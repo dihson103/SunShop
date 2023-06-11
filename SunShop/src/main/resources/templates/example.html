@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <form th:action="@{/example}" th:object="${userDTO}" method="post">
+      <label>name: </label>
+        <input type="text" th:field="*{name}">
+        <br>
+        <label>email: </label>
+        <input type="email" th:field="*{email}">
+        <br>
+        <label>pass: </label>
+        <input type="password" th:field="*{password}">
+        <br>
+        <label>repass: </label>
+        <input type="password" th:field="*{rePassword}">
+        <br>
+        <input type="submit" th:value="save">
+    </form>
+
+</body>
+</html>

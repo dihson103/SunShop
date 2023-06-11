@@ -1,0 +1,30 @@
+package com.dinhson.sunshop.appCart;
+
+import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
+import com.dinhson.sunshop.appUser.User;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "cart_items")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CartItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private int quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_detail_id")
+    private ProductDetail productDetail;
+}
