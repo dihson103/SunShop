@@ -1,0 +1,31 @@
+.quantity_content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #f5f5f5;
+    width: fit-content;
+    height: 40px;
+}
+
+.quantity span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 25px;
+    cursor: pointer;
+    color: #6f6f6f;
+}
+
+.quantity__input {
+    border: 0px solid #f5f5f5;
+    background-color: #f5f5f5;
+    width: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #6f6f6f;
+}
