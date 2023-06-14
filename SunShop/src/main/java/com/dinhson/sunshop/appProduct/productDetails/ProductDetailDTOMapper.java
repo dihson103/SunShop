@@ -31,6 +31,7 @@ public class ProductDetailDTOMapper implements Function<Product, ProductDetailDT
                         .map(p -> p.getSize())
                         .collect(Collectors.toSet()),
 
+                //TODO Viet ham tinh toan discount
                 0
         );
     }

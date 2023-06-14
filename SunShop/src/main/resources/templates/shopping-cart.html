@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zxx">
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="fragments :: html_head"/>
 
@@ -60,58 +60,29 @@
                             </thead>
                             <tbody>
 
-                                <tr>
+                                <tr th:each="cartItem : ${cart}">
                                     <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-1.jpg" alt="">
+                                        <img th:src="${cartItem.img()}" style="width: 270px; height: 270px;" alt="">
                                         <h5>Vegetable’s Package</h5>
                                     </td>
                                     <td class="shoping__cart__price">
-                                        $55.00
+                                        [[${cartItem.price()}]]
                                     </td>
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">
                                             <div class="quantity_content" style="margin-left: 50px; margin-right: 50px">
-                                                <span onclick="minusQuantity(1, 50)">-</span>
-                                                <input onchange="changeValue(1, 50)" name="quantity" id="1" type="text" class="quantity__input" value="1">
-                                                <span  onclick="plusQuantity(1, 50)">+</span>
+                                                <span th:onclick="'minusQuantity(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'">-</span>
+                                                <input th:onchange="'changeValue(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'" name="quantity" th:id="${cartItem.id()}" type="text" class="quantity__input" th:value="${cartItem.quantity()}">
+                                                <span  th:onclick="'plusQuantity(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'">+</span>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="shoping__cart__total" id="pr1">
-                                        $110.00
+                                    <td class="shoping__cart__total" th:id="'pr' + ${cartItem.id()}">
+                                        [[${cartItem.price() * cartItem.quantity()}]]
                                     </td>
-                                    <input type="hidden" id="total1" value="0">
+                                    <input type="hidden" th:id="'total' + ${cartItem.id()}" th:value="${cartItem.price() * cartItem.quantity()}">
                                     <td>
-                                        <input class="check checkValue" type="checkbox" name="chooseItem" onchange="changeCheck()" value="1">
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="shoping__cart__item">
-                                        <img src="img/cart/cart-1.jpg" alt="">
-                                        <h5>Vegetable’s Package</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        $55.00
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="quantity_content" style="margin-left: 50px; margin-right: 50px">
-                                                <span onclick="minusQuantity(2, 50)">-</span>
-                                                <input onchange="changeValue(2, 50)" name="quantity" id="2" type="text" class="quantity__input" value="1">
-                                                <span  onclick="plusQuantity(2, 50)">+</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total" id="pr2">
-                                        $110.00
-                                    </td>
-                                    <input type="hidden" id="total2" value="0">
-                                    <td>
-                                        <input class="check checkValue" type="checkbox" name="chooseItem" onchange="changeCheck()" value="2">
+                                        <input class="check checkValue" type="checkbox" name="chooseItem" onchange="changeCheck()" th:value="${cartItem.id()}">
                                     </td>
                                     <td class="shoping__cart__item__close">
                                         <span class="icon_close"></span>

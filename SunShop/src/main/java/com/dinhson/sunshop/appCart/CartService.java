@@ -7,7 +7,9 @@ import com.dinhson.sunshop.appUser.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -16,6 +18,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ProductDetailService productDetailService;
     private final UserService userService;
+    private final CartItemDTOMapper cartItemDTOMapper;
 
     private Optional<CartItem> findItemInCart(int productDetailId, int userId){
         return cartRepository.findCartItemByProductDetailId(productDetailId, userId);
@@ -68,6 +71,10 @@ public class CartService {
 
     public int countNumberItemInCart(int userId){
         return cartRepository.countNumberItemInCart(userId);
+    }
+
+    public List<CartItemDTO> findCartByUserId(int userId){
+        return cartRepository.findCartByUserId(userId).stream().map(cartItemDTOMapper).collect(Collectors.toList());
     }
 
 

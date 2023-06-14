@@ -11,5 +11,7 @@ public record ProductDTO(
         String description,
         String img,
         Set<Image> images
+
+        //TODO them discount
 ) {
 }
