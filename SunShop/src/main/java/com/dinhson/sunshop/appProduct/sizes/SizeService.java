@@ -2,7 +2,10 @@ package com.dinhson.sunshop.appProduct.sizes;
 
 import com.dinhson.sunshop.exception.SizeAlreadyExistException;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -19,5 +22,10 @@ public class SizeService {
             throw new SizeAlreadyExistException("Size " + size.getSize() + " is already exist!!!");
         }
         sizeRepository.save(size);
+    }
+
+    @Cacheable("sizes")
+    public Iterable<Size> findAllSize(){
+        return sizeRepository.findAll();
     }
 }

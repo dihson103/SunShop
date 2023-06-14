@@ -43,8 +43,6 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-
-
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Set<ProductDetail> productDetails;

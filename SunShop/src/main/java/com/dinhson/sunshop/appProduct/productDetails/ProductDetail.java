@@ -26,11 +26,11 @@ public class ProductDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "color_id")
     private Color color;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
 

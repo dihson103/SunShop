@@ -7,5 +7,21 @@
 <body>
     <h1 th:each="name : ${list}">xin chao [[${name.name}]] [[${name.age}]] o [[${name.address}]]</h1>
 
+
+    <h1>[[${product.productDTO.name}]]</h1>
+
+    <h1 th:each="color : ${product.colors()}">
+        [[${color}]]
+    </h1>
+
+
+    <h1 th:each="size : ${product.sizes()}">
+        [[${size}]]
+    </h1>
+
+    <h1 th:each="img : ${product.images()}">
+        [[${img}]]
+    </h1>
+
 </body>
 </html>

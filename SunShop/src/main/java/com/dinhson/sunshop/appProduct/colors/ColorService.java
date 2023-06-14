@@ -2,6 +2,7 @@ package com.dinhson.sunshop.appProduct.colors;
 
 import com.dinhson.sunshop.exception.ColorAlreadyExistException;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -19,5 +20,10 @@ public class ColorService {
 
     private boolean isColorExist(Color color) {
         return colorRepository.findColorByName(color.getName()).isPresent();
+    }
+
+    @Cacheable("colors")
+    public Iterable<Color> findAllColor(){
+        return colorRepository.findAll();
     }
 }

@@ -1,15 +1,21 @@
 package com.dinhson.sunshop.appProduct.sizes;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
 class SizeServiceTest {
 
+    @Autowired
+    private SizeService underTest;
+
     @Test
-    void addNewSize() {
+    void canAddNewSize() {
         Size size1 = new Size();
         size1.setSize("Tiny");
         size1.setWeight("30 - 45 kg");
@@ -30,5 +36,9 @@ class SizeServiceTest {
         size4.setWeight("70 - 80 kg");
         size4.setHeight("170 - 190 cm");
 
+        underTest.addNewSize(size1);
+        underTest.addNewSize(size2);
+        underTest.addNewSize(size3);
+        underTest.addNewSize(size4);
     }
 }
