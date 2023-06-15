@@ -391,9 +391,10 @@
         }
     }
 
-    let numberProductRemain = document.getElementById('numberProductRemain').value;
+    let numberProductRemain;
 
     function plusQuantity(){
+        numberProductRemain = document.getElementById('numberProductRemain').value;
         let numberProduct = document.getElementById('numberProduct').value;
         if(numberProduct == numberProductRemain){
             alert("Number product is more than number product remain!!!");
@@ -403,6 +404,7 @@
     }
 
     function changeQuantity(){
+        numberProductRemain = document.getElementById('numberProductRemain').value;
         let value = document.getElementById('numberProduct').value;
         if(isNaN(value) || Number(value) <= 0 || Number(value) > 5){
             document.getElementById('numberProduct').value = 1;
@@ -417,10 +419,11 @@
         let size = $('input[name="size"]:checked').val();
 
         let product = productDetails.filter(s => s.colorId == color && s.sizeId == size);
+        let numberProduct = product.length == 0 ? 0 : product[0].number;
 
-        product.length == 0 ? console.log("null") : console.log(product[0].number);
-
-        //console.log(number);
+        document.getElementById('numberProductRemain').value = numberProduct;
+        document.getElementById('numberProduct').value = 1;
+        console.log(numberProduct);
     }
 </script>
 
