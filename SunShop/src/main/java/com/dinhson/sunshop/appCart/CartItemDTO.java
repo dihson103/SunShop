@@ -1,10 +1,8 @@
 package com.dinhson.sunshop.appCart;
 
 import com.dinhson.sunshop.appProduct.colors.Color;
-import com.dinhson.sunshop.appProduct.productDetails.ProductDetailDTO;
 import com.dinhson.sunshop.appProduct.sizes.Size;
 
-import java.util.List;
 import java.util.Set;
 
 public record CartItemDTO(

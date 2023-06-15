@@ -2,9 +2,7 @@ package com.dinhson.sunshop.appProduct.categories;
 
 import com.dinhson.sunshop.exception.CategoryAlreadyExistException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +13,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @CacheEvict(value = "categories", allEntries = true)
-    public Category addNewCategory(Category category){
-        if(isCategoryExist(category)){
+    public Category addNewCategory(Category category) {
+        if (isCategoryExist(category)) {
             throw new CategoryAlreadyExistException("Category " + category.getName() + " is already exist!!!");
         }
         return categoryRepository.save(category);
@@ -27,7 +25,7 @@ public class CategoryService {
     }
 
     @Cacheable("categories")
-    public Iterable<Category> findAllCategory(){
+    public Iterable<Category> findAllCategory() {
         System.out.println("get all categories");
         return categoryRepository.findAll();
     }

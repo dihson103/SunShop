@@ -1,6 +1,5 @@
 package com.dinhson.sunshop.testSessionCookie;
 
-import com.dinhson.sunshop.testSessionCookie.Person;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -13,16 +12,16 @@ import java.util.List;
 
 @Controller
 @SessionAttributes("name")
-public class TestController{
+public class TestController {
 
     @GetMapping("hello")
-    public String hello(){
+    public String hello() {
         return "test";
     }
 
     @GetMapping("change")
     public String change(@SessionAttribute(name = "name") String name,
-                         Model model){
+                         Model model) {
         name = "thuy linh";
         model.addAttribute("name", name);
         return "test";
@@ -30,13 +29,13 @@ public class TestController{
 
     @GetMapping("testCookie")
     public String testCookie(@CookieValue(name = "testCookie", defaultValue = "1*dinhson_23_hanoi") String cookie,
-                             Model model){
+                             Model model) {
         String[] cookies = cookie.split("#");
         String ps = Arrays.stream(cookies).filter(s -> s.startsWith(11 + "*")).toString();
 
         String[] persons = cookie.split("\\+");
         List<Person> list = new ArrayList<>();
-        for (String str: persons) {
+        for (String str : persons) {
             String[] arr = str.split("_");
             int age = Integer.parseInt(arr[1]);
             Person person = new Person();
@@ -50,7 +49,7 @@ public class TestController{
     }
 
     @GetMapping("changeCookie")
-    public String testChangeCookie(HttpServletResponse response){
+    public String testChangeCookie(HttpServletResponse response) {
         String names = "1*dinhson_23_hanoi+thuylinh_22_hanoi+ngocmai_22_hanoi#11*dinhson_20_hanoi+thuylinh_22_hanoi+ngocmai_22_hanoi";
         Cookie cookie = new Cookie("testCookie", names);
         cookie.setMaxAge(7 * 24 * 60 * 60);
@@ -60,7 +59,7 @@ public class TestController{
 
 
     @ModelAttribute("name")
-    public String name(){
+    public String name() {
         return "dinh son";
     }
 }

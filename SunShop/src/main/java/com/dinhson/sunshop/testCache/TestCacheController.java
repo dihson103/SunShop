@@ -16,24 +16,24 @@ public class TestCacheController {
     private final TestService testService;
 
     @GetMapping("getAll")
-    public List<Student> getAll(){
+    public List<Student> getAll() {
         return testService.getAll();
     }
 
     @GetMapping("findById/{id}")
-    public Student findById(@PathVariable Integer id){
+    public Student findById(@PathVariable Integer id) {
         return testService.getById(id);
     }
 
     @GetMapping("update/{id}/{name}")
     public Student update(@PathVariable Integer id,
-                          @PathVariable String name){
+                          @PathVariable String name) {
         return testService.updateById(id, name);
     }
 
     @GetMapping("add/{id}/{name}")
     public Student add(@PathVariable Integer id,
-                          @PathVariable String name){
+                       @PathVariable String name) {
         return testService.addNewStudent(id, name);
     }
 }

@@ -9,12 +9,12 @@ import java.util.Optional;
 public interface CartRepository extends CrudRepository<CartItem, Integer> {
 
     @Query("SELECT c FROM CartItem c WHERE c.productDetail.id = :productDetailId and c.user.id = :userId")
-    public Optional<CartItem> findCartItemByProductDetailId(int productDetailId, int userId);
+    Optional<CartItem> findCartItemByProductDetailId(int productDetailId, int userId);
 
     @Query("SELECT COUNT(c) FROM CartItem c WHERE c.user.id = :userId")
-    public int countNumberItemInCart(int userId);
+    int countNumberItemInCart(int userId);
 
     @Query("SELECT c FROM CartItem c WHERE c.user.id = :userId")
-    public List<CartItem> findCartByUserId(int userId);
+    List<CartItem> findCartByUserId(int userId);
 
 }

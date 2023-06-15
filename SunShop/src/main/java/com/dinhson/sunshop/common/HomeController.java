@@ -14,7 +14,7 @@ public class HomeController {
     private final CategoryService categoryService;
 
     @GetMapping("home")
-    public String home(Model model){
+    public String home(Model model) {
         Iterable<Category> categories = categoryService.findAllCategory();
 
         model.addAttribute("categories", categories);

@@ -20,11 +20,11 @@ public class CartService {
     private final UserService userService;
     private final CartItemDTOMapper cartItemDTOMapper;
 
-    private Optional<CartItem> findItemInCart(int productDetailId, int userId){
+    private Optional<CartItem> findItemInCart(int productDetailId, int userId) {
         return cartRepository.findCartItemByProductDetailId(productDetailId, userId);
     }
 
-    private void saveItem(int productDetailId, int userId){
+    private void saveItem(int productDetailId, int userId) {
         User user = userService.findUserById(userId);
         ProductDetail productDetail = productDetailService.findProductDetailById(productDetailId);
         CartItem cartItem = new CartItem(1, user, productDetail);
@@ -32,48 +32,48 @@ public class CartService {
         cartRepository.save(cartItem);
     }
 
-    public void addItemsToCart(int productDetailId, int userId){
+    public void addItemsToCart(int productDetailId, int userId) {
         int numberProductRemaining = productDetailService.findNumberProductRemainById(productDetailId);
-        if(numberProductRemaining > 0){
+        if (numberProductRemaining > 0) {
             Optional<CartItem> cartItemOptional = findItemInCart(productDetailId, userId);
-            if(cartItemOptional.isPresent()){
+            if (cartItemOptional.isPresent()) {
                 changeNumberItemInCart(cartItemOptional.get(), 1);
-            }else{
+            } else {
                 saveItem(productDetailId, userId);
             }
-        }else{
+        } else {
             throw new IllegalArgumentException("This product is sold out!!!");
         }
 
     }
 
-    private void changeNumberItemInCart(CartItem cartItem, int number){
+    private void changeNumberItemInCart(CartItem cartItem, int number) {
         cartItem.setQuantity(cartItem.getQuantity() + number);
         cartRepository.save(cartItem);
     }
 
-    private CartItem findCartItem(int productDetailId, int userId){
+    private CartItem findCartItem(int productDetailId, int userId) {
         return findItemInCart(productDetailId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("Can not found item!!!"));
     }
 
-    public void deleteItem(int productDetailId, int userId){
+    public void deleteItem(int productDetailId, int userId) {
         cartRepository.delete(findCartItem(productDetailId, userId));
     }
 
-    public void changeQuantityItem(int productDetailId, int userId, int number){
+    public void changeQuantityItem(int productDetailId, int userId, int number) {
         int numberProductRemaining = productDetailService.findNumberProductRemainById(productDetailId);
-        if(number > numberProductRemaining || number < 1){
+        if (number > numberProductRemaining || number < 1) {
             throw new IllegalArgumentException("Number is more than number product remain or less than 1!!!");
         }
         changeNumberItemInCart(findCartItem(productDetailId, userId), number);
     }
 
-    public int countNumberItemInCart(int userId){
+    public int countNumberItemInCart(int userId) {
         return cartRepository.countNumberItemInCart(userId);
     }
 
-    public List<CartItemDTO> findCartByUserId(int userId){
+    public List<CartItemDTO> findCartByUserId(int userId) {
         return cartRepository.findCartByUserId(userId).stream().map(cartItemDTOMapper).collect(Collectors.toList());
     }
 

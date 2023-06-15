@@ -1,7 +1,7 @@
-package com.dinhson.sunshop.appProduct.productDetails;
+package com.dinhson.sunshop.appProduct;
 
-import com.dinhson.sunshop.appProduct.Product;
-import com.dinhson.sunshop.appProduct.ProductDTOMapper;
+import com.dinhson.sunshop.appProduct.productDetails.ProductDetailResponseDTO;
+import com.dinhson.sunshop.appProduct.productDetails.ProductDetailResponseDTOMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,13 +10,14 @@ import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-public class ProductDetailDTOMapper implements Function<Product, ProductDetailDTO> {
+public class ProductResponseDTOMapper implements Function<Product, ProductResponseDTO> {
 
     private final ProductDTOMapper productDTOMapper;
+    private final ProductDetailResponseDTOMapper productDetailResponseDTOMapper;
 
     @Override
-    public ProductDetailDTO apply(Product product) {
-        return new ProductDetailDTO(
+    public ProductResponseDTO apply(Product product) {
+        return new ProductResponseDTO(
                 productDTOMapper.apply(product),
 
                 product.getProductDetails().stream()
@@ -32,7 +33,11 @@ public class ProductDetailDTOMapper implements Function<Product, ProductDetailDT
                         .collect(Collectors.toSet()),
 
                 //TODO Viet ham tinh toan discount
-                0
+                0,
+
+                product.getProductDetails().stream()
+                        .map(productDetailResponseDTOMapper)
+                        .collect(Collectors.toList())
         );
     }
 }

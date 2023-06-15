@@ -10,7 +10,7 @@ public interface ProductDetailRepository extends CrudRepository<ProductDetail, I
     @Query("SELECT p " +
             "FROM ProductDetail p " +
             "WHERE p.product.id = :productId and p.color.id = :colorId and p.size.id = :sizeId")
-    public Optional<ProductDetail> findProductDetailByAll(int productId, int colorId, int sizeId);
+    Optional<ProductDetail> findProductDetailByAll(int productId, int colorId, int sizeId);
 
-    public Optional<ProductDetail> getById(Integer id);
+    Optional<ProductDetail> getById(Integer id);
 }

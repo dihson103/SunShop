@@ -27,12 +27,12 @@ public class ProductDetailService {
                 .isPresent();
     }
 
-    public ProductDetail findProductDetailById(int productDetailId){
+    public ProductDetail findProductDetailById(int productDetailId) {
         return productDetailRepository.getById(productDetailId)
                 .orElseThrow(() -> new IllegalArgumentException("Product detail is not found !!!"));
     }
 
-    public int findNumberProductRemainById(int productDetailId){
+    public int findNumberProductRemainById(int productDetailId) {
         return productDetailRepository.findById(productDetailId).get().getNumber();
     }
 }

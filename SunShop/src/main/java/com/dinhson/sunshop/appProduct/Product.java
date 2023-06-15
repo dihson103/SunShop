@@ -1,10 +1,12 @@
 package com.dinhson.sunshop.appProduct;
 
 import com.dinhson.sunshop.appProduct.categories.Category;
-import com.dinhson.sunshop.appProduct.discounts.Discount;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Set;

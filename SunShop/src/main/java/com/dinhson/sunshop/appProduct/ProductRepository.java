@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p WHERE p.name = :name")
-    public Optional<Product> findProductByName(String name);
+    Optional<Product> findProductByName(String name);
 
     @Query("select p from Product p where p.isDelete = :isDelete")
-    public List<Product> getAllProductsByIsDelete(boolean isDelete);
+    List<Product> getAllProductsByIsDelete(boolean isDelete);
 
     @Query("select p from Product p where p.id = :productId and p.isDelete = false")
-    public Optional<Product> findProductActiveById(Integer productId);
+    Optional<Product> findProductActiveById(Integer productId);
 }

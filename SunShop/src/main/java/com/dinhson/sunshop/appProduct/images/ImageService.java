@@ -11,8 +11,8 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    public void addNewImages(List<Image> images){
-        for (Image image: images) {
+    public void addNewImages(List<Image> images) {
+        for (Image image : images) {
             imageRepository.save(image);
         }
     }

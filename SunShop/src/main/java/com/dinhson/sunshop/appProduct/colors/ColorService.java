@@ -11,8 +11,8 @@ public class ColorService {
 
     private final ColorRepository colorRepository;
 
-    public void addNewColor(Color color){
-        if(isColorExist(color)){
+    public void addNewColor(Color color) {
+        if (isColorExist(color)) {
             throw new ColorAlreadyExistException("Color " + color.getName() + " is already exist!!!");
         }
         colorRepository.save(color);
@@ -23,7 +23,7 @@ public class ColorService {
     }
 
     @Cacheable("colors")
-    public Iterable<Color> findAllColor(){
+    public Iterable<Color> findAllColor() {
         return colorRepository.findAll();
     }
 }

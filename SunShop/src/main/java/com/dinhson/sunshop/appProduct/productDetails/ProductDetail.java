@@ -6,7 +6,10 @@ import com.dinhson.sunshop.appProduct.discounts.Discount;
 import com.dinhson.sunshop.appProduct.images.Image;
 import com.dinhson.sunshop.appProduct.sizes.Size;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 

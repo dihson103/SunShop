@@ -1,7 +1,6 @@
 package com.dinhson.sunshop.appOrders.votes;
 
 import com.dinhson.sunshop.appOrders.Order;
-import com.dinhson.sunshop.appUser.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

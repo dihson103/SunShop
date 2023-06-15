@@ -4,7 +4,6 @@ import com.dinhson.sunshop.appProduct.categories.Category;
 import com.dinhson.sunshop.appProduct.categories.CategoryService;
 import com.dinhson.sunshop.appProduct.colors.Color;
 import com.dinhson.sunshop.appProduct.colors.ColorService;
-import com.dinhson.sunshop.appProduct.productDetails.ProductDetailDTO;
 import com.dinhson.sunshop.appProduct.sizes.Size;
 import com.dinhson.sunshop.appProduct.sizes.SizeService;
 import lombok.AllArgsConstructor;
@@ -27,7 +26,7 @@ public class ProductController {
     private final CategoryService categoryService;
 
     @GetMapping("shop")
-    public String listProduct(Model model){
+    public String listProduct(Model model) {
 
         System.out.println("access");
 
@@ -44,11 +43,11 @@ public class ProductController {
     }
 
     @GetMapping("/product")
-    public String getProduct(@RequestParam Integer productId, Model model){
+    public String getProduct(@RequestParam Integer productId, Model model) {
 
-        ProductDetailDTO productDetailDTO = productService.findProductActiveById(productId);
+        ProductResponseDTO productResponseDTO = productService.findProductActiveById(productId);
 
-        model.addAttribute("product", productDetailDTO);
+        model.addAttribute("product", productResponseDTO);
         return "shopDetails";
     }
 }

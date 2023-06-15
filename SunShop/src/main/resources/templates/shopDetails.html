@@ -62,68 +62,73 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-6 col-md-6">
-                <div class="product__details__text">
-                    <h3>[[${product.productDTO.name}]]</h3>
-                    <div class="product__details__rating">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star-o"></i>
-                        <i class="fa fa-star-half-empty"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star-half-o"></i>
-                        <span>(18 reviews)</span>
-                    </div>
-                    <div class="product__details__price">$[[${product.productDTO.price}]]</div>
-                    <p>[[${product.productDTO.description}]]</p>
+                <form method="post" onsubmit="addItemToCart()">
+                    <div class="product__details__text">
+                        <h3>[[${product.productDTO.name}]]</h3>
+                        <div class="product__details__rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-half-empty"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-half-o"></i>
+                            <span>(18 reviews)</span>
+                        </div>
+                        <div class="product__details__price">$[[${product.productDTO.price}]]</div>
+                        <p>[[${product.productDTO.description}]]</p>
 
-                    <div class="wrapper">
-                        <b style="margin-top: 4px">Color:</b>
-                        <div class="option" style="margin-left: 15px;" th:each="color, state : ${product.colors()}">
-                            <input class="input" type="radio" name="color" value="option1" th:if="${state.first}" checked>
-                            <input class="input" type="radio" name="color" value="option1" th:unless="${state.first}">
-                            <div class="btn">
-                                <span class="span">[[${color.name}]]</span>
+                        <div class="wrapper">
+                            <b style="margin-top: 4px">Color:</b>
+                            <div class="option" style="margin-left: 15px;" th:each="color, state : ${product.colors()}">
+                                <input class="input" type="radio" name="color" th:value="${color.id}" th:checked="${state.first}" onclick="getNumberRemain()">
+                                <div class="btn">
+                                    <span class="span">[[${color.name}]]</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
+                        <br>
 
-                    <div class="wrapper">
-                        <b style="margin-top: 4px">Size:</b>
-                        <div class="option" style="margin-left: 22px;" th:each="size, state : ${product.sizes()}">
-                            <input class="input" type="radio" name="size" value="option1" th:if="${state.first}" checked>
-                            <input class="input" type="radio" name="size" value="option1" th:unless="${state.first}">
-                            <div class="btn">
-                                <span class="span">[[${size.size}]]</span>
+                        <div class="wrapper">
+                            <b style="margin-top: 4px">Size:</b>
+                            <div class="option" style="margin-left: 22px;" th:each="size, state : ${product.sizes()}">
+                                <input class="input" type="radio" name="size" th:value="${size.id}" th:checked="${state.first}" onclick="getNumberRemain()">
+                                <div class="btn">
+                                    <span class="span">[[${size.size}]]</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
+                        <br>
 
-
-                    <div class="product__details__quantity">
-                        <div class="quantity">
-                            <div class="pro-qty">
-                                <input type="text" value="1">
+                        <input type="hidden" id="numberProductRemain" value="5">
+                        <div class="product__details__quantity">
+                            <div class="quantity">
+                                <div class="quantity_content" style="margin-left: 50px; margin-right: 50px">
+                                    <span onclick="minusQuantity()">-</span>
+                                    <input onchange="changeQuantity()" name="quantity" id="numberProduct" type="text" class="quantity__input" value="1">
+                                    <span  onclick="plusQuantity()">+</span>
+                                </div>
                             </div>
                         </div>
+                        <button class="primary-btn" style="border: 0px;" type="submit">ADD TO CARD</button>
+                        <a href="#" class="heart-icon"><span class="icon_heart"></span></a>
+                        <ul>
+                            <li><b>Availability</b> <span>In Stock</span></li>
+                            <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
+                            <li><b>Weight</b> <span>0.5 kg</span></li>
+                            <li><b>Share on</b>
+                                <div class="share">
+                                    <a href="#"><i class="fa fa-facebook"></i></a>
+                                    <a href="#"><i class="fa fa-twitter"></i></a>
+                                    <a href="#"><i class="fa fa-instagram"></i></a>
+                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <a href="#" class="primary-btn">ADD TO CARD</a>
-                    <a href="#" class="heart-icon"><span class="icon_heart"></span></a>
-                    <ul>
-                        <li><b>Availability</b> <span>In Stock</span></li>
-                        <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
-                        <li><b>Weight</b> <span>0.5 kg</span></li>
-                        <li><b>Share on</b>
-                            <div class="share">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                                <a href="#"><i class="fa fa-pinterest"></i></a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                </form>
+
+
             </div>
             <div class="col-lg-12">
                 <div class="product__details__tab">
@@ -363,6 +368,61 @@
 <script src="js/mixitup.min.js"></script>
 <script src="js/owl.carousel.min.js"></script>
 <script src="js/main.js"></script>
+
+<script th:inline="javascript">
+    function addItemToCart(){
+        let colorId = document.querySelector('input[name="color"]:checked').value;
+        let sizeId = document.querySelector('input[name="size"]:checked').value;
+        let param = {colorId : colorId, sizeId : sizeId};
+        let url = "dsfsdf";
+
+        $.post(url, param, function (response) {
+
+        }).fail(function (){
+            alert("Fail connecting to the server!!!");
+        });
+        return false;
+    }
+
+    function minusQuantity(){
+        let numberProduct = document.getElementById('numberProduct').value;
+        if(numberProduct != 1){
+            document.getElementById('numberProduct').value = numberProduct - 1;
+        }
+    }
+
+    let numberProductRemain = document.getElementById('numberProductRemain').value;
+
+    function plusQuantity(){
+        let numberProduct = document.getElementById('numberProduct').value;
+        if(numberProduct == numberProductRemain){
+            alert("Number product is more than number product remain!!!");
+        }else {
+            document.getElementById('numberProduct').value = Number(numberProduct) + 1;
+        }
+    }
+
+    function changeQuantity(){
+        let value = document.getElementById('numberProduct').value;
+        if(isNaN(value) || Number(value) <= 0 || Number(value) > 5){
+            document.getElementById('numberProduct').value = 1;
+            alert("Wrong of format, number < 1 or number > " + numberProductRemain);
+        }
+    }
+
+    const productDetails = /*[[${product.productDetailResponseDTO}]]*/ null;
+
+    function getNumberRemain(){
+        let color = $('input[name="color"]:checked').val();
+        let size = $('input[name="size"]:checked').val();
+
+        let product = productDetails.filter(s => s.colorId == color && s.sizeId == size);
+
+        product.length == 0 ? console.log("null") : console.log(product[0].number);
+
+        //console.log(number);
+    }
+</script>
 
 
 </body>

@@ -9,7 +9,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User findUserById(int id){
+    public User findUserById(int id) {
         return userRepository.getById(id).
                 orElseThrow(() -> new IllegalArgumentException("User not found!!!"));
     }

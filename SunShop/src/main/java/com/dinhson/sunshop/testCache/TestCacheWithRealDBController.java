@@ -15,12 +15,12 @@ public class TestCacheWithRealDBController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public Iterable<Category> getAll(){
+    public Iterable<Category> getAll() {
         return categoryService.findAllCategory();
     }
 
     @PostMapping
-    public Category add(@RequestBody Category category){
+    public Category add(@RequestBody Category category) {
         return categoryService.addNewCategory(category);
     }
 }
