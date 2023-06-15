@@ -100,6 +100,11 @@
                         </div>
                         <br>
 
+                        <div>
+                            <span style="margin-left: 50px; color: red" id="productNumber"></span>
+                        </div>
+                        <br>
+
                         <input type="hidden" id="numberProductRemain" value="5">
                         <div class="product__details__quantity">
                             <div class="quantity">
@@ -110,7 +115,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="primary-btn" style="border: 0px;" type="submit">ADD TO CARD</button>
+                        <button class="primary-btn" style="border: 0px;" type="submit" id="addButton">ADD TO CARD</button>
                         <a href="#" class="heart-icon"><span class="icon_heart"></span></a>
                         <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
@@ -370,6 +375,11 @@
 <script src="js/main.js"></script>
 
 <script th:inline="javascript">
+
+    $(document).ready(function (){
+        getNumberRemain();
+    });
+
     function addItemToCart(){
         let colorId = document.querySelector('input[name="color"]:checked').value;
         let sizeId = document.querySelector('input[name="size"]:checked').value;
@@ -385,30 +395,30 @@
     }
 
     function minusQuantity(){
-        let numberProduct = document.getElementById('numberProduct').value;
-        if(numberProduct != 1){
-            document.getElementById('numberProduct').value = numberProduct - 1;
+        let numberProduct = $('#numberProduct').val();
+        if (numberProduct != 1) {
+            $('#numberProduct').val(Number(numberProduct) - 1);
         }
     }
 
     let numberProductRemain;
 
     function plusQuantity(){
-        numberProductRemain = document.getElementById('numberProductRemain').value;
-        let numberProduct = document.getElementById('numberProduct').value;
-        if(numberProduct == numberProductRemain){
-            alert("Number product is more than number product remain!!!");
-        }else {
-            document.getElementById('numberProduct').value = Number(numberProduct) + 1;
+        let numberProductRemain = $('#numberProductRemain').val();
+        let numberProduct = $('#numberProduct').val();
+        if (numberProduct == numberProductRemain) {
+            alert("Number of products is more than the number of products remaining!!!");
+        } else {
+            $('#numberProduct').val(Number(numberProduct) + 1);
         }
     }
 
     function changeQuantity(){
-        numberProductRemain = document.getElementById('numberProductRemain').value;
-        let value = document.getElementById('numberProduct').value;
-        if(isNaN(value) || Number(value) <= 0 || Number(value) > 5){
-            document.getElementById('numberProduct').value = 1;
-            alert("Wrong of format, number < 1 or number > " + numberProductRemain);
+        let numberProductRemain = $('#numberProductRemain').val();
+        let value = $('#numberProduct').val();
+        if (isNaN(value) || Number(value) <= 0 || Number(value) > 5) {
+            $('#numberProduct').val(1);
+            alert("Wrong format. Number should be between 1 and " + numberProductRemain);
         }
     }
 
@@ -421,8 +431,15 @@
         let product = productDetails.filter(s => s.colorId == color && s.sizeId == size);
         let numberProduct = product.length == 0 ? 0 : product[0].number;
 
-        document.getElementById('numberProductRemain').value = numberProduct;
-        document.getElementById('numberProduct').value = 1;
+        $('#productNumber').html("Remaining " + numberProduct + " products.");
+        $('#numberProductRemain').val(numberProduct);
+        $('#numberProduct').val(1);
+        if (numberProduct == 0) {
+            $('#addButton').prop('disabled', true);
+        } else {
+            $('#addButton').prop('disabled', false);
+        }
+
         console.log(numberProduct);
     }
 </script>
