@@ -7,6 +7,8 @@ import java.util.Set;
 
 public record CartItemDTO(
         int id,
+        int productId,
+        int productDetailId,
         String name,
         String img,
         int quantity,

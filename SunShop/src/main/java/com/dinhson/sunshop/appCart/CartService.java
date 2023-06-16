@@ -37,6 +37,9 @@ public class CartService {
         if (numberProductRemaining > 0) {
             Optional<CartItem> cartItemOptional = findItemInCart(productDetailId, userId);
             if (cartItemOptional.isPresent()) {
+                if(cartItemOptional.get().getQuantity() == numberProductRemaining){
+                    throw new IllegalArgumentException("Number product remain is not enough!!!");
+                }
                 changeNumberItemInCart(cartItemOptional.get(), 1);
             } else {
                 saveItem(productDetailId, userId);
@@ -48,7 +51,7 @@ public class CartService {
     }
 
     private void changeNumberItemInCart(CartItem cartItem, int number) {
-        cartItem.setQuantity(cartItem.getQuantity() + number);
+        cartItem.setQuantity(number);
         cartRepository.save(cartItem);
     }
 
@@ -66,7 +69,8 @@ public class CartService {
         if (number > numberProductRemaining || number < 1) {
             throw new IllegalArgumentException("Number is more than number product remain or less than 1!!!");
         }
-        changeNumberItemInCart(findCartItem(productDetailId, userId), number);
+        CartItem cartItem = findCartItem(productDetailId, userId);
+        changeNumberItemInCart(cartItem, number);
     }
 
     public int countNumberItemInCart(int userId) {

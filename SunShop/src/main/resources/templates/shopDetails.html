@@ -64,7 +64,7 @@
             </div>
 
             <div class="col-lg-6 col-md-6">
-                <form method="post" onsubmit="addItemToCart()">
+
                     <div class="product__details__text">
                         <h3>[[${product.productDTO.name}]]</h3>
                         <div class="product__details__rating">
@@ -105,6 +105,8 @@
                         </div>
                         <br>
 
+                        <input type="hidden" id="productDetailId" value="0">
+
                         <input type="hidden" id="numberProductRemain" value="5">
                         <div class="product__details__quantity">
                             <div class="quantity">
@@ -115,7 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="primary-btn" style="border: 0px;" type="submit" id="addButton">ADD TO CARD</button>
+                        <button class="primary-btn" style="border: 0px;" type="button" id="addButton" onclick="addItemToCart()">ADD TO CARD</button>
                         <a href="#" class="heart-icon"><span class="icon_heart"></span></a>
                         <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
@@ -131,7 +133,6 @@
                             </li>
                         </ul>
                     </div>
-                </form>
 
 
             </div>
@@ -381,17 +382,20 @@
     });
 
     function addItemToCart(){
-        let colorId = document.querySelector('input[name="color"]:checked').value;
-        let sizeId = document.querySelector('input[name="size"]:checked').value;
-        let param = {colorId : colorId, sizeId : sizeId};
-        let url = "dsfsdf";
+        let numberProductRemain = $('#numberProductRemain').val();
+        if(numberProductRemain == 0){
+            alert("This product is out of stock!!! Please choose other size or color!!!");
+            return false;
+        }
+        let productDetailId = $('#productDetailId').val();
+        let param = {productDetailId : productDetailId};
+        let url = /*[[@{/api/cart}]]*/ '';
 
         $.post(url, param, function (response) {
-
-        }).fail(function (){
-            alert("Fail connecting to the server!!!");
+            alert(response.responseText);
+        }).fail(function (response){
+            alert(response.responseText);
         });
-        return false;
     }
 
     function minusQuantity(){
@@ -400,8 +404,6 @@
             $('#numberProduct').val(Number(numberProduct) - 1);
         }
     }
-
-    let numberProductRemain;
 
     function plusQuantity(){
         let numberProductRemain = $('#numberProductRemain').val();
@@ -434,11 +436,7 @@
         $('#productNumber').html("Remaining " + numberProduct + " products.");
         $('#numberProductRemain').val(numberProduct);
         $('#numberProduct').val(1);
-        if (numberProduct == 0) {
-            $('#addButton').prop('disabled', true);
-        } else {
-            $('#addButton').prop('disabled', false);
-        }
+        $('#productDetailId').val(product[0].productDetailId);
 
         console.log(numberProduct);
     }

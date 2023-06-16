@@ -20,6 +20,8 @@ public class CartItemDTOMapper implements Function<CartItem, CartItemDTO> {
         ProductResponseDTO productResponseDTO = productResponseDTOMapper.apply(product);
         return new CartItemDTO(
                 cartItem.getId(),
+                product.getId(),
+                cartItem.getProductDetail().getId(),
                 product.getName(),
                 product.getImg(),
                 cartItem.getQuantity(),

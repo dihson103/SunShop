@@ -65,21 +65,24 @@
                                 <tr th:each="cartItem : ${cart}">
                                     <td class="shoping__cart__item">
                                         <img th:src="${cartItem.img()}" style="width: 70px; height: 70px;" alt="">
-                                        <h5>[[${cartItem.name}]]</h5>
+                                        <a th:href="@{/product(productId=${cartItem.productId()})}"><h5>[[${cartItem.name}]]</h5></a>
                                     </td>
                                     <td>
                                         <select name="color">
-                                            <option th:each="color : ${cartItem.colors()}" th:value="${color.getId()}" th:checked="${cartItem.colorIdChoose() == color.id}">[[${color.name}]]</option>
+                                            <option th:each="color : ${cartItem.colors()}" th:value="${color.getId()}" th:if="${cartItem.colorIdChoose() == color.id}" checked>[[${color.name}]]</option>
+                                            <option th:each="color : ${cartItem.colors()}" th:value="${color.getId()}" th:unless="${cartItem.colorIdChoose() == color.id}">[[${color.name}]]</option>
                                         </select>
                                     </td>
                                     <td>
                                         <select name="size">
-                                            <option th:each="size : ${cartItem.sizes()}" th:value="${size.id}" th:checked="${cartItem.sizeIdChoose() == size.id}">[[${size.size}]]</option>
+                                            <option th:each="size : ${cartItem.sizes()}" th:value="${size.id}" th:if="${cartItem.sizeIdChoose() == size.id}" checked>[[${size.size}]]</option>
+                                            <option th:each="size : ${cartItem.sizes()}" th:value="${size.id}" th:unless="${cartItem.sizeIdChoose() == size.id}">[[${size.size}]]</option>
                                         </select>
                                     </td>
                                     <td class="shoping__cart__price">
                                         [[${cartItem.price()}]]
                                     </td>
+                                    <input type="hidden" th:id="'productDetailId' + ${cartItem.id()}" th:value="${cartItem.productDetailId()}">
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">
                                             <div class="quantity_content" style="margin-left: 50px; margin-right: 50px">
@@ -221,84 +224,114 @@
 
 
 
-    <script>
+    <script th:inline="javascript">
+        function changeQuantityInCart(productId, number, callback){
+            let productDetailId = $('#productDetailId' + productId).val();
+            let param = {productDetailId : productDetailId, number : number};
+            let url = /*[[@{/api/cart}]]*/ '';
+            console.log(productDetailId);
+
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                data: JSON.stringify(param),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert("Success");
+                    callback(true);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                    callback(false);
+                }
+            });
+        }
+
+        function doChangeNumber(productId, number, salePrice){
+            changeQuantityInCart(productId, number, function(isSuccess) {
+                if (isSuccess) {
+                    $("#" + productId).val(number);
+                    calculateItemMoney(productId, salePrice);
+                }
+            });
+        }
+
         function plusQuantity(productId, salePrice){
-            let value = document.getElementById(productId).value;
-            if(value == 5){
+            let value = $("#" + productId).val();
+            if (value == 5) {
                 window.alert("This product is remaining 5!!!");
-            }else {
-                document.getElementById(productId).value = Number(value) + 1;
-                calculateItemMoney(productId, salePrice);
+            } else {
+                doChangeNumber(productId, Number(value) + 1, salePrice);
             }
         }
 
         function minusQuantity(productId, salePrice){
-            let value = document.getElementById(productId).value;
-            if(value != 1){
-                document.getElementById(productId).value = value - 1;
+            let value = $("#" + productId).val();
+            if (value != 1) {
+                value = value - 1;
+                doChangeNumber(productId, value, salePrice);
             }
-            calculateItemMoney(productId, salePrice);
         }
 
         function changeValue(productId, salePrice){
-            let value = document.getElementById(productId).value;
-            if(isNaN(value) || Number(value) <= 0){
+            let value = $("#" + productId).val();
+            if (isNaN(value) || Number(value) <= 0) {
                 window.alert("Enter number more than 0 only!!!");
                 value = 1;
-                document.getElementById(productId).value = value;
-            }else if(Number(value) > 5){
+            } else if (Number(value) > 5) {
                 window.alert("This product is remaining 5!!!");
                 value = 5;
-                document.getElementById(productId).value = value;
             }
-            calculateItemMoney(productId, salePrice);
+            doChangeNumber(productId, value, salePrice);
         }
 
         function calculateItemMoney(productId, salePrice){
-            let value = document.getElementById(productId).value;
+            let value = $("#" + productId).val();
             let total = value * salePrice;
-            document.getElementById("pr" + productId).innerHTML = "$ " + total;
-            document.getElementById('total' + productId).value = total;
+            $("#pr" + productId).text("$ " + total);
+            $("#total" + productId).val(total);
             getTotalMoneyToPay();
         }
 
         function changeCheckAll(){
-            if(document.getElementById('checkAll').checked){
-                let arr = document.getElementsByClassName('check');
-                for(let i = 0; i < arr.length; i++){
+            if ($('#checkAll').is(':checked')) {
+                let arr = $('.check');
+                for (let i = 0; i < arr.length; i++) {
                     arr[i].checked = true;
                 }
-                document.getElementById('isCheckAll').value = 1;
+                $('#isCheckAll').val(1);
             }
             console.log("changeCheckAll");
             getTotalMoneyToPay();
         }
 
         function changeCheck(){
-            if(document.getElementById('isCheckAll').value == 1){
-                document.getElementById('checkAll').checked = false;
+            if ($('#isCheckAll').val() == 1) {
+                $('#checkAll').prop('checked', false);
             }
             getTotalMoneyToPay();
         }
 
         function getTotalMoneyToPay(){
             console.log("getTotalMoneyToPay");
-            let arr = document.getElementsByClassName('checkValue');
+            let arr = $('.checkValue');
             let total = 0;
             let flag;
             console.log(arr.length);
-            for(let i = 0; i < arr.length; i++){
-                if(arr[i].checked){
-                    flag = document.getElementById('total' + arr[i].value);
-                    total = total + Number(flag.value);
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].checked) {
+                    flag = $('#total' + arr[i].value);
+                    total += Number(flag.val());
                 }
             }
-            document.getElementById('subTotalMoney').innerHTML = "$ " + total;
-            if(total != 0){
+            $('#subTotalMoney').text("$ " + total);
+            if (total !== 0) {
                 total += 2;
             }
-            document.getElementById('totalMoney').innerHTML = "$ " + total;
+            $('#totalMoney').text("$ " + total);
         }
+
+
     </script>
 
 

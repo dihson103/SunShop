@@ -48,7 +48,7 @@ class CartRepositoryTest {
 
         //after
         int userId = 1;
-        int expected = 3;
+        int expected = 4;
 
         //when
         int actual = underTest.countNumberItemInCart(userId);
