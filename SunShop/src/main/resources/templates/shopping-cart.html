@@ -63,45 +63,51 @@
                             <tbody>
 
                                 <tr th:each="cartItem : ${cart}">
-                                    <td class="shoping__cart__item">
-                                        <img th:src="${cartItem.img()}" style="width: 70px; height: 70px;" alt="">
-                                        <a th:href="@{/product(productId=${cartItem.productId()})}"><h5>[[${cartItem.name}]]</h5></a>
-                                    </td>
-                                    <td>
-                                        <select name="color">
-                                            <option th:each="color : ${cartItem.colors()}" th:value="${color.getId()}" th:if="${cartItem.colorIdChoose() == color.id}" checked>[[${color.name}]]</option>
-                                            <option th:each="color : ${cartItem.colors()}" th:value="${color.getId()}" th:unless="${cartItem.colorIdChoose() == color.id}">[[${color.name}]]</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <select name="size">
-                                            <option th:each="size : ${cartItem.sizes()}" th:value="${size.id}" th:if="${cartItem.sizeIdChoose() == size.id}" checked>[[${size.size}]]</option>
-                                            <option th:each="size : ${cartItem.sizes()}" th:value="${size.id}" th:unless="${cartItem.sizeIdChoose() == size.id}">[[${size.size}]]</option>
-                                        </select>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        [[${cartItem.price()}]]
-                                    </td>
-                                    <input type="hidden" th:id="'productDetailId' + ${cartItem.id()}" th:value="${cartItem.productDetailId()}">
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="quantity_content" style="margin-left: 50px; margin-right: 50px">
-                                                <span th:onclick="'minusQuantity(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'">-</span>
-                                                <input th:onchange="'changeValue(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'" name="quantity" th:id="${cartItem.id()}" type="text" class="quantity__input" th:value="${cartItem.quantity()}">
-                                                <span  th:onclick="'plusQuantity(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'">+</span>
+                                    <div th:id="'item' + ${cartItem.id()}">
+                                        <td class="shoping__cart__item">
+                                            <img th:src="${cartItem.img()}" style="width: 70px; height: 70px;" alt="">
+                                            <a th:href="@{/product(productId=${cartItem.productId()})}"><h5>[[${cartItem.name}]]</h5></a>
+                                        </td>
+                                        <td>
+                                            <select name="color" th:id="'color' + ${cartItem.id()}" th:onchange="'changeProductDetail(' + ${cartItem.id()} + ',' +${cartItem.productId()} + ')'">
+                                                <option th:each="color : ${cartItem.colors()}" th:value="${color.getId()}" th:if="${cartItem.colorIdChoose() == color.id}" checked>[[${color.name}]]</option>
+                                                <option th:each="color : ${cartItem.colors()}" th:value="${color.getId()}" th:unless="${cartItem.colorIdChoose() == color.id}">[[${color.name}]]</option>
+                                            </select>
+                                        </td>
+
+                                        <input type="hidden" th:id="'oldColor' + ${cartItem.id()}" th:value="${cartItem.colorIdChoose()}">
+                                        <input type="hidden" th:id="'oldSize' + ${cartItem.id()}" th:value="${cartItem.sizeIdChoose()}">
+
+                                        <td>
+                                            <select name="size" th:id="'size' + ${cartItem.id()}" th:onchange="'changeProductDetail(' + ${cartItem.id()} + ',' +${cartItem.productId()} + ')'">
+                                                <option th:each="size : ${cartItem.sizes()}" th:value="${size.id}" th:if="${cartItem.sizeIdChoose() == size.id}" checked>[[${size.size}]]</option>
+                                                <option th:each="size : ${cartItem.sizes()}" th:value="${size.id}" th:unless="${cartItem.sizeIdChoose() == size.id}">[[${size.size}]]</option>
+                                            </select>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            [[${cartItem.price()}]]
+                                        </td>
+                                        <input type="hidden" th:id="'productDetailId' + ${cartItem.id()}" th:value="${cartItem.productDetailId()}">
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="quantity_content" style="margin-left: 50px; margin-right: 50px">
+                                                    <span th:onclick="'minusQuantity(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'">-</span>
+                                                    <input th:onchange="'changeValue(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'" name="quantity" th:id="${cartItem.id()}" type="text" class="quantity__input" th:value="${cartItem.quantity()}">
+                                                    <span  th:onclick="'plusQuantity(\'' + ${cartItem.id()} + '\', \'' + ${cartItem.price()} + '\')'">+</span>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total" th:id="'pr' + ${cartItem.id()}">
-                                        [[${cartItem.price() * cartItem.quantity()}]]
-                                    </td>
-                                    <input type="hidden" th:id="'total' + ${cartItem.id()}" th:value="${cartItem.price() * cartItem.quantity()}">
-                                    <td>
-                                        <input class="check checkValue" type="checkbox" name="chooseItem" onchange="changeCheck()" th:value="${cartItem.id()}">
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <span class="icon_close"></span>
-                                    </td>
+                                        </td>
+                                        <td class="shoping__cart__total" th:id="'pr' + ${cartItem.id()}">
+                                            [[${cartItem.price() * cartItem.quantity()}]]
+                                        </td>
+                                        <input type="hidden" th:id="'total' + ${cartItem.id()}" th:value="${cartItem.price() * cartItem.quantity()}">
+                                        <td>
+                                            <input class="check checkValue" type="checkbox" name="chooseItem" onchange="changeCheck()" th:value="${cartItem.id()}">
+                                        </td>
+                                        <td class="shoping__cart__item__close">
+                                            <span class="icon_close" th:onclick="'deleteItem(' + ${cartItem.id()} + ')'"></span>
+                                        </td>
+                                    </div>
                                 </tr>
 
                             </tbody>
@@ -225,9 +231,12 @@
 
 
     <script th:inline="javascript">
-        function changeQuantityInCart(productId, number, callback){
-            let productDetailId = $('#productDetailId' + productId).val();
-            let param = {productDetailId : productDetailId, number : number};
+        function changeQuantityInCart(itemId, number, callback){
+            let productDetailId = $('#productDetailId' + itemId).val();
+            let param = {
+                productDetailId : productDetailId,
+                number : number
+            };
             let url = /*[[@{/api/cart}]]*/ '';
             console.log(productDetailId);
 
@@ -247,34 +256,80 @@
             });
         }
 
-        function doChangeNumber(productId, number, salePrice){
-            changeQuantityInCart(productId, number, function(isSuccess) {
-                if (isSuccess) {
-                    $("#" + productId).val(number);
-                    calculateItemMoney(productId, salePrice);
+        function changeItemInCart(colorId, sizeId, productId, callback){
+            let param = {
+                colorId : colorId,
+                sizeId : sizeId,
+                productId : productId
+            };
+            let url = /*[[@{/api/cart/change}]]*/ '';
+
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                data: JSON.stringify(param),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert("Success");
+                    callback(true);
+                },
+                error: function(response) {
+                    alert("fail");
+                    alert(response.responseText);
+                    callback(false);
                 }
             });
         }
 
-        function plusQuantity(productId, salePrice){
-            let value = $("#" + productId).val();
+        function deleteItem(cartItemId){
+            let productDetailId = $('#productDetailId' + cartItemId).val();
+            let param = {productDetailId : productDetailId};
+            let url = /*[[@{/api/cart}]]*/ '';
+
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: JSON.stringify(param),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert("Success");
+                    window.location = "/cart";
+                },
+                error: function(response) {
+                    alert("fail");
+                    alert(response.responseText);
+                }
+            });
+        }
+
+        function doChangeNumber(itemId, number, salePrice){
+            changeQuantityInCart(itemId, number, function(isSuccess) {
+                if (isSuccess) {
+                    $("#" + itemId).val(number);
+                    calculateItemMoney(itemId, salePrice);
+                }
+            });
+        }
+
+        function plusQuantity(itemId, salePrice){
+            let value = $("#" + itemId).val();
             if (value == 5) {
                 window.alert("This product is remaining 5!!!");
             } else {
-                doChangeNumber(productId, Number(value) + 1, salePrice);
+                doChangeNumber(itemId, Number(value) + 1, salePrice);
             }
         }
 
-        function minusQuantity(productId, salePrice){
-            let value = $("#" + productId).val();
+        function minusQuantity(itemId, salePrice){
+            let value = $("#" + itemId).val();
             if (value != 1) {
                 value = value - 1;
-                doChangeNumber(productId, value, salePrice);
+                doChangeNumber(itemId, value, salePrice);
             }
         }
 
-        function changeValue(productId, salePrice){
-            let value = $("#" + productId).val();
+        function changeValue(itemId, salePrice){
+            let value = $("#" + itemId).val();
             if (isNaN(value) || Number(value) <= 0) {
                 window.alert("Enter number more than 0 only!!!");
                 value = 1;
@@ -282,14 +337,14 @@
                 window.alert("This product is remaining 5!!!");
                 value = 5;
             }
-            doChangeNumber(productId, value, salePrice);
+            doChangeNumber(itemId, value, salePrice);
         }
 
-        function calculateItemMoney(productId, salePrice){
-            let value = $("#" + productId).val();
+        function calculateItemMoney(itemId, salePrice){
+            let value = $("#" + itemId).val();
             let total = value * salePrice;
-            $("#pr" + productId).text("$ " + total);
-            $("#total" + productId).val(total);
+            $("#pr" + itemId).text("$ " + total);
+            $("#total" + itemId).val(total);
             getTotalMoneyToPay();
         }
 
@@ -330,6 +385,41 @@
             }
             $('#totalMoney').text("$ " + total);
         }
+
+        const cart = /*[[${cart}]]*/ null;
+
+        function changeProductDetail(cartItemId, productId){
+            let colorId = $('#color' + cartItemId).val();
+            let sizeId = $('#size' + cartItemId).val();
+            let oldColorId = $('#oldColor' + cartItemId).val();
+            let oldSizeId = $('#oldSize' + cartItemId).val();
+            alert("color and size: " + colorId + " - " + sizeId + " - " + productId);
+            changeItemInCart(colorId, sizeId, productId, function (isSuccess){
+                if(isSuccess){
+                    let cartItem = cart.filter(c => c.sizeIdChoose == oldSizeId
+                                                        && c.colorIdChoose == oldColorId
+                                                        && c.productId == productId);
+                    let colorDropDown = $('#color' + cartItemId);
+                    let sizeDropDown = $('#size' + cartItemId);
+
+                    colorDropDown.empty();
+                    $.each(cartItem[0].colors, function (index, color) {
+                        $('<option>').val(color.id).text(color.name).appendTo(colorDropDown);
+                    })
+
+                    sizeDropDown.empty();
+                    $.each(cartItem[0].sizes, function (index, size) {
+                        $('<option>').val(size.id).text(size.size).appendTo(sizeDropDown);
+                    })
+                    alert(cartItem[0].name);
+                }else{
+                    $('#oldColor' + cartItemId).val(colorId);
+                    $('#oldSize' + cartItemId).val(sizeId);
+                }
+            });
+        }
+
+
 
 
     </script>

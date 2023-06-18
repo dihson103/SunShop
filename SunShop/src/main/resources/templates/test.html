@@ -4,8 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 <body>
     <h1>hello [[${session.name}]]</h1>
+
+
+    <form th:action="@{/test/getSize}" method="post">
+        <button onclick="testClick()" id="size" type="button">Test</button>
+        <select id="test" onchange="testChange()" >
+            <option value="test">test</option>
+        </select>
+    </form>
+
+    <script th:inline="javascript">
+        const arr = /*[[${list}]]*/ null
+
+        function testClick(){
+            let testDropDownList = $('#test');
+            let size = $('#size').val();
+            testDropDownList.empty();
+            $.each(arr, function (index, s){
+                $('<option>').val(s).text(s).appendTo(testDropDownList);
+            })
+            testDropDownList.click();
+        }
+
+        function testChange(){
+            let rs = document.getElementById('test').value;
+            $('#size').text(rs);
+            //testClick();
+            console.log("rs: " + rs);
+        }
+
+    </script>
+
+
 </body>
 </html>

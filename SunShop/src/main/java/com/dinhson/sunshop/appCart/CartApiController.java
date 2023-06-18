@@ -33,4 +33,18 @@ public class CartApiController {
         return "Change success!!!";
     }
 
+    @DeleteMapping
+    public String deleteItem(@RequestBody CartItemRequestDTO cartItemRequestDTO){
+
+        int userId = 1;
+        cartService.deleteItem(cartItemRequestDTO.productDetailId(), userId);
+        return "Success";
+    }
+
+    @PutMapping("change")
+    public String changeItemInCart(@RequestBody CartItemRequestDTO cartItemRequestDTO){
+
+        return "Success";
+    }
+
 }

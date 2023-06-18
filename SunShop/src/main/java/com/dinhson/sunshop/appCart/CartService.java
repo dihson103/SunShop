@@ -5,6 +5,8 @@ import com.dinhson.sunshop.appProduct.productDetails.ProductDetailService;
 import com.dinhson.sunshop.appUser.User;
 import com.dinhson.sunshop.appUser.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,22 +34,23 @@ public class CartService {
         cartRepository.save(cartItem);
     }
 
+    @CacheEvict(value = "carts", allEntries = true)
     public void addItemsToCart(int productDetailId, int userId) {
         int numberProductRemaining = productDetailService.findNumberProductRemainById(productDetailId);
-        if (numberProductRemaining > 0) {
-            Optional<CartItem> cartItemOptional = findItemInCart(productDetailId, userId);
-            if (cartItemOptional.isPresent()) {
-                if(cartItemOptional.get().getQuantity() == numberProductRemaining){
-                    throw new IllegalArgumentException("Number product remain is not enough!!!");
-                }
-                changeNumberItemInCart(cartItemOptional.get(), 1);
-            } else {
-                saveItem(productDetailId, userId);
-            }
-        } else {
+        if (numberProductRemaining <= 0) {
             throw new IllegalArgumentException("This product is sold out!!!");
         }
 
+        Optional<CartItem> cartItemOptional = findItemInCart(productDetailId, userId);
+        if (cartItemOptional.isPresent()) {
+            CartItem cartItem = cartItemOptional.get();
+            if (cartItem.getQuantity() == numberProductRemaining) {
+                throw new IllegalArgumentException("Number product remain is not enough!!!");
+            }
+            changeNumberItemInCart(cartItem, 1);
+        } else {
+            saveItem(productDetailId, userId);
+        }
     }
 
     private void changeNumberItemInCart(CartItem cartItem, int number) {
@@ -57,13 +60,15 @@ public class CartService {
 
     private CartItem findCartItem(int productDetailId, int userId) {
         return findItemInCart(productDetailId, userId)
-                .orElseThrow(() -> new IllegalArgumentException("Can not found item!!!"));
+                .orElseThrow(() -> new IllegalArgumentException("Product is sold out!!!"));
     }
 
+    @CacheEvict(value = "carts", allEntries = true)
     public void deleteItem(int productDetailId, int userId) {
         cartRepository.delete(findCartItem(productDetailId, userId));
     }
 
+    @CacheEvict(value = "carts", allEntries = true)
     public void changeQuantityItem(int productDetailId, int userId, int number) {
         int numberProductRemaining = productDetailService.findNumberProductRemainById(productDetailId);
         if (number > numberProductRemaining || number < 1) {
@@ -77,9 +82,13 @@ public class CartService {
         return cartRepository.countNumberItemInCart(userId);
     }
 
+    @Cacheable("carts")
     public List<CartItemDTO> findCartByUserId(int userId) {
         return cartRepository.findCartByUserId(userId).stream().map(cartItemDTOMapper).collect(Collectors.toList());
     }
 
+    public void changeItemInCart(){
+
+    }
 
 }
