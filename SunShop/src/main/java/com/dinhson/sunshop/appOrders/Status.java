@@ -2,10 +2,12 @@ package com.dinhson.sunshop.appOrders;
 
 public enum Status {
 
-    ACCEPTED,
+    Delivered,
 
-    DELIVERING,
+    Shipped,
 
-    RECEIVED
+    Cancelled,
+
+    Pending
 
 }

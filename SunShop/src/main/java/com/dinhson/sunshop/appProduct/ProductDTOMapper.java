@@ -18,7 +18,9 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
                 product.getImg(),
                 product.getProductDetails().stream()
                         .flatMap(p -> p.getImages().stream())
-                        .collect(Collectors.toSet())
+                        .collect(Collectors.toSet()),
+                product.isDelete(),
+                product.getCategory()
         );
     }
 }

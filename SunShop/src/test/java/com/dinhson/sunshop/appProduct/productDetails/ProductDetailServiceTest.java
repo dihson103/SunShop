@@ -2,6 +2,7 @@ package com.dinhson.sunshop.appProduct.productDetails;
 
 import com.dinhson.sunshop.appProduct.Product;
 import com.dinhson.sunshop.appProduct.ProductRepository;
+import com.dinhson.sunshop.appProduct.ProductResponseDTO;
 import com.dinhson.sunshop.appProduct.colors.Color;
 import com.dinhson.sunshop.appProduct.colors.ColorRepository;
 import com.dinhson.sunshop.appProduct.sizes.Size;
@@ -10,16 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProductDetailServiceTest {
 
 
     @Autowired
-    private ProductDetailService productDetailService;
+    private ProductDetailService underTest;
 
     @Autowired
     private ColorRepository colorRepository;
@@ -37,7 +37,7 @@ class ProductDetailServiceTest {
         Color color = colorOptional1
                 .orElseThrow(() -> new IllegalArgumentException("Color not found!!"));
 
-        Optional<Size> sizeOptional1 = sizeRepository.findById(3);
+        Optional<Size> sizeOptional1 = sizeRepository.findById(2);
         Size size = sizeOptional1
                 .orElseThrow(() -> new IllegalArgumentException("Size is not found!!!"));
 
@@ -51,6 +51,22 @@ class ProductDetailServiceTest {
         productD1.setColor(color);
         productD1.setNumber(5);
 
-        productDetailService.addNewProductDetail(productD1);
+        underTest.addNewProductDetail(productD1);
+    }
+
+    @Test
+    void searchProductDetailByAll() {
+        //after
+        String status = "false";
+        int colorId = 1;
+        String searchName = "Product";
+
+        //when
+        List<ProductResponseDTO> productResponseDTOS = underTest.searchProducts(status, colorId, searchName);
+
+        //then
+        boolean actual = productResponseDTOS.stream().anyMatch(p -> {
+            return true;
+        });
     }
 }

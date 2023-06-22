@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -33,15 +34,27 @@ public class User {
     private Boolean gender;
 
     @Column(nullable = true)
-    private Date dob;
+    private String image;
+
+    @Column(nullable = true)
+    private LocalDate dob;
 
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @Column(nullable = false)
     private Boolean enabled;
 
     @Column(nullable = false)
     private Boolean isActive;
+
+    public User(UserDTO userDTO){
+        name = userDTO.name();
+        email = userDTO.email();
+        password = userDTO.password();
+        enabled = false;
+        isActive = false;
+        role = userDTO.role() == null ? Role.USER : userDTO.role();
+    }
 
 }

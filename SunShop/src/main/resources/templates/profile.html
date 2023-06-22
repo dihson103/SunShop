@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>Update user profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" th:href="@{/img/login/icons/favicon.ico}"/>
+    <link th:href="@{https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/profile/profile.css}" type="text/css">
+
+    <style>
+        :focus {
+            outline: 0;
+            border-color: #2260ff;
+            box-shadow: 0 0 0 4px #b5c9fc;
+        }
+
+        .mydict div {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+            justify-content: left;
+        }
+
+        .mydict input[type="radio"] {
+            clip: rect(0 0 0 0);
+            clip-path: inset(100%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
+        }
+
+        .mydict input[type="radio"]:checked + span {
+            box-shadow: 0 0 0 0.0625em #0043ed;
+            background-color: #dee7ff;
+            z-index: 1;
+            color: #0043ed;
+        }
+
+        label span {
+            display: block;
+            cursor: pointer;
+            background-color: #fff;
+            padding: 0.375em .75em;
+            position: relative;
+            margin-left: .0625em;
+            box-shadow: 0 0 0 0.0625em #b5bfd9;
+            letter-spacing: .05em;
+            color: #3e4963;
+            text-align: center;
+            transition: background-color .5s ease;
+        }
+
+        label:first-child span {
+            border-radius: .375em 0 0 .375em;
+        }
+
+        label:last-child span {
+            border-radius: 0 .375em .375em 0;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <link th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css}" rel="stylesheet">
+    <div class="container">
+        <div class="view-account">
+            <section class="module">
+                <div class="module-inner" style="height: 700px">
+                    <div class="side-bar">
+                        <div class="user-info">
+                            <img class="img-profile img-circle img-responsive center-block"
+                                 src="https://bootdey.com/img/Content/avatar/avatar1.png" alt>
+                            <ul class="meta list list-unstyled">
+                                <li class="name">Rebecca Sanders
+                                    <label class="label label-info">UX Designer</label>
+                                </li>
+                                <li class="email"><a href="#"><span class="__cf_email__"
+                                                                    data-cfemail="4d1f282f282e2e2c631e0d3a282f3e243928632e2220">[email&#160;protected]</span></a>
+                                </li>
+                                <li class="activity">Last logged in: Today at 2:18pm</li>
+                            </ul>
+                        </div>
+                        <nav class="side-menu">
+                            <ul class="nav">
+                                <li class="active"><a href="#"><span class="fa fa-user"></span> Profile</a></li>
+                                <li><a href="#"><span class="fa fa-cog"></span> Security</a></li>
+                                <li><a href="#"><span class="fa fa-credit-card"></span> Billing</a></li>
+                                <li><a href="#"><span class="fa fa-envelope"></span> Messages</a></li>
+                                <li><a href="user-drive.html"><span class="fa fa-th"></span> Drive</a></li>
+                                <li><a href="#"><span class="fa fa-clock-o"></span> Reminders</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <div class="content-panel">
+                        <button class="title btn btn-light" id="changePageBtn">Continuous shopping</button>
+
+                        <form class="form-horizontal" th:action="@{/profile}" method="post" enctype="multipart/form-data">
+                            <fieldset class="fieldset">
+                                <input type="hidden" id="userId" th:value="${user.userId()}">
+                                <h3 class="fieldset-title">Personal Info</h3>
+                                <div class="form-group avatar">
+                                    <figure class="figure col-md-2 col-sm-3 col-xs-12" id="imageUpload">
+                                        <img class="img-rounded img-responsive"
+                                             src="https://bootdey.com/img/Content/avatar/avatar1.png" alt>
+                                    </figure>
+                                    <div class="form-inline col-md-10 col-sm-9 col-xs-12">
+                                        <input type="file" class="file-uploader pull-left" id="file">
+                                        <button type="button" id="updateImage" class="btn btn-sm btn-default-alt pull-left">Update
+                                            Image</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Full Name</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="text" class="form-control" th:value="${user.name()}" id="name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Date of birth</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="date" class="form-control" id="dob" th:value="${user.dob()}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Gender</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12 mydict">
+                                        <div>
+                                            <label>
+                                                <input type="radio" name="gender" value="false" th:checked="${user.gender() == false}">
+                                                <span>Women</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="gender" value="true" th:checked="${user.gender()}">
+                                                <span>Men</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
+                                        <input class="btn btn-primary" id="updateProfile" type="button" value="Update Profile">
+                                    </div>
+                                </div>
+                            </fieldset>
+
+
+
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+            const currentDate = new Date().toISOString().split("T")[0];
+            $('#dob').attr("max", currentDate);
+        });
+
+        $('#changePageBtn').click(function () {
+            window.location = "/shop";
+        });
+
+        $('#updateProfile').click(function (){
+            let userId = $('#userId').val();
+            let name = $('#name').val();
+            let image = $('#image').val();
+            let dob = $('#dob').val();
+            let gender = $("input[name='gender']:checked").val();
+            let param = {
+                userId : userId,
+                name : name,
+                image : image,
+                dob : dob,
+                gender : gender
+            };
+
+            $.ajax({
+                url: "profile",
+                type: 'PUT',
+                data: JSON.stringify(param),
+                contentType: 'application/json',
+                success: function(response) {
+                    alert("Update profile success!!!");
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+        $('#dob').change(function (){
+            let dob = $('#dob').val();
+            console.log("Date: " + dob);
+        });
+
+        $('#updateImage').click(function (){
+            let formData = new FormData();
+            let file = $('#file')[0].files[0];
+
+            formData.append("file", file);
+            let param = {file : file};
+
+            $.ajax({
+                url: "upload",
+                type: 'POST',
+                data: formData,
+                enctype: 'multipart/form-data',
+                contentType : false,
+                cache : false,
+                processData : false,
+                success: function(response) {
+                    alert("Update file success!!!");
+                    console.log("File name: " + response.fileName);
+                    $('#imageUpload').html("<img class=\"img-rounded img-responsive\"\n" +
+                        "src=\"" + response.fileName + "\" alt=\"\">");
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+    </script>
+
+</body>
+</html>
