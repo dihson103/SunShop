@@ -1,5 +1,6 @@
 package com.dinhson.sunshop.appUser;
 
+import com.dinhson.sunshop.appUser.profile.ProfileSecurityDTO;
 import com.dinhson.sunshop.exception.UsersNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -111,6 +112,21 @@ public class UserService {
 
         System.out.println("isA: " + isActive +" role: " + role + "search: " + searchName);
         return searchUsersAndMapToUserDTO(isActive, role, searchName);
+    }
+
+    private User loginByEmailAndPassword(String email, String password){
+        return userRepository.findUserByEmailAndPassword(email, password)
+                .orElseThrow(() -> new IllegalArgumentException("Password is wrong!!!"));
+    }
+
+    public void changePassword(ProfileSecurityDTO profileSecurityDTO){
+        if(profileSecurityDTO.newPassword().isEmpty() ||
+                !profileSecurityDTO.newPassword().equals(profileSecurityDTO.rePassword())){
+            throw new IllegalArgumentException("New Password and re-password must be the same!!!");
+        }
+        User user = loginByEmailAndPassword(profileSecurityDTO.email(), profileSecurityDTO.password());
+        user.setPassword(profileSecurityDTO.newPassword());
+        userRepository.save(user);
     }
 
 }

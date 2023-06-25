@@ -20,4 +20,10 @@ public class UserProfileApi {
         return "Update profile success!!!";
     }
 
+    @PutMapping("profile/change-password")
+    public ApiResponse changePassword(@RequestBody ProfileSecurityDTO profileSecurityDTO){
+        userService.changePassword(profileSecurityDTO);
+        return new ApiResponse("Change password success!!!", HttpStatus.OK);
+    }
+
 }

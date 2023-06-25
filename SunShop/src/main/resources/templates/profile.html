@@ -89,12 +89,8 @@
                         </div>
                         <nav class="side-menu">
                             <ul class="nav">
-                                <li class="active"><a href="#"><span class="fa fa-user"></span> Profile</a></li>
-                                <li><a href="#"><span class="fa fa-cog"></span> Security</a></li>
-                                <li><a href="#"><span class="fa fa-credit-card"></span> Billing</a></li>
-                                <li><a href="#"><span class="fa fa-envelope"></span> Messages</a></li>
-                                <li><a href="user-drive.html"><span class="fa fa-th"></span> Drive</a></li>
-                                <li><a href="#"><span class="fa fa-clock-o"></span> Reminders</a></li>
+                                <li class="active" id="profile"><a><span class="fa fa-user"></span> Profile</a></li>
+                                <li id="security"><a><span class="fa fa-cog"></span> Security</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -102,7 +98,7 @@
                     <div class="content-panel">
                         <button class="title btn btn-light" id="changePageBtn">Continuous shopping</button>
 
-                        <form class="form-horizontal" th:action="@{/profile}" method="post" enctype="multipart/form-data">
+                        <form class="form-horizontal" th:action="@{/profile}" method="post" enctype="multipart/form-data" id="profile_content">
                             <fieldset class="fieldset">
                                 <input type="hidden" id="userId" th:value="${user.userId()}">
                                 <h3 class="fieldset-title">Personal Info</h3>
@@ -123,6 +119,14 @@
                                         <input type="text" class="form-control" th:value="${user.name()}" id="name">
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Full Name</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="text" class="form-control" id="email" th:value="${user.email()}" readonly>
+                                    </div>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">Date of birth</label>
                                     <div class="col-md-10 col-sm-9 col-xs-12">
@@ -156,6 +160,65 @@
 
 
                         </form>
+
+                        <form class="form-horizontal" id="security_content">
+                            <fieldset class="fieldset">
+                                <h3 class="fieldset-title">Change Password</h3>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Password</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="password" class="form-control" id="password">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">New Password</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="password" class="form-control" id="new-password">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">New Password</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="password" class="form-control" id="re-new-password">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
+                                        <input class="btn btn-primary" id="change-password" type="button" value="Change Password">
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <fieldset class="fieldset">
+                                <h3 class="fieldset-title">Change Email</h3>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">New Email</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="text" class="form-control" id="new-email">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Password</label>
+                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <input type="password" class="form-control" id="new-email-password">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
+                                        <input class="btn btn-primary" id="change-email" type="button" value="Change email">
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+
+
                     </div>
                 </div>
             </section>
@@ -170,6 +233,8 @@
         $(document).ready(function() {
             const currentDate = new Date().toISOString().split("T")[0];
             $('#dob').attr("max", currentDate);
+
+            $('#security_content').hide();
         });
 
         $('#changePageBtn').click(function () {
@@ -234,6 +299,55 @@
                     alert(response.responseText);
                 }
             });
+        });
+
+        $('#profile').click(function (){
+            $('#security_content').toggle(false);
+            $('#profile_content').toggle(true);
+            $('#security').removeClass('active');
+            $('#profile').addClass('active');
+
+        });
+
+        $('#security').click(function (){
+            $('#security_content').toggle(true);
+            $('#profile_content').toggle(false);
+            $('#profile').removeClass('active');
+            $('#security').addClass('active');
+        });
+
+        $('#change-password').click(function () {
+            let email = $('#email').val();
+            let password = $('#password').val();
+            let newPassword = $('#new-password').val();
+            let rePassword = $('#re-new-password').val();
+
+            if(newPassword != rePassword){
+                alert("New Password and Re-Password must be the same!!!");
+                $('#password').val('');
+                $('#new-password').val('');
+                $('#re-new-password').val('');
+            }else{
+                let param = {
+                    email : email,
+                    password : password,
+                    newPassword : newPassword,
+                    rePassword : rePassword
+                };
+
+                $.ajax({
+                    url: "profile/change-password",
+                    type: 'PUT',
+                    data: JSON.stringify(param),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        alert(response.message);
+                    },
+                    error: function(response) {
+                        alert(response.responseText);
+                    }
+                });
+            }
         });
 
     </script>
