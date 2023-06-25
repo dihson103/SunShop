@@ -19,19 +19,6 @@ class UserServiceTest {
     @Test
     @Disabled
     void createNewUser() {
-        UserDTO userDTO = new UserDTO(
-                null,
-                "Thuy Linh",
-                "chuthuylinh@gmail.com",
-                null,
-                null,
-                Role.ADMIN,
-                "12345",
-                null,
-                null
-        );
-        //when
-        underTest.createNewUser(userDTO);
     }
 
     @Test

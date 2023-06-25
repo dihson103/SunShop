@@ -31,9 +31,8 @@ public class UserService {
         return userRepository.getUserByEmail(email).isPresent();
     }
 
-    public void createNewUser(UserDTO userDTO){
-        User user = new User(userDTO);
-        if(checkEmailExist(userDTO.email()))
+    public void createNewUser(User user){
+        if(checkEmailExist(user.getEmail()))
             throw new IllegalArgumentException("Email is already exist!!!");
         userRepository.save(user);
     }
