@@ -8,6 +8,7 @@
 
     <!-- Page Content  -->
 
+
     <div class="container-xl" style="margin-top: 25px;">
         <div class="table-responsive">
             <div class="table-wrapper">
@@ -83,7 +84,7 @@
                         <td>[[${userDTO.email()}]]</td>
                         <td th:text="${userDTO.isActive() ? 'ACTIVE' : 'NON-ACTIVE'}"></td>
                         <td><span class="status text-info">&bull;</span> [[${userDTO.role()}]]</td>
-                        <td><a href="#" class="view" title="View Details" data-toggle="tooltip"><i
+                        <td><a th:href="@{/admin/users/{userId}(userId=${userDTO.userId})}" class="view" title="View Details" data-toggle="tooltip"><i
                                 class="material-icons">&#xE5C8;</i></a></td>
                     </tr>
 
@@ -110,6 +111,7 @@
 
 
 <script>
+
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
     });

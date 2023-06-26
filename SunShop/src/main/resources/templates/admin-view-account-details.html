@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+
+    <title>User details</title>
+</head>
+<body class="container bg-light">
+<button class="title btn btn-outline-primary" style="margin-top: 10px" id="changePageBtn">Return users management</button>
+<div class="text-center">
+    <h2>User details</h2><br>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form id="userForm" th:action="@{/admin/users/delete}" method="post" class="needs-validation" novalidate autocomplete="off">
+            <input type="hidden" th:value="${user.userId()}" name="userId" readonly>
+
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                <input type="text" class="form-control" id="inputName" name="name" th:value="${user.name()}" placeholder="Your name"
+                       readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="inputEmail">Email</label>
+                <input type="email" class="form-control" id="inputEmail" name="email" th:value="${user.email()}" placeholder="Enter email"
+                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="inputDate">Date</label>
+                <input type="date" class="form-control" id="inputDate" th:value="${user.dob()}" name="date" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="inputRole">Role</label>
+                <select class="form-control" id="inputRole" disabled>
+                    <option th:selected="${user.role().name().equals('ADMIN')}" value="ADMIN">ADMIN</option>
+                    <option th:selected="${user.role().name().equals('USER')}" value="USER">USER</option>
+                    <option th:selected="${user.role().name().equals('MANAGER')}" value="MANAGER">MANAGER</option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary btn-block col-lg-2" type="button" id="deleteBtn">Delete</button>
+
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+
+<script>
+
+    $('#changePageBtn').click(function () {
+        window.location = "/admin/users";
+    });
+
+    $('#deleteBtn').click(function () {
+        let check = confirm("Are you sure to delete this account!!!");
+        if(check){
+            $('#userForm').submit();
+        }
+    });
+
+</script>
+
+</body>
+</html>

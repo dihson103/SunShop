@@ -44,4 +44,18 @@ public class AccountsManagementController {
         model.addAttribute("message", "Add user success");
         return "redirect:/admin/users";
     }
+
+    @GetMapping("{userId}")
+    public String getUserDetails(Model model, @PathVariable Integer userId){
+        UserDTO userDTO = userService.getUserDTO(userId);
+        model.addAttribute("user", userDTO);
+        return "admin-view-account-details";
+    }
+
+    @PostMapping("delete")
+    public String deleteUser(Model model, @RequestParam Integer userId){
+        userService.changeAccountStatus(userId);
+        model.addAttribute("message", "Delete user success!!!");
+        return "redirect:/admin/users";
+    }
 }

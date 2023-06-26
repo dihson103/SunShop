@@ -128,4 +128,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void changeAccountStatus(Integer userId){
+        User user = findUserById(userId);
+        user.setIsActive(false);
+        userRepository.save(user);
+    }
+
 }
