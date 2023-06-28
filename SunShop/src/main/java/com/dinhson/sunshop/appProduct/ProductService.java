@@ -131,4 +131,8 @@ public class ProductService {
         }
         productRepository.save(product);
     }
+
+    public Integer getNumberProductByCategoryId(Integer categoryId){
+        return productRepository.getNumberProductByCategoryId(categoryId);
+    }
 }

@@ -21,4 +21,9 @@ public class Category {
 
     @Column(nullable = false)
     private String img;
+
+    public Category (String name, String img){
+        this.name = name;
+        this.img = img;
+    }
 }

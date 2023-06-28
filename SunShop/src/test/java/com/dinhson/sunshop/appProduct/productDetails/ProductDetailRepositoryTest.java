@@ -134,4 +134,16 @@ class ProductDetailRepositoryTest {
         //then
         assertEquals(false, productDetails.isEmpty());
     }
+
+    @Test
+    void getNumberProductRemainByCategoryId() {
+        //after
+        Integer categoryId = 2;
+
+        //when
+        Integer actual = underTest.getNumberProductRemainByCategoryId(categoryId);
+
+        //then
+        System.out.println("Number: " + actual);
+    }
 }

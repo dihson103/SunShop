@@ -137,4 +137,8 @@ public class ProductDetailService {
         return new ApiResponse("Create and add product's quantity success!!!", HttpStatus.OK);
     }
 
+    public Integer getNumberProductRemainByCategoryId(Integer categoryId){
+        return productDetailRepository.getNumberProductRemainByCategoryId(categoryId);
+    }
+
 }

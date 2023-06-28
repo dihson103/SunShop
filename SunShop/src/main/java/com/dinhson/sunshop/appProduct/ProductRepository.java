@@ -55,4 +55,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
     @Query("SELECT p FROM Product p")
     List<Product> getAll();
 
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.category.id = :categoryId")
+    Integer getNumberProductByCategoryId(Integer categoryId);
+
 }
