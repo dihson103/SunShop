@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+
+    <title>Create new product</title>
+</head>
+<body class="container bg-light">
+
+<button class="title btn btn-outline-primary" style="margin-top: 10px" id="changePageBtn">Return products management</button>
+
+<fieldset class="fieldset">
+    <div class="text-center">
+        <h2>Update Product</h2><br>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form id="updateProduct" th:action="@{/admin/products/update}" method="post" enctype="multipart/form-data" th:object="${product}" class="needs-validation" novalidate autocomplete="off">
+                <input type="hidden" id="productId" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="inputName">Name</label>
+                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Product's name" th:field="*{name}"
+                           required/>
+                    <small class="form-text text-muted">Please fill product's name.</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="category">Category</label>
+                        <select class="form-control mr-1" name="startHour" id="category" th:field="*{categoryId}" required>
+                            <option value="" hidden>Category</option>
+                            <option th:each="category : ${categories}" th:selected="${product.categoryId == category.id}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+                        <small class="form-text text-muted">Please choose category.</small>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="price">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="text" class="form-control" id="price" th:field="*{price}" required aria-label="Amount (to the nearest dollar)">
+                            <span class="input-group-text">.00</span>
+                        </div>
+                        <small class="form-text text-muted">Please enter product's price.</small>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="avatar" class="form-label">Default image:</label><br>
+                    <input type="file" id="avatar" accept="image/png, image/jpeg, image/jpg" name="file" th:field="*{file}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="textAreaRemark">Descriptions:</label>
+                    <textarea class="form-control" name="remark" id="textAreaRemark" rows="7" required th:field="*{description}"
+                              placeholder="Tell us you want more..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-secondary btn col-lg-2" id="changeStatusBtn" type="button" th:text="${product.isDelete ? 'Active Product' : 'Delete'}"></button>
+                    <button class="btn btn-primary btn col-lg-2" id="updateBtn" type="button">Update product</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</fieldset><br>
+
+<fieldset class="fieldset">
+    <div class="text-center">
+        <h2>Add Product Number</h2><br>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form id="updateProductNumber" th:action="@{/admin/products/update}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate autocomplete="off">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="color">Color</label>
+                        <select class="form-control mr-1" name="startHour" id="color"  required>
+                            <option value="all" hidden selected>Color</option>
+                            <option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.name}"></option>
+                        </select>
+                        <small class="form-text text-muted">Please choose color.</small>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="size">Size</label>
+                        <select class="form-control mr-1" name="startHour" id="size"  required>
+                            <option value="all" hidden selected>Size</option>
+                            <option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.size}"></option>
+                        </select>
+                        <small class="form-text text-muted">Please choose color.</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantity remain</label>
+                    <input type="text" class="form-control" id="quantity" name="name" value="0" readonly
+                           required/>
+                    <small class="form-text text-muted">Number products are remaining.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Number add</label>
+                    <input type="text" class="form-control" id="inputNumber" name="name" placeholder="Input number will add"
+                           required/>
+                    <small class="form-text text-muted">Number products will add.</small>
+                </div>
+
+                <input type="hidden" id="isProductExist">
+
+                <div class="form-group">
+                    <button class="btn btn-primary btn col-lg-2" id="updateQuantity" type="button">Update Quantity</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</fieldset>
+
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+<script th:inline="javascript">
+
+    let checkButton = [[${product.isDelete}]] + '';
+    let buttonChangeStatus;
+    let sizeId, colorId;
+    let numberRemain = 0;
+    let productId = $('#productId').val();
+
+    $('#changeStatusBtn').click(function () {
+        let param = {productId : productId};
+        console.log("here")
+
+        $.ajax({
+            url: "/admin/api/products/changeStatus",
+            type: 'PUT',
+            data: param,
+            success: function(response) {
+                alert(response.message);
+                checkButton = !checkButton;
+                buttonChangeStatus = checkButton ? 'Active Product' : 'Delete';
+                $('#changeStatusBtn').html(buttonChangeStatus);
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
+        });
+    });
+
+    $('#updateBtn').click(function () {
+        let name = $('#inputName').val().trim();
+        let categoryId = $('#category').val();
+        let price = $('#price').val().trim();
+        let description = $('#textAreaRemark').val().trim();
+
+        if(name == null || name == "" || categoryId == "" || price == null || price == ""
+            || description == null || description == "" || categoryId == null){
+            alert("Please fill all!!!");
+        }else if (isNaN(price)){
+            alert("Price must be a number!!!");
+        }else {
+
+            $('#updateProduct').submit();
+        }
+    });
+
+    $('#changePageBtn').click(function () {
+        window.location = "/admin/products";
+    });
+
+    function getNumberProductRemain(){
+        sizeId = $('#size').val();
+        colorId = $('#color').val();
+
+        if(!isNaN(sizeId) && !isNaN(colorId)){
+            let param = {
+                sizeId : sizeId,
+                colorId : colorId,
+                productId : productId
+            };
+
+            $.ajax({
+                url: "/admin/api/products/quantity",
+                type: 'GET',
+                data: param,
+                success: function(response) {
+                    numberRemain = response.number;
+                    $('#quantity').val(numberRemain);
+                    $('#isProductExist').val(response.status == "OK");
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+
+        }
+
+    }
+
+    $('#size').change(function () {
+        getNumberProductRemain();
+    });
+
+    $('#color').change(function () {
+        getNumberProductRemain();
+    });
+
+    function updateProductQuantity(sizeId, colorId, number) {
+        let param = {
+            sizeId : sizeId,
+            colorId : colorId,
+            productId : productId,
+            number : number
+        };
+
+        $.ajax({
+            url: "/admin/api/products/quantity",
+            type: 'POST',
+            data: JSON.stringify(param),
+            contentType: 'application/json',
+            success: function(response) {
+                alert(response.message);
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    $('#updateQuantity').click(function () {
+        let isProductExist = $('#isProductExist').val();
+        sizeId = $('#size').val();
+        colorId = $('#color').val();
+        let number = parseInt($('#inputNumber').val());
+
+        if (Number.isInteger(number) && !isNaN(sizeId) && !isNaN(colorId) && number > 0) {
+            let message;
+            let productMess = (number > 1 ? "products" : "product");
+            if(isProductExist != "true"){
+                message = "Product with this color and size is not exist.\nDo you want to create and add " + number + " " + productMess;
+            }else {
+                message = "Do you want to add " + number + " " + productMess;
+            }
+            if(confirm(message)){
+                updateProductQuantity(sizeId, colorId, number);
+            }
+        } else if (!Number.isInteger(number) || number <= 0) {
+            alert("Please input a number greater than 0 for the product quantity.");
+        } else {
+            alert("Please choose a color and size.");
+        }
+    });
+
+
+</script>
+
+</body>
+</html>

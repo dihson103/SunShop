@@ -21,12 +21,14 @@ public class AccountsManagementController {
     public String getUsers(@RequestParam(required = false, defaultValue = "") String name,
                            @RequestParam(required = false, defaultValue = "all") String role,
                            @RequestParam(required = false, defaultValue = "all") String isActive,
+                           @RequestParam(required = false, defaultValue = "") String message,
                            Model model){
         List<UserDTO> userDTOS = userService.searchUsers(isActive, role, name);
         model.addAttribute("users", userDTOS);
         model.addAttribute("role", role);
         model.addAttribute("isActive", isActive);
         model.addAttribute("search", name);
+        model.addAttribute("message", message);
         return "admin-accounts-management";
     }
 
@@ -37,12 +39,11 @@ public class AccountsManagementController {
     }
 
     @PostMapping("create")
-    public String addNewUser(@ModelAttribute User user, Model model){
+    public String addNewUser(@ModelAttribute User user){
         user.setEnabled(true);
         user.setIsActive(true);
         userService.createNewUser(user);
-        model.addAttribute("message", "Add user success");
-        return "redirect:/admin/users";
+        return "redirect:/admin/users?message=Add+user+success%21%21%21";
     }
 
     @GetMapping("{userId}")
@@ -52,10 +53,10 @@ public class AccountsManagementController {
         return "admin-view-account-details";
     }
 
-    @PostMapping("delete")
-    public String deleteUser(Model model, @RequestParam Integer userId){
+    @PostMapping("/delete")
+    public String deleteUser(@RequestParam("userId") Integer userId) {
         userService.changeAccountStatus(userId);
-        model.addAttribute("message", "Delete user success!!!");
-        return "redirect:/admin/users";
+        return "redirect:/admin/users?message=Change+user's+status+success%21%21%21";
     }
+
 }

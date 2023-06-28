@@ -1,7 +1,10 @@
 package com.dinhson.sunshop.appProduct;
 
-import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
+import com.dinhson.sunshop.appAdmin.productManagement.ProductRequestCreate;
+import com.dinhson.sunshop.appAdmin.productManagement.ProductRequestUpdate;
+import com.dinhson.sunshop.appProduct.categories.Category;
 import com.dinhson.sunshop.exception.ProductAlreadyExistException;
+import com.dinhson.sunshop.utils.FileUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -93,4 +96,38 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    public void createNewProduct(ProductRequestCreate productRequestCreate, Category category) {
+        String fileName = FileUtils.getImageUrl(productRequestCreate.getFile());
+        Product product = new Product(productRequestCreate, category, fileName);
+        productRepository.save(product);
+    }
+
+    public ProductRequestUpdate findProductRequestUpdateById(Integer productId){
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find product!!!"));
+        return new ProductRequestUpdate(product);
+    }
+
+    public void changeStatus(Integer productId) {
+        Product product = findProductById(productId);
+        product.setDelete(product.isDelete() ? false : true);
+        productRepository.save(product);
+    }
+
+    public Product findProductById(Integer productId){
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find product!!!"));
+    }
+
+    public void updateProduct(ProductRequestUpdate productRequestUpdate, Category category) {
+        Product product = findProductById(productRequestUpdate.getId());
+        product.setName(productRequestUpdate.getName());
+        product.setPrice(productRequestUpdate.getPrice());
+        product.setCategory(category);
+
+        if(!productRequestUpdate.getFile().isEmpty()){
+            product.setImg(FileUtils.getImageUrl(productRequestUpdate.getFile()));
+        }
+        productRepository.save(product);
+    }
 }

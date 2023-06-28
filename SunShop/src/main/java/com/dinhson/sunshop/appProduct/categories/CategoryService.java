@@ -29,4 +29,9 @@ public class CategoryService {
         System.out.println("get all categories");
         return categoryRepository.findAll();
     }
+
+    public Category getCategoryById(Integer categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("Can not found category!!!"));
+    }
 }

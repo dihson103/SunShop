@@ -26,4 +26,9 @@ public class ColorService {
     public Iterable<Color> findAllColor() {
         return colorRepository.findAll();
     }
+
+    public Color findColorById(Integer colorId){
+        return colorRepository.findById(colorId)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find color!!!"));
+    }
 }

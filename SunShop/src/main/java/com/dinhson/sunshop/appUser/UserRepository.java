@@ -12,13 +12,13 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     Optional<User> getUserByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.role = :role AND u.name LIKE %:nameSearch")
+    @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.role = :role AND u.name LIKE %:nameSearch%")
     List<User> searchUserByAll(boolean isActive, Role role, String nameSearch);
 
-    @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.name LIKE %:nameSearch")
+    @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.name LIKE %:nameSearch%")
     List<User> searchUserByIsActiveAndSearch(boolean isActive, String nameSearch);
 
-    @Query("SELECT u FROM User u WHERE u.role = :role AND u.name LIKE %:nameSearch")
+    @Query("SELECT u FROM User u WHERE u.role = :role AND u.name LIKE %:nameSearch%")
     List<User> searchUserByRoleAndSearch(Role role, String nameSearch);
 
     @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.role = :role")
@@ -30,7 +30,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.role = :role")
     List<User> searchUserByRole(Role role);
 
-    @Query("SELECT u FROM User u WHERE u.name LIKE %:searchName")
+    @Query("SELECT u FROM User u WHERE u.name LIKE %:searchName%")
     List<User> searchByName(String searchName);
 
     @Query("SELECT u FROM User u")

@@ -46,4 +46,11 @@ public class ProductDetail {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_detail_id")
     private Set<Discount> discounts;
+
+    public ProductDetail (Product product, Color color, Size size, Integer number){
+        this.product = product;
+        this.color = color;
+        this.size = size;
+        this.number = number;
+    }
 }

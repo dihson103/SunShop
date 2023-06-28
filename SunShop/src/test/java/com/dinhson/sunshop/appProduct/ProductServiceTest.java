@@ -164,7 +164,7 @@ class ProductServiceTest {
         //after
         String status = "all";
         int categoryId = 0;
-        String searchName = "duct";
+        String searchName = "son";
         boolean isDelete = Boolean.valueOf(status);
 
         //when
@@ -174,6 +174,8 @@ class ProductServiceTest {
         boolean actual = list.stream().anyMatch(p -> {
             return !p.productDTO().name().contains(searchName);
         });
+
+        list.forEach(System.out::println);
         assertFalse(actual);
     }
 

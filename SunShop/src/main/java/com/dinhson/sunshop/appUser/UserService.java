@@ -130,7 +130,7 @@ public class UserService {
 
     public void changeAccountStatus(Integer userId){
         User user = findUserById(userId);
-        user.setIsActive(false);
+        user.setIsActive(user.getIsActive() ? false : true);
         userRepository.save(user);
     }
 

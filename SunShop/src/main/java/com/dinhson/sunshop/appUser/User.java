@@ -57,4 +57,5 @@ public class User {
         role = userDTO.role() == null ? Role.USER : userDTO.role();
     }
 
+
 }

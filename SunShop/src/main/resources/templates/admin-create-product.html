@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+
+    <title>Create new product</title>
+</head>
+<body class="container bg-light">
+
+<button class="title btn btn-outline-primary" style="margin-top: 10px" id="changePageBtn">Return users management</button>
+<div class="text-center">
+    <h2>Create new Product</h2><br>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form id="createProduct" th:action="@{/admin/products/create}" method="post" th:object="${product}" enctype="multipart/form-data" class="needs-validation" novalidate autocomplete="off">
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                <input type="text" class="form-control" id="inputName" name="name" placeholder="Your name" th:field="*{name}"
+                       required/>
+                <small class="form-text text-muted">Please fill product's name.</small>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="category">Category</label>
+                    <select class="form-control mr-1" name="startHour" id="category" th:field="*{categoryId}" required>
+                        <option value="" hidden>Category</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                    <small class="form-text text-muted">Please choose category.</small>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="price">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" id="price" th:field="*{price}" required aria-label="Amount (to the nearest dollar)">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                    <small class="form-text text-muted">Please enter product's price.</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="avatar" class="form-label">Default image:</label><br>
+                <input type="file" id="avatar" accept="image/png, image/jpeg, image/jpg" name="file" th:field="*{file}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="textAreaRemark">Descriptions:</label>
+                <textarea class="form-control" name="remark" id="textAreaRemark" rows="7" th:field="*{description}" required
+                          placeholder="Tell us you want more..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary btn col-lg-2" id="addBtn" type="button">Add new product</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+
+    <script>
+        $('#addBtn').click(function () {
+            let name = $('#inputName').val().trim();
+            let categoryId = $('#category').val();
+            let price = $('#price').val().trim();
+            let image = $('#avatar').val();
+            let description = $('#textAreaRemark').val().trim();
+
+            console.log("name: " + name + " categoryID: " + categoryId + " price: " + price + " image: " + image + " des: " + description);
+
+            if(name == null || name == "" || categoryId == "" || price == null || price == "" || image == null ||
+            image == "" || description == null || description == "" || categoryId == null){
+                alert("Please fill all!!!");
+            }else if (isNaN(price)){
+                alert("Price must be a number!!!");
+            }else {
+                $('#createProduct').submit();
+            }
+        });
+    </script>
+
+</body>
+</html>

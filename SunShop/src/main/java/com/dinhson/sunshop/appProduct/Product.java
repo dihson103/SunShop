@@ -1,5 +1,6 @@
 package com.dinhson.sunshop.appProduct;
 
+import com.dinhson.sunshop.appAdmin.productManagement.ProductRequestCreate;
 import com.dinhson.sunshop.appProduct.categories.Category;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
 import jakarta.persistence.*;
@@ -49,5 +50,13 @@ public class Product {
     @JoinColumn(name = "product_id")
     private Set<ProductDetail> productDetails;
 
-
+    public Product(ProductRequestCreate productRequestCreate, Category category, String img){
+        name = productRequestCreate.getName();
+        price = productRequestCreate.getPrice();
+        description = productRequestCreate.getDescription();
+        isDelete = true;
+        this.img = img;
+        this.category = category;
+        createDate = LocalDateTime.now();
+    }
 }

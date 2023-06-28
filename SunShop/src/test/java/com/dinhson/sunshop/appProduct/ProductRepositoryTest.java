@@ -121,6 +121,8 @@ class ProductRepositoryTest {
         boolean actual = list.stream().anyMatch(p -> {
             return !p.getName().contains(searchName);
         });
+
+        list.forEach(System.out::println);
         assertFalse(actual);
     }
 

@@ -1,5 +1,6 @@
 package com.dinhson.sunshop.utils;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -33,5 +34,12 @@ public class FileUtils {
     public static void saveFile(String fileName, MultipartFile multipartFile){
         saveToMain(fileName, multipartFile);
         saveToTarget(fileName, multipartFile);
+    }
+
+    public static String getImageUrl(MultipartFile multipartFile){
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        FileUtils.saveFile(fileName, multipartFile);
+        fileName = "/img/" + fileName;
+        return fileName;
     }
 }

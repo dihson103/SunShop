@@ -47,7 +47,7 @@
                 </select>
             </div>
 
-            <button class="btn btn-primary btn-block col-lg-2" type="button" id="deleteBtn">Delete</button>
+            <button class="btn btn-primary btn-block col-lg-2" type="button" id="deleteBtn" th:text="${user.isActive() ? 'Delete' : 'Active'}"></button>
 
         </form>
     </div>
@@ -57,14 +57,21 @@
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
 
-<script>
+<script th:inline="javascript">
 
     $('#changePageBtn').click(function () {
         window.location = "/admin/users";
     });
 
     $('#deleteBtn').click(function () {
-        let check = confirm("Are you sure to delete this account!!!");
+        let isActive = /*[[${isActive}]]*/ "";
+        let check;
+        if(isActive){
+           check = confirm("Are you sure to delete this account!!!");
+        }
+        else {
+            check = confirm("Are you sure to active this account!!!");
+        }
         if(check){
             $('#userForm').submit();
         }

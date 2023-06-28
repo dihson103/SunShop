@@ -19,7 +19,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     @Query("SELECT p " +
             "FROM Product p " +
-            "WHERE p.isDelete = :isDelete AND p.category.id = :categoryId AND p.name LIKE %:searchName")
+            "WHERE p.isDelete = :isDelete AND p.category.id = :categoryId AND p.name LIKE %:searchName%")
     List<Product> searchProductByAll(boolean isDelete, int categoryId, String searchName);
 
     @Query("SELECT p " +
@@ -29,7 +29,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     @Query("SELECT p " +
             "FROM Product p " +
-            "WHERE p.isDelete = :isDelete AND p.name LIKE %:searchName")
+            "WHERE p.isDelete = :isDelete AND p.name LIKE %:searchName%")
     List<Product> searchProductByIsDeleteAndSearchName(boolean isDelete, String searchName);
 
     @Query("SELECT p " +
@@ -39,7 +39,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     @Query("SELECT p " +
             "FROM Product p " +
-            "WHERE p.category.id = :categoryId AND p.name LIKE %:searchName")
+            "WHERE p.category.id = :categoryId AND p.name LIKE %:searchName%")
     List<Product> searchProductByCategoryAndSearchName(int categoryId, String searchName);
 
     @Query("SELECT p " +
@@ -49,7 +49,7 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
 
     @Query("SELECT p " +
             "FROM Product p " +
-            "WHERE p.name LIKE %:searchName")
+            "WHERE p.name LIKE %:searchName%")
     List<Product> searchProductBySearchName(String searchName);
 
     @Query("SELECT p FROM Product p")

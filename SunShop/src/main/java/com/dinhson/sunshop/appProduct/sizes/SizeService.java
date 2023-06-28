@@ -26,4 +26,9 @@ public class SizeService {
     public Iterable<Size> findAllSize() {
         return sizeRepository.findAll();
     }
+
+    public Size findSizeById(Integer sizeId){
+        return sizeRepository.findById(sizeId)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find size!!!"));
+    }
 }
