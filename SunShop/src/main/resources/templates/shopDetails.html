@@ -3,7 +3,7 @@
 
 <head th:replace="fragments :: html_head"/>
 
-<body>
+<body th:inline="text">
 <!-- Page Preloder -->
 <div id="preloder">
     <div class="loader"></div>
@@ -76,7 +76,7 @@
                             <span>(18 reviews)</span>
                         </div>
                         <div class="product__details__price">$[[${product.productDTO.price}]]</div>
-                        <p>[[${product.productDTO.description}]]</p>
+                        <pre><p th:text="${product.productDTO.description}"></p></pre>
 
                         <div class="wrapper">
                             <b style="margin-top: 4px">Color:</b>

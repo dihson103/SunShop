@@ -124,6 +124,7 @@ public class ProductService {
         product.setName(productRequestUpdate.getName());
         product.setPrice(productRequestUpdate.getPrice());
         product.setCategory(category);
+        product.setDescription(productRequestUpdate.getDescription());
 
         if(!productRequestUpdate.getFile().isEmpty()){
             product.setImg(FileUtils.getImageUrl(productRequestUpdate.getFile()));

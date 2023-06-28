@@ -69,8 +69,7 @@ public class ProductsManagementController {
 
     @GetMapping("{productId}")
     public String getProductDetail(@PathVariable Integer productId,
-                                   Model model,
-                                   @RequestParam(required = false) String message){
+                                   Model model){
         ProductRequestUpdate productRequestUpdate = productService.findProductRequestUpdateById(productId);
         Iterable<Category> categories = categoryService.findAllCategory();
         Iterable<Color> colors = colorService.findAllColor();
@@ -80,7 +79,6 @@ public class ProductsManagementController {
         model.addAttribute("sizes", sizes);
         model.addAttribute("categories", categories);
         model.addAttribute("product", productRequestUpdate);
-        model.addAttribute("message", message);
         return "admin-view-product-details";
     }
 

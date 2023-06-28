@@ -15,6 +15,11 @@
 <button class="title btn btn-outline-primary" style="margin-top: 10px" id="changePageBtn">Return products management</button>
 
 <fieldset class="fieldset">
+
+    <div class="alert alert-primary mt-3" role="alert" th:if="${message != null}">
+        [[${message}]]
+    </div>
+
     <div class="text-center">
         <h2>Update Product</h2><br>
     </div>
