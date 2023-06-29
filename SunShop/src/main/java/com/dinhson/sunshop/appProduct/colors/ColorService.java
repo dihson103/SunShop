@@ -70,4 +70,9 @@ public class ColorService {
         colorRepository.save(color);
         return "Update color success!!";
     }
+
+    public void deleteColor(Integer colorId){
+        Color color = findColorById(colorId);
+        colorRepository.delete(color);
+    }
 }

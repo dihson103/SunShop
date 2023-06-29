@@ -120,6 +120,7 @@
                         </div>
 
                         <div class="form-group">
+                            <button class="btn btn-primary btn col-lg-2" id="deleteBtn" type="button">Delete Size</button>
                             <button class="btn btn-primary btn col-lg-2" id="addBtn" type="button">Add new category</button>
                         </div>
 
@@ -165,7 +166,8 @@
         $('#inputHeight').val('');
         $('#inputWeight').val('');
         $('#addBtn').html('Add New Size');
-        $('#sizeForm').attr('action', '/admin/sizes')
+        $('#sizeForm').attr('action', '/admin/sizes');
+        $('#deleteBtn').toggle(false);
         $('#sizeTable').toggle(false);
         $('#addSizeForm').toggle(true);
     });
@@ -186,7 +188,7 @@
         $('#inputHeight').val(height);
         $('#inputWeight').val(weight);
         $('#addBtn').html('Update Size');
-        $('#sizeForm').attr('action', '/admin/sizes/update')
+        $('#deleteBtn').toggle(true);
         $('#sizeTable').toggle(false);
         $('#addSizeForm').toggle(true);
     });
@@ -197,10 +199,18 @@
         let weight = $('#inputWeight').val().trim();
 
         if(name != null && name != "" && height != null && height != "" && weight != null && weight != ""){
+            $('#sizeForm').attr('action', '/admin/sizes/update');
             $('#sizeForm').submit();
         }
         else {
             alert("Please input all field!!!");
+        }
+    });
+
+    $('#deleteBtn').click(function () {
+        if(confirm("Are you sure to delete this color?")){
+            $('#sizeForm').attr('action', '/admin/sizes/delete');
+            $('#sizeForm').submit();
         }
     });
 

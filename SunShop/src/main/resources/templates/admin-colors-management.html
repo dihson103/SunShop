@@ -57,7 +57,8 @@
                         <th>#</th>
                         <th>Color Name</th>
                         <th>Number product remain</th>
-                        <th>Action</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody id="tableUser">
@@ -68,6 +69,8 @@
                         <td th:text="${color.numberRemain()}"></td>
                         <td><a style="cursor: pointer" class="view" title="View Details" data-toggle="tooltip"><i
                                 class="material-icons colorAction" th:id="${color.id()}" th:name="${color.name()}">&#xE5C8;</i></a></td>
+                        <td><a style="cursor: pointer" class="view" title="View Details" data-toggle="tooltip"><i
+                                class="material-icons colorDelete" th:name="${color.id()}">&#xE5C8;</i></a></td>
                     </tr>
 
                     </tbody>
@@ -156,6 +159,15 @@
             $('#colorId').val(colorId);
             $('#colorName').val(newName);
             $('#colorForm').attr('action', '/admin/colors/update')
+            $('#colorForm').submit();
+        }
+    });
+
+    $('.colorDelete').click(function () {
+        if(confirm('Are you sure to delete this color???')){
+            let colorId = $(this).attr('name');
+            $('#colorId').val(colorId);
+            $('#colorForm').attr('action', '/admin/colors/delete')
             $('#colorForm').submit();
         }
     });

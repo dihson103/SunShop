@@ -1,5 +1,6 @@
 package com.dinhson.sunshop.appAdmin.sizeManagement;
 
+import com.dinhson.sunshop.appProduct.productDetails.ProductDetailService;
 import com.dinhson.sunshop.appProduct.sizes.Size;
 import com.dinhson.sunshop.appProduct.sizes.SizeService;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SizeManagementController {
 
     private final SizeService sizeService;
+    private final ProductDetailService productDetailService;
 
     @GetMapping
     public String getSizes(@RequestParam(required = false) String search,
@@ -48,6 +50,19 @@ public class SizeManagementController {
                           RedirectAttributes redirectAttributes){
         String message = sizeService.updateSize(id, size, height, weight);
 
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/admin/sizes";
+    }
+
+    @PostMapping("delete")
+    public String deleteSize(@RequestParam Integer id, RedirectAttributes redirectAttributes){
+        String message;
+        if(productDetailService.isSizeWasUsed(id)){
+            message = "This size was used so can not delete this size!!!";
+        }else {
+            sizeService.deleteSize(id);
+            message = "Delete success!!!";
+        }
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/admin/sizes";
     }

@@ -9,6 +9,9 @@
     <!-- Page Content  -->
     <div class="container-xl" style="margin-top: 25px;">
         <div class="table-responsive">
+            <div class="alert alert-primary mt-3" role="alert" th:if="${message != null}">
+                [[${message}]]
+            </div>
             <div class="table-wrapper" id="categoriesTable">
                 <div class="table-title">
                     <div class="row">
@@ -52,7 +55,8 @@
                         <th>Categories name</th>
                         <th>Number product</th>
                         <th>Total product remain</th>
-                        <th>Action</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -66,6 +70,11 @@
                         <td>
                             <a style="cursor: pointer" class="view" title="View Details" data-toggle="tooltip">
                                 <i class="material-icons categoryAction" th:id="${category.id()}" th:name="${category.name()}">&#xE5C8;</i>
+                            </a>
+                        </td>
+                        <td>
+                            <a style="cursor: pointer" class="view" title="View Details" data-toggle="tooltip">
+                                <i class="material-icons categoryDelete" th:name="${category.id()}">&#xE5C8;</i>
                             </a>
                         </td>
 
@@ -120,6 +129,12 @@
         </div>
     </div>
 
+</div>
+
+<div hidden>
+    <form th:action="@{/admin/categories/delete}" method="post" id="formDelete">
+        <input type="hidden" name="categoryId" id="cateId">
+    </form>
 </div>
 
 
@@ -183,6 +198,12 @@
 
         $('#categoryForm').attr('action', '/admin/categories/update');
         $('#addBtn').html('Update category');
+    });
+
+    $('.categoryDelete').click(function () {
+        let categoryId = $(this).attr('name');
+        $('#cateId').val(categoryId);
+        $('#formDelete').submit();
     });
 
 

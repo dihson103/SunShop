@@ -54,4 +54,10 @@ public class SizeService {
         sizeRepository.save(size);
         return "Update size success!!!";
     }
+
+    public void deleteSize(Integer id){
+        Size size = sizeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find size!!!"));
+        sizeRepository.delete(size);
+    }
 }

@@ -23,7 +23,6 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryDTOMapper categoryDTOMapper;
 
-    @CacheEvict(value = "categories", allEntries = true)
     public Category addNewCategory(Category category) {
         if (isCategoryExist(category)) {
             throw new CategoryAlreadyExistException("Category " + category.getName() + " is already exist!!!");
@@ -35,7 +34,6 @@ public class CategoryService {
         return categoryRepository.findCategoryByName(category.getName()).isPresent();
     }
 
-    @Cacheable("categories")
     public List<Category> findAllCategory() {
         System.out.println("get all categories");
         return categoryRepository.getAll();
@@ -74,5 +72,10 @@ public class CategoryService {
         }
 
         categoryRepository.save(category);
+    }
+
+    public void deleteCategory(Integer categoryId){
+        Category category = getCategoryById(categoryId);
+        categoryRepository.delete(category);
     }
 }

@@ -145,4 +145,14 @@ public class ProductDetailService {
         return productDetailRepository.getNumberProductRemainByColorId(colorId);
     }
 
+    public boolean isSizeWasUsed(Integer sizeId){
+        Optional<ProductDetail> productDetail = productDetailRepository.getFirstBySizeId(sizeId);
+        return productDetail.isPresent();
+    }
+
+    public boolean isColorWasUsed(Integer colorId){
+        Optional<ProductDetail> productDetail = productDetailRepository.getFirstByColorId(colorId);
+        return productDetail.isPresent();
+    }
+
 }

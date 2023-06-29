@@ -1,6 +1,7 @@
 package com.dinhson.sunshop.appAdmin.colorManagement;
 
 import com.dinhson.sunshop.appProduct.colors.ColorService;
+import com.dinhson.sunshop.appProduct.productDetails.ProductDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ColorManagementController {
 
     private final ColorService colorService;
+    private final ProductDetailService productDetailService;
 
     @GetMapping
     public String colorManagement(@RequestParam(required = false) String search, Model model){
@@ -42,6 +44,20 @@ public class ColorManagementController {
                               RedirectAttributes redirectAttributes){
         String message = colorService.updateColor(colorId, colorName);
 
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/admin/colors";
+    }
+
+    @PostMapping("delete")
+    public String deleteColor(@RequestParam Integer colorId, RedirectAttributes redirectAttributes){
+        String message;
+        if(productDetailService.isColorWasUsed(colorId)){
+            message = "This color was used so can not delete!!!";
+        }
+        else {
+            colorService.deleteColor(colorId);
+            message = "Delete color success!!!";
+        }
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/admin/colors";
     }

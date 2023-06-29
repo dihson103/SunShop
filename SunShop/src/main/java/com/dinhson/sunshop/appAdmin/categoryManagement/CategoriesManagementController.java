@@ -1,5 +1,6 @@
 package com.dinhson.sunshop.appAdmin.categoryManagement;
 
+import com.dinhson.sunshop.appProduct.ProductService;
 import com.dinhson.sunshop.appProduct.categories.Category;
 import com.dinhson.sunshop.appProduct.categories.CategoryService;
 import jakarta.validation.Valid;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CategoriesManagementController {
 
     private final CategoryService categoryService;
+    private final ProductService productService;
 
     @GetMapping
     public String categoriesManagement (@RequestParam(required = false) String searchName, Model model){
@@ -49,6 +51,20 @@ public class CategoriesManagementController {
 
         categoryService.updateCategory(categoryRequestDTO);
         redirectAttributes.addFlashAttribute("message", "Update category success!!!");
+        return "redirect:/admin/categories";
+    }
+
+    @PostMapping("delete")
+    public String deleteCategory(@RequestParam Integer categoryId, RedirectAttributes redirectAttributes){
+        String message;
+        if(productService.getNumberProductByCategoryId(categoryId) > 0){
+            message = "This category was used, can not delete this!!!";
+        }
+        else {
+            categoryService.deleteCategory(categoryId);
+            message = "Delete category success!!!";
+        }
+        redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/admin/categories";
     }
 

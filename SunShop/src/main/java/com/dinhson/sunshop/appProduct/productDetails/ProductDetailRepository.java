@@ -58,4 +58,10 @@ public interface ProductDetailRepository extends CrudRepository<ProductDetail, I
 
     @Query("SELECT SUM(p.number) FROM ProductDetail p WHERE p.color.id = :colorId")
     Integer getNumberProductRemainByColorId(Integer colorId);
+
+    @Query("SELECT p FROM ProductDetail p WHERE p.size.id = :sizeId ORDER BY p.id ASC LIMIT 1")
+    Optional<ProductDetail> getFirstBySizeId(Integer sizeId);
+
+    @Query("SELECT p FROM ProductDetail p WHERE p.color.id = :colorId ORDER BY p.id ASC LIMIT 1")
+    Optional<ProductDetail> getFirstByColorId(Integer colorId);
 }
