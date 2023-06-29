@@ -55,4 +55,7 @@ public interface ProductDetailRepository extends CrudRepository<ProductDetail, I
 
     @Query("SELECT SUM(p.number) FROM ProductDetail p WHERE p.product.category.id = :categoryId")
     Integer getNumberProductRemainByCategoryId(Integer categoryId);
+
+    @Query("SELECT SUM(p.number) FROM ProductDetail p WHERE p.color.id = :colorId")
+    Integer getNumberProductRemainByColorId(Integer colorId);
 }

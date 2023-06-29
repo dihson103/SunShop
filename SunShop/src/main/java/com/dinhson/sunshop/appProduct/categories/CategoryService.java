@@ -68,7 +68,7 @@ public class CategoryService {
             throw new CategoryAlreadyExistException("Category name can not be empty!!!");
         }
 
-        if(categoryRequestDTO.getFile().isEmpty()){
+        if(!categoryRequestDTO.getFile().isEmpty()){
             String image = FileUtils.getImageUrl(categoryRequestDTO.getFile());
             category.setImg(image);
         }

@@ -38,7 +38,6 @@ public class CategoriesManagementController {
             throw new IllegalArgumentException(bindingResult.toString());
         }
 
-        //TODO test this
         categoryService.createCategory(categoryRequestDTO);
         redirectAttributes.addFlashAttribute("message", "Add new category success!!!");
         return "redirect:/admin/categories";
@@ -48,7 +47,6 @@ public class CategoriesManagementController {
     public String updateCategory (@ModelAttribute CategoryRequestDTO categoryRequestDTO,
                                   RedirectAttributes redirectAttributes){
 
-        //TODO test this
         categoryService.updateCategory(categoryRequestDTO);
         redirectAttributes.addFlashAttribute("message", "Update category success!!!");
         return "redirect:/admin/categories";

@@ -141,4 +141,8 @@ public class ProductDetailService {
         return productDetailRepository.getNumberProductRemainByCategoryId(categoryId);
     }
 
+    public Integer getNumberProductRemainByColorId(Integer colorId){
+        return productDetailRepository.getNumberProductRemainByColorId(colorId);
+    }
+
 }

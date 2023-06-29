@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin-fragments :: admin_html_head"/>
+<body>
+
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" style="height: 750px;" th:replace="admin-fragments :: admin_html_nav"/>
+
+    <!-- Page Content  -->
+
+
+
+    <div class="container-xl" style="margin-top: 25px;">
+        <div class="table-responsive">
+            <div class="alert alert-primary mt-3" role="alert" th:if="${message != null}">
+                [[${message}]]
+            </div>
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h2>Colors <b>Management</b></h2>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="btn btn-primary" id="addColorBtn"><i class="material-icons">&#xE863;</i> <span>Add New Color</span></div>
+                            <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-filter">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="" style="display: flex; align-items: center;">
+                                <span style="margin-right: 5px;">Show</span>
+                                <select class="form-control" style="margin-right: 5px;">
+                                    <option>5</option>
+                                    <option>10</option>
+                                    <option>15</option>
+                                    <option>20</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                            <div class="filter-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" id="searchName" th:value="${search}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Color Name</th>
+                        <th>Number product remain</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableUser">
+
+                    <tr th:each="color, state : ${colors}">
+                        <td>[[${state.count}]]</td>
+                        <td th:text="${color.name()}"></td>
+                        <td th:text="${color.numberRemain()}"></td>
+                        <td><a style="cursor: pointer" class="view" title="View Details" data-toggle="tooltip"><i
+                                class="material-icons colorAction" th:id="${color.id()}" th:name="${color.name()}">&#xE5C8;</i></a></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="clearfix">
+                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <ul class="pagination">
+                        <li class="page-item disabled"><a href="#">Previous</a></li>
+                        <li class="page-item"><a href="#" class="page-link">1</a></li>
+                        <li class="page-item"><a href="#" class="page-link">2</a></li>
+                        <li class="page-item"><a href="#" class="page-link">3</a></li>
+                        <li class="page-item active"><a href="#" class="page-link">4</a></li>
+                        <li class="page-item"><a href="#" class="page-link">5</a></li>
+                        <li class="page-item"><a href="#" class="page-link">6</a></li>
+                        <li class="page-item"><a href="#" class="page-link">7</a></li>
+                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div hidden>
+    <form action="" method="post" id="colorForm">
+        <input type="hidden" id="colorId" name="colorId">
+        <input type="hidden" id="colorName" name="colorName">
+    </form>
+</div>
+
+
+<script th:inline="javascript">
+
+    let colorList = /*[[${colors}]]*/ null;
+
+    function isColorExist(colorName) {
+        let color = colorList.find(c => c.name == colorName);
+        return color != null;
+    }
+
+    $('#addColorBtn').click(function () {
+        let name = prompt("Enter new color name:").trim();
+        if(name != null && name != ""){
+            if(isColorExist(name)){
+                alert("Color with name: " + name + " is already exist!!!");
+            }
+            else {
+                $('#colorId').val('');
+                $('#colorName').val(name);
+                $('#colorForm').attr('action', '/admin/colors')
+                $('#colorForm').submit();
+            }
+        }
+    });
+
+    $('#searchName').change(function () {
+        window.location = '/admin/colors?search=' + $('#searchName').val().trim();
+    });
+
+    $('.colorAction').click(function () {
+        let colorId = $(this).attr('id');
+        let colorName = $(this).attr('name');
+        let newName = prompt("Enter new color name:", colorName).trim();
+
+        if(newName != null && newName != "" && newName != colorName){
+            $('#colorId').val(colorId);
+            $('#colorName').val(newName);
+            $('#colorForm').attr('action', '/admin/colors/update')
+            $('#colorForm').submit();
+        }
+    });
+
+</script>
+
+</body>
+</html>
