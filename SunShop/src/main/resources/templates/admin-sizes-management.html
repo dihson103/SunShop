@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin-fragments :: admin_html_head"/>
+<body>
+
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" style="height: 750px;" th:replace="admin-fragments :: admin_html_nav"/>
+
+    <!-- Page Content  -->
+
+
+
+    <div class="container-xl" style="margin-top: 25px;">
+        <div class="table-responsive">
+            <div class="alert alert-primary mt-3" role="alert" th:if="${message != null}">
+                [[${message}]]
+            </div>
+            <div id="sizeTable" class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <h2>Sizes <b>Management</b></h2>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="btn btn-primary" id="addSizeBtn"><i class="material-icons">&#xE863;</i> <span>Add New Color</span></div>
+                            <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-filter">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="" style="display: flex; align-items: center;">
+                                <span style="margin-right: 5px;">Show</span>
+                                <select class="form-control" style="margin-right: 5px;">
+                                    <option>5</option>
+                                    <option>10</option>
+                                    <option>15</option>
+                                    <option>20</option>
+                                </select>
+                                <span>entries</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                            <div class="filter-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" id="searchName" th:value="${search}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Size Name</th>
+                        <th>Height</th>
+                        <th>Weight</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tableUser">
+
+                    <tr th:each="size, state : ${sizes}">
+                        <td>[[${state.count}]]</td>
+                        <td th:text="${size.size}"></td>
+                        <td th:text="${size.height} + ' cm'"></td>
+                        <input type="hidden" th:id="'height' + ${size.id}" th:value="${size.height}">
+                        <input type="hidden" th:id="'weight' + ${size.id}" th:value="${size.weight}">
+                        <td th:text="${size.weight} + ' kg'"></td>
+                        <td><a style="cursor: pointer" class="view" title="View Details" data-toggle="tooltip"><i
+                                class="material-icons sizeAction" th:id="${size.id}" th:name="${size.size}">&#xE5C8;</i></a></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+                <div class="clearfix">
+                    <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
+                    <ul class="pagination">
+                        <li class="page-item disabled"><a href="#">Previous</a></li>
+                        <li class="page-item"><a href="#" class="page-link">1</a></li>
+                        <li class="page-item"><a href="#" class="page-link">2</a></li>
+                        <li class="page-item"><a href="#" class="page-link">3</a></li>
+                        <li class="page-item active"><a href="#" class="page-link">4</a></li>
+                        <li class="page-item"><a href="#" class="page-link">5</a></li>
+                        <li class="page-item"><a href="#" class="page-link">6</a></li>
+                        <li class="page-item"><a href="#" class="page-link">7</a></li>
+                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" id="addSizeForm">
+                <div class="card-body">
+                    <button class="title btn btn-outline-secondary" style="margin: 10px 0px" id="changePageBtn">Return sizes management</button>
+                    <form id="sizeForm" th:action="@{/admin/sizes}" method="post" enctype="multipart/form-data"  class="needs-validation" novalidate autocomplete="off">
+                        <input type="hidden" id="sizeId" name="id">
+
+                        <div class="form-group">
+                            <label for="inputSize">Size</label>
+                            <input type="text" class="form-control" id="inputSize" name="size" placeholder="Size's name"
+                                   required/>
+                            <small class="form-text text-muted">Please fill size's name.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputHeight">Height (cm)</label>
+                            <input type="text" class="form-control" id="inputHeight" name="height" placeholder="Height like : xxx - xxx"
+                                   required/>
+                            <small class="form-text text-muted">Please fill size's height.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputWeight">Weight (kg)</label>
+                            <input type="text" class="form-control" id="inputWeight" name="weight" placeholder="Weight like: xxx -xxx"
+                                   required/>
+                            <small class="form-text text-muted">Please fill size's weight.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary btn col-lg-2" id="addBtn" type="button">Add new category</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script th:inline="javascript">
+
+    $(document).ready(function () {
+        $('#addSizeForm').hide();
+    });
+
+    (function($) {
+
+        "use strict";
+
+        var fullHeight = function() {
+
+            $('.js-fullheight').css('height', $(window).height());
+            $(window).resize(function(){
+                $('.js-fullheight').css('height', $(window).height());
+            });
+
+        };
+        fullHeight();
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+        });
+
+    })(jQuery);
+
+    $('#addSizeBtn').click(function () {
+        $('#sizeId').val('');
+        $('#inputSize').val('');
+        $('#inputHeight').val('');
+        $('#inputWeight').val('');
+        $('#addBtn').html('Add New Size');
+        $('#sizeForm').attr('action', '/admin/sizes')
+        $('#sizeTable').toggle(false);
+        $('#addSizeForm').toggle(true);
+    });
+
+    $('#changePageBtn').click(function () {
+        $('#sizeTable').toggle(true);
+        $('#addSizeForm').toggle(false);
+    });
+
+    $('.sizeAction').click(function () {
+        let sizeId = $(this).attr('id');
+        let sizeName = $(this).attr('name');
+        let height = $('#height' + sizeId).val();
+        let weight = $('#weight' + sizeId).val();
+
+        $('#sizeId').val(sizeId);
+        $('#inputSize').val(sizeName);
+        $('#inputHeight').val(height);
+        $('#inputWeight').val(weight);
+        $('#addBtn').html('Update Size');
+        $('#sizeForm').attr('action', '/admin/sizes/update')
+        $('#sizeTable').toggle(false);
+        $('#addSizeForm').toggle(true);
+    });
+
+    $('#addBtn').click(function () {
+        let name = $('#inputSize').val().trim();
+        let height = $('#inputHeight').val().trim();
+        let weight = $('#inputWeight').val().trim();
+
+        if(name != null && name != "" && height != null && height != "" && weight != null && weight != ""){
+            $('#sizeForm').submit();
+        }
+        else {
+            alert("Please input all field!!!");
+        }
+    });
+
+</script>
+
+</body>
+</html>

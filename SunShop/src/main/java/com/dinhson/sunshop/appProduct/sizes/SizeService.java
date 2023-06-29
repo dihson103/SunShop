@@ -11,18 +11,17 @@ public class SizeService {
 
     private final SizeRepository sizeRepository;
 
-    private boolean isSizeExist(Size size) {
-        return sizeRepository.findSizeBySize(size.getSize()).isPresent();
+    private boolean isSizeExist(String size) {
+        return sizeRepository.findSizeBySize(size).isPresent();
     }
 
     public void addNewSize(Size size) {
-        if (isSizeExist(size)) {
+        if (isSizeExist(size.getSize())) {
             throw new SizeAlreadyExistException("Size " + size.getSize() + " is already exist!!!");
         }
         sizeRepository.save(size);
     }
 
-    @Cacheable("sizes")
     public Iterable<Size> findAllSize() {
         return sizeRepository.findAll();
     }
@@ -30,5 +29,29 @@ public class SizeService {
     public Size findSizeById(Integer sizeId){
         return sizeRepository.findById(sizeId)
                 .orElseThrow(() -> new IllegalArgumentException("Can not find size!!!"));
+    }
+
+    public String createNewSize(String name, String height, String weight){
+        if(isSizeExist(name)){
+            return "Size " + name + " is already exist!!!";
+        }
+
+        Size size = new Size(name, height, weight);
+        sizeRepository.save(size);
+        return "Add new size success!!!";
+    }
+
+    public String updateSize(Integer id, String name, String height, String weight){
+        if(isSizeExist(name)){
+            return "Size " + name + " is already exist!!!";
+        }
+
+        Size size = sizeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find size!!!"));
+        size.setSize(name);
+        size.setHeight(height);
+        size.setWeight(weight);
+        sizeRepository.save(size);
+        return "Update size success!!!";
     }
 }
