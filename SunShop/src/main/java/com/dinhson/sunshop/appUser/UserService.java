@@ -18,7 +18,7 @@ public class UserService {
     private final UserDTOMapper userDTOMapper;
 
     public User findUserById(int id) {
-        return userRepository.getById(id).
+        return userRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("User not found!!!"));
     }
 

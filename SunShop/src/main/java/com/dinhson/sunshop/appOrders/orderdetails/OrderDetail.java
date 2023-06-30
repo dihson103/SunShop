@@ -15,13 +15,19 @@ public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    private int quantity;
+    private Integer quantity;
 
-    private int discount;
+    private Integer discount;
 
     @ManyToOne
     @JoinColumn(name = "product_detail_id", nullable = false)
     private ProductDetail productDetail;
+
+    public OrderDetail (Integer quantity, Integer discount, ProductDetail productDetail){
+        this.quantity = quantity;
+        this.discount = discount;
+        this.productDetail = productDetail;
+    }
 }

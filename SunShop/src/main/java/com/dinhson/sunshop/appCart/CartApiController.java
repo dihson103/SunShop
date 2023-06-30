@@ -19,8 +19,8 @@ public class CartApiController {
 
         //TODO lay userId
 
-        cartService.addItemsToCart(productDetailId, 1);
-        int count = cartService.countNumberItemInCart(1);
+        cartService.addItemsToCart(productDetailId, 4);
+        int count = cartService.countNumberItemInCart(4);
 
         return String.valueOf(count);
     }
@@ -28,7 +28,7 @@ public class CartApiController {
     @PutMapping
     public String changeQuantityItem(@RequestBody CartItemRequestDTO cartItemRequestDTO) {
 
-        cartService.changeQuantityItem(cartItemRequestDTO.productDetailId(), 1, cartItemRequestDTO.number());
+        cartService.changeQuantityItem(cartItemRequestDTO.productDetailId(), 4, cartItemRequestDTO.number());
 
         return "Change success!!!";
     }
@@ -36,7 +36,7 @@ public class CartApiController {
     @DeleteMapping
     public String deleteItem(@RequestBody CartItemRequestDTO cartItemRequestDTO){
 
-        int userId = 1;
+        int userId = 4;
         cartService.deleteItem(cartItemRequestDTO.productDetailId(), userId);
         return "Success";
     }

@@ -24,4 +24,10 @@ public class Shipment {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    public Shipment (String phone, String address, User user){
+        this.phone = phone;
+        this.address = address;
+        this.user = user;
+    }
 }

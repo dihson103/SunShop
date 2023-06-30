@@ -23,6 +23,8 @@
     <link rel="stylesheet" th:href="@{/css/slicknav.min.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css">
 
+    <link rel="stylesheet" th:href="@{/css/checkOut/checkOut.css}" type="text/css">
+
     <link rel="stylesheet" th:href="@{/css/cart/quantity.css}" type="text/css">
     <link rel="stylesheet" th:href="@{/css/cart/checkBox.css}" type="text/css">
 
@@ -84,6 +86,7 @@
         .input:checked + .btn .span {
             color: var(--font-color-light);
         }
+
     </style>
 
 </head>
@@ -112,7 +115,7 @@
                         <div class="header__top__right__language">
                             <img src="img/language.png" alt="">
                             <a th:if="${user} == null" th:href="@{/sign-up}">Create Account</a>
-                            <a th:if="${user} != null" th:href="@{/#}">[[${user.getName()}]]</a>
+                            <a th:if="${user} != null" th:href="@{/#}">[[${user.name()}]]</a>
                             <span class="arrow_carrot-down"></span>
                         </div>
                         <div class="header__top__right__auth">

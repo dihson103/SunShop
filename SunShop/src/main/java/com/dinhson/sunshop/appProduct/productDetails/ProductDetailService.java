@@ -2,6 +2,7 @@ package com.dinhson.sunshop.appProduct.productDetails;
 
 import com.dinhson.sunshop.appAdmin.productManagement.NumberProductResponseDTO;
 import com.dinhson.sunshop.appAdmin.productManagement.UpdateNumberProductDTO;
+import com.dinhson.sunshop.appCart.CartItem;
 import com.dinhson.sunshop.appProduct.Product;
 import com.dinhson.sunshop.appProduct.ProductDetailMapProductResponseDTOMapper;
 import com.dinhson.sunshop.appProduct.ProductResponseDTO;
@@ -154,5 +155,16 @@ public class ProductDetailService {
         Optional<ProductDetail> productDetail = productDetailRepository.getFirstByColorId(colorId);
         return productDetail.isPresent();
     }
+
+    private void updateQuantity (CartItem cartItem){
+        ProductDetail productDetail = cartItem.getProductDetail();
+        productDetail.setNumber(productDetail.getNumber() - cartItem.getQuantity());
+        productDetailRepository.save(productDetail);
+    }
+
+    public void updateQuantityProducts(List<CartItem> cartItems){
+        cartItems.forEach(cartItem -> updateQuantity(cartItem));
+    }
+
 
 }

@@ -1,12 +1,13 @@
 package com.dinhson.sunshop.appOrders;
 
 import com.dinhson.sunshop.appOrders.orderdetails.OrderDetail;
+import com.dinhson.sunshop.appUser.shipments.Shipment;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -20,11 +21,24 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private LocalDateTime orderDate;
+    private LocalDate orderDate;
 
     private Status status;
+
+    private String note;
+
+    @ManyToOne
+    @JoinColumn(name = "shipment_id")
+    private Shipment shipment;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
     private Set<OrderDetail> orderDetails;
+
+    public Order (LocalDate orderDate, Status status, String note, Shipment shipment){
+        this.orderDate = orderDate;
+        this.status = status;
+        this.note = note;
+        this.shipment = shipment;
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -84,11 +85,27 @@ public class CartService {
 
     @Cacheable("carts")
     public List<CartItemDTO> findCartByUserId(int userId) {
-        return cartRepository.findCartByUserId(userId).stream().map(cartItemDTOMapper).collect(Collectors.toList());
+        return cartRepository.findCartByUserId(userId).stream()
+                .map(cartItemDTOMapper)
+                .collect(Collectors.toList());
     }
 
-    public void changeItemInCart(){
+    public List<CartItem> getCartItemsById(List<Integer> cartItemIds){
+        List<CartItem> cartItems = new ArrayList<>();
+        cartItemIds.forEach(cartItemId -> {
+            CartItem cartItem = cartRepository.findById(cartItemId)
+                    .orElseThrow(() -> new IllegalArgumentException("Can not find item by id: " + cartItemId));
+            cartItems.add(cartItem);
+        });
+        return cartItems;
+    }
 
+    private void deleteItemInCart(CartItem cartItem){
+        cartRepository.delete(cartItem);
+    }
+
+    public void deleteCartItems(List<CartItem> cartItems){
+        cartItems.forEach(cartItem -> deleteItemInCart(cartItem));
     }
 
 }

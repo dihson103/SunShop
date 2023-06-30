@@ -102,7 +102,10 @@
                                         </td>
                                         <input type="hidden" th:id="'total' + ${cartItem.id()}" th:value="${cartItem.price() * cartItem.quantity()}">
                                         <td>
-                                            <input class="check checkValue" type="checkbox" name="chooseItem" onchange="changeCheck()" th:value="${cartItem.id()}">
+                                            <form th:action="@{/order}" method="get" id="formChecked">
+                                                <input type="hidden" id="checkedValues" name="checkedValues">
+                                                <input class="check checkValue" type="checkbox" name="chooseItem" onchange="changeCheck()" th:value="${cartItem.id()}">
+                                            </form>
                                         </td>
                                         <td class="shoping__cart__item__close">
                                             <span class="icon_close" th:onclick="'deleteItem(' + ${cartItem.id()} + ')'"></span>
@@ -142,7 +145,7 @@
                             <li>Shipment's fee <span>$ 2</span></li>
                             <li>Total <span  id="totalMoney">$ 0</span></li>
                         </ul>
-                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        <a style="cursor: pointer" id="checkOutBtn" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
                 </div>
             </div>
@@ -419,7 +422,20 @@
             });
         }
 
+        $('#checkOutBtn').click(function () {
+            const selectedValues = $('input[name="chooseItem"]:checked').map( function () {
+                return $(this).val();
+            })
+                .get()
+                .join(',');
 
+            if (selectedValues.length === 0) {
+                alert('No items selected.');
+            } else {
+                $('#checkedValues').val(selectedValues);
+                $('#formChecked').submit();
+            }
+        });
 
 
     </script>

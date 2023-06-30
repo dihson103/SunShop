@@ -17,7 +17,7 @@ public class CartController {
 
     @GetMapping("cart")
     public String getCart(Model model) {
-        int userId = 1;
+        int userId = 4;
 
         List<CartItemDTO> cart = cartService.findCartByUserId(userId);
 
