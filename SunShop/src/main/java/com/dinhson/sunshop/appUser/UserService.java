@@ -1,13 +1,17 @@
 package com.dinhson.sunshop.appUser;
 
 import com.dinhson.sunshop.appUser.profile.ProfileSecurityDTO;
+import com.dinhson.sunshop.exception.ForgetPasswordEmailNotTrueException;
+import com.dinhson.sunshop.exception.UserNotValidException;
 import com.dinhson.sunshop.exception.UsersNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserDTOMapper userDTOMapper;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public User findUserById(int id) {
         return userRepository.findById(id).
@@ -131,6 +136,44 @@ public class UserService {
     public void changeAccountStatus(Integer userId){
         User user = findUserById(userId);
         user.setIsActive(user.getIsActive() ? false : true);
+        userRepository.save(user);
+    }
+
+
+    private void checkPassword(UserSecurityDTO userDTO){
+        if(!userDTO.getPassword().equals(userDTO.getRePassword()))
+            throw new UserNotValidException("Password and re-password must be same!!!", userDTO);
+    }
+
+    private void checkUserExist(UserSecurityDTO userDTO){
+        Optional<User> userOptional = userRepository.findUserByEmailAndEnableIsTrue(userDTO.getEmail());
+        if(userOptional.isPresent())
+            throw new UserNotValidException("Email is already registries!!!", userDTO);
+    }
+
+    public User saveUser(UserSecurityDTO userDTO){
+        checkPassword(userDTO);
+        checkUserExist(userDTO);
+        User user = new User(userDTO);
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        return userRepository.save(user);
+    }
+
+    public void setEnable(User user) {
+        user.setEnabled(true);
+        user.setIsActive(true);
+        userRepository.save(user);
+    }
+
+    public User getUserByEmail(String email){
+        Optional<User> userOptional = userRepository.findUserByEmailAndActiveIsTrue(email);
+        return userOptional.
+                orElseThrow(() -> new ForgetPasswordEmailNotTrueException("Can not find account by this email!!!"));
+    }
+
+    public void changeUserPassword(UserSecurityDTO userDTO) {
+        User user = userRepository.findUserByEmailAndActiveIsTrue(userDTO.getEmail()).get();
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
     }
 

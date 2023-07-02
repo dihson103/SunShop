@@ -114,13 +114,13 @@
                         </div>
                         <div class="header__top__right__language">
                             <img src="img/language.png" alt="">
-                            <a th:if="${user} == null" th:href="@{/sign-up}">Create Account</a>
-                            <a th:if="${user} != null" th:href="@{/#}">[[${user.name()}]]</a>
+                            <a th:if="${session.user} == null" th:href="@{/sign-up}">Create Account</a>
+                            <a th:if="${session.user} != null" th:href="@{/#}">[[${session.user.getUsername()}]]</a>
                             <span class="arrow_carrot-down"></span>
                         </div>
                         <div class="header__top__right__auth">
-                            <a th:href="@{/login}" th:if="${user} == null"><i class="fa fa-user"></i> Login</a>
-                            <form th:action="@{/logout}" method="post" th:if="${user} != null">
+                            <a th:href="@{/login}" th:if="${session.user} == null"><i class="fa fa-user"></i> Login</a>
+                            <form th:action="@{/logout}" method="post" th:if="${session.user} != null">
                                 <i class="fa fa-user"></i> <button type="submit">Logout</button>
                             </form>
                         </div>

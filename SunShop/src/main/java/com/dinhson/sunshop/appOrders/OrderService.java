@@ -1,5 +1,7 @@
 package com.dinhson.sunshop.appOrders;
 
+import com.dinhson.sunshop.appAdmin.ordersManagement.OrderDTO;
+import com.dinhson.sunshop.appAdmin.ordersManagement.OrderDTOMapper;
 import com.dinhson.sunshop.appCart.CartItem;
 import com.dinhson.sunshop.appCart.CartService;
 import com.dinhson.sunshop.appOrders.orderdetails.OrderDetailService;
@@ -26,6 +28,7 @@ public class OrderService {
     private final ShipmentService shipmentService;
     private final OrderDetailService orderDetailService;
     private final ProductDetailService productDetailService;
+    private final OrderDTOMapper orderDTOMapper;
 
     private List<Integer> getItemsSelected (String itemsString){
         return Arrays.stream(itemsString.split(","))
@@ -90,6 +93,34 @@ public class OrderService {
 
         //TODO delete items ordered in cart
         cartService.deleteCartItems(cartItems);
+    }
+
+    private List<Order> searchOrders(Status status, String searchName){
+        if (status == null){
+            if(searchName == null){
+                return orderRepository.getAllOrders();
+            }
+            return orderRepository.searchOrdersBySearchName(searchName);
+        }else {
+            if(searchName == null){
+                return orderRepository.searchOrdersByStatus(status);
+            }
+            return orderRepository.searchOrdersByAll(status, searchName);
+        }
+    }
+
+    public List<OrderDTO> searchOrderDTO (String statusString, String searchName){
+        Status status = null;
+        for (Status s : Status.values()){
+            if(s.name().equals(statusString)){
+                status = s;
+                break;
+            }
+        }
+
+        return searchOrders(status, searchName).stream()
+                .map(orderDTOMapper)
+                .collect(Collectors.toList());
     }
 
 

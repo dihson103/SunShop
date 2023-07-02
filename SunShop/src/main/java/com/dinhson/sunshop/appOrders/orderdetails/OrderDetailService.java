@@ -15,7 +15,7 @@ public class OrderDetailService {
 
     private void addNewOrders(CartItem cartItem, Order order){
         //TODO van dang de discount la 0
-        OrderDetail orderDetail = new OrderDetail(cartItem.getQuantity(), 0, cartItem.getProductDetail());
+        OrderDetail orderDetail = new OrderDetail(cartItem.getQuantity(), 0, cartItem.getProductDetail(), order);
         orderDetailRepository.save(orderDetail);
     }
 

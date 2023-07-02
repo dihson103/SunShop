@@ -57,5 +57,14 @@ public class User {
         role = userDTO.role() == null ? Role.USER : userDTO.role();
     }
 
+    public User(UserSecurityDTO userDTO){
+        email = userDTO.getEmail();
+        name = userDTO.getName();
+        password = userDTO.getPassword();
+        enabled = false;
+        isActive = false;
+        role = Role.USER;
+    }
+
 
 }

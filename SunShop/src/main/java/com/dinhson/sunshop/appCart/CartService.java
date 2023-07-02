@@ -35,7 +35,6 @@ public class CartService {
         cartRepository.save(cartItem);
     }
 
-    @CacheEvict(value = "carts", allEntries = true)
     public void addItemsToCart(int productDetailId, int userId) {
         int numberProductRemaining = productDetailService.findNumberProductRemainById(productDetailId);
         if (numberProductRemaining <= 0) {
@@ -64,12 +63,10 @@ public class CartService {
                 .orElseThrow(() -> new IllegalArgumentException("Product is sold out!!!"));
     }
 
-    @CacheEvict(value = "carts", allEntries = true)
     public void deleteItem(int productDetailId, int userId) {
         cartRepository.delete(findCartItem(productDetailId, userId));
     }
 
-    @CacheEvict(value = "carts", allEntries = true)
     public void changeQuantityItem(int productDetailId, int userId, int number) {
         int numberProductRemaining = productDetailService.findNumberProductRemainById(productDetailId);
         if (number > numberProductRemaining || number < 1) {
@@ -83,7 +80,6 @@ public class CartService {
         return cartRepository.countNumberItemInCart(userId);
     }
 
-    @Cacheable("carts")
     public List<CartItemDTO> findCartByUserId(int userId) {
         return cartRepository.findCartByUserId(userId).stream()
                 .map(cartItemDTOMapper)

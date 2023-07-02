@@ -12,6 +12,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     Optional<User> getUserByEmail(String email);
 
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.isActive = true")
+    Optional<User> findUserByEmailAndActiveIsTrue(String email);
+
     @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.role = :role AND u.name LIKE %:nameSearch%")
     List<User> searchUserByAll(boolean isActive, Role role, String nameSearch);
 
@@ -38,4 +41,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.password = :password AND u.isActive  = true")
     Optional<User> findUserByEmailAndPassword(String email, String password);
+
+    @Query("SELECT u FROM User u WHERE u.email = :email AND u.enabled = true")
+    Optional<User> findUserByEmailAndEnableIsTrue(String email);
 }
