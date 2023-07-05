@@ -4,6 +4,7 @@ import com.dinhson.sunshop.appUser.profile.ProfileSecurityDTO;
 import com.dinhson.sunshop.exception.ForgetPasswordEmailNotTrueException;
 import com.dinhson.sunshop.exception.UserNotValidException;
 import com.dinhson.sunshop.exception.UsersNotFoundException;
+import com.dinhson.sunshop.securityConfig.MyUserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -119,17 +120,25 @@ public class UserService {
     }
 
     private User loginByEmailAndPassword(String email, String password){
+        System.out.println("admin: " + passwordEncoder.encode("admin"));
+        System.out.println("admin: " + passwordEncoder.encode("admin"));
+        System.out.println("password: " + password);
         return userRepository.findUserByEmailAndPassword(email, password)
                 .orElseThrow(() -> new IllegalArgumentException("Password is wrong!!!"));
     }
 
-    public void changePassword(ProfileSecurityDTO profileSecurityDTO){
+    public void changePassword(ProfileSecurityDTO profileSecurityDTO, MyUserDetail userDetail){
+        if(!passwordEncoder.matches(profileSecurityDTO.password(), userDetail.getPassword())){
+            throw new IllegalArgumentException("Password is wrong!");
+        }
+
         if(profileSecurityDTO.newPassword().isEmpty() ||
                 !profileSecurityDTO.newPassword().equals(profileSecurityDTO.rePassword())){
             throw new IllegalArgumentException("New Password and re-password must be the same!!!");
         }
-        User user = loginByEmailAndPassword(profileSecurityDTO.email(), profileSecurityDTO.password());
-        user.setPassword(profileSecurityDTO.newPassword());
+        User user = userRepository.getUserByEmail(profileSecurityDTO.email())
+                        .orElseThrow(() -> new IllegalArgumentException("Can not find user by email " + profileSecurityDTO.email()));
+        user.setPassword(passwordEncoder.encode(profileSecurityDTO.newPassword()));
         userRepository.save(user);
     }
 
@@ -175,6 +184,20 @@ public class UserService {
         User user = userRepository.findUserByEmailAndActiveIsTrue(userDTO.getEmail()).get();
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
+    }
+
+    public String checkAuthenticated(MyUserDetail user){
+        if(user != null){
+            switch (user.getRole()){
+                case USER -> {
+                    return "redirect:/home";
+                }
+                case ADMIN, MANAGER -> {
+                    return "redirect:/admin/users";
+                }
+            }
+        }
+        return null;
     }
 
 }

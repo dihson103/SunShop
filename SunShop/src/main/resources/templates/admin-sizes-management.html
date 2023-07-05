@@ -121,7 +121,8 @@
 
                         <div class="form-group">
                             <button class="btn btn-primary btn col-lg-2" id="deleteBtn" type="button">Delete Size</button>
-                            <button class="btn btn-primary btn col-lg-2" id="addBtn" type="button">Add new category</button>
+                            <button class="btn btn-primary btn col-lg-2" id="addBtn" type="button">Add New Size</button>
+                            <button class="btn btn-primary btn col-lg-2" id="updateBtn" type="button">Update Size</button>
                         </div>
 
                     </form>
@@ -165,10 +166,11 @@
         $('#inputSize').val('');
         $('#inputHeight').val('');
         $('#inputWeight').val('');
-        $('#addBtn').html('Add New Size');
         $('#sizeForm').attr('action', '/admin/sizes');
         $('#deleteBtn').toggle(false);
         $('#sizeTable').toggle(false);
+        $('#updateBtn').toggle(false);
+        $('#addBtn').toggle(true);
         $('#addSizeForm').toggle(true);
     });
 
@@ -187,10 +189,26 @@
         $('#inputSize').val(sizeName);
         $('#inputHeight').val(height);
         $('#inputWeight').val(weight);
-        $('#addBtn').html('Update Size');
+
+        $('#addBtn').toggle(false);
+        $('#updateBtn').toggle(true);
         $('#deleteBtn').toggle(true);
         $('#sizeTable').toggle(false);
         $('#addSizeForm').toggle(true);
+    });
+
+    $('#updateBtn').click(function () {
+        let name = $('#inputSize').val().trim();
+        let height = $('#inputHeight').val().trim();
+        let weight = $('#inputWeight').val().trim();
+
+        if(name != null && name != "" && height != null && height != "" && weight != null && weight != ""){
+            $('#sizeForm').attr('action', '/admin/sizes/update');
+            $('#sizeForm').submit();
+        }
+        else {
+            alert("Please input all field!!!");
+        }
     });
 
     $('#addBtn').click(function () {
@@ -199,7 +217,6 @@
         let weight = $('#inputWeight').val().trim();
 
         if(name != null && name != "" && height != null && height != "" && weight != null && weight != ""){
-            $('#sizeForm').attr('action', '/admin/sizes/update');
             $('#sizeForm').submit();
         }
         else {

@@ -381,22 +381,32 @@
         getNumberRemain();
     });
 
-    function addItemToCart(){
+    function addItemToCart() {
         let numberProductRemain = $('#numberProductRemain').val();
-        if(numberProductRemain == 0){
-            alert("This product is out of stock!!! Please choose other size or color!!!");
+        if (numberProductRemain == 0) {
+            alert("This product is out of stock!!! Please choose another size or color!!!");
             return false;
         }
+        let numberProduct = $('#numberProduct').val();
         let productDetailId = $('#productDetailId').val();
-        let param = {productDetailId : productDetailId};
-        let url = /*[[@{/api/cart}]]*/ '';
+        let param = {
+            productDetailId: productDetailId,
+            numberProduct : numberProduct
+        };
 
-        $.post(url, param, function (response) {
-            alert(response.responseText);
-        }).fail(function (response){
-            alert(response.responseText);
+        $.ajax({
+            url: "/api/cart",
+            type: 'POST',
+            data: param,
+            success: function(response) {
+                alert(response.message || 'Please login to add item to cart');
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
         });
     }
+
 
     function minusQuantity(){
         let numberProduct = $('#numberProduct').val();

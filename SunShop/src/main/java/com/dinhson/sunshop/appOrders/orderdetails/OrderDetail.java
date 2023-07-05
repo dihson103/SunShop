@@ -22,11 +22,11 @@ public class OrderDetail {
 
     private Integer discount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_detail_id", nullable = false)
     private ProductDetail productDetail;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "order_id")
     private Order order;
 

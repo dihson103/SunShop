@@ -326,10 +326,18 @@
             <a th:href="@{/profile}"><span class="fa fa-cog mr-3"></span> My Account </a>
         </li>
         <li>
-            <a href=""><span class="fa fa-sign-out mr-3"></span> Sign Out</a>
+            <a style="cursor: pointer" id="signOut"><span class="fa fa-sign-out mr-3"></span> Sign Out</a>
         </li>
     </ul>
 
+    <form th:action="@{/logout}" method="post" hidden id="formLogout">
+    </form>
+
+    <script>
+        $('#signOut').click(function () {
+            $('#formLogout').submit();
+        });
+    </script>
 </nav>
 
 </body>

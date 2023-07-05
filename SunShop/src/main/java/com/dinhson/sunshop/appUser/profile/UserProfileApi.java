@@ -2,8 +2,11 @@ package com.dinhson.sunshop.appUser.profile;
 
 import com.dinhson.sunshop.appUser.UserDTO;
 import com.dinhson.sunshop.appUser.UserService;
+import com.dinhson.sunshop.securityConfig.MyUserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +24,9 @@ public class UserProfileApi {
     }
 
     @PutMapping("profile/change-password")
-    public ApiResponse changePassword(@RequestBody ProfileSecurityDTO profileSecurityDTO){
-        userService.changePassword(profileSecurityDTO);
+    public ApiResponse changePassword(@RequestBody ProfileSecurityDTO profileSecurityDTO,
+                                      @AuthenticationPrincipal MyUserDetail user){
+        userService.changePassword(profileSecurityDTO, user);
         return new ApiResponse("Change password success!!!", HttpStatus.OK);
     }
 

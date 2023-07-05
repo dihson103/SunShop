@@ -1,5 +1,6 @@
 package com.dinhson.sunshop.securityConfig;
 
+import com.dinhson.sunshop.appUser.Role;
 import com.dinhson.sunshop.appUser.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,12 +20,17 @@ public class MyUserDetail implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
+        System.out.println("role: " + authority);
         return Arrays.asList(authority);
     }
 
     public String getName(){
         return user.getName();
     }
+
+    public Integer getId(){return user.getId();}
+
+    public Role getRole(){return user.getRole();}
 
     @Override
     public String getPassword() {

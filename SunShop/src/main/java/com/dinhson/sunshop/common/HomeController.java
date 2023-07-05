@@ -2,6 +2,7 @@ package com.dinhson.sunshop.common;
 
 import com.dinhson.sunshop.appProduct.categories.Category;
 import com.dinhson.sunshop.appProduct.categories.CategoryService;
+import com.dinhson.sunshop.securityConfig.MyUserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +29,17 @@ public class HomeController {
     }
 
     @GetMapping("login")
-    public String getLogin(){
+    public String getLogin(@AuthenticationPrincipal MyUserDetail user){
+        if(user != null){
+            switch (user.getRole()){
+                case USER -> {
+                    return "redirect:/home";
+                }
+                case ADMIN, MANAGER -> {
+                    return "redirect:/admin/users";
+                }
+            }
+        }
         return "login";
     }
 

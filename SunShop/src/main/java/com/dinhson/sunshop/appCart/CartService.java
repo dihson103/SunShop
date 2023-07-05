@@ -27,15 +27,15 @@ public class CartService {
         return cartRepository.findCartItemByProductDetailId(productDetailId, userId);
     }
 
-    private void saveItem(int productDetailId, int userId) {
+    private void saveItem(int productDetailId, int userId, int number) {
         User user = userService.findUserById(userId);
         ProductDetail productDetail = productDetailService.findProductDetailById(productDetailId);
-        CartItem cartItem = new CartItem(1, user, productDetail);
+        CartItem cartItem = new CartItem(number, user, productDetail);
 
         cartRepository.save(cartItem);
     }
 
-    public void addItemsToCart(int productDetailId, int userId) {
+    public void addItemsToCart(int productDetailId, int userId, int number) {
         int numberProductRemaining = productDetailService.findNumberProductRemainById(productDetailId);
         if (numberProductRemaining <= 0) {
             throw new IllegalArgumentException("This product is sold out!!!");
@@ -47,9 +47,10 @@ public class CartService {
             if (cartItem.getQuantity() == numberProductRemaining) {
                 throw new IllegalArgumentException("Number product remain is not enough!!!");
             }
-            changeNumberItemInCart(cartItem, 1);
+            System.out.println("add ___________");
+            changeNumberItemInCart(cartItem, cartItem.getQuantity() + number);
         } else {
-            saveItem(productDetailId, userId);
+            saveItem(productDetailId, userId, number);
         }
     }
 

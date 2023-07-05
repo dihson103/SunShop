@@ -4,7 +4,9 @@ import com.dinhson.sunshop.appUser.UserDTO;
 import com.dinhson.sunshop.appUser.UserService;
 import com.dinhson.sunshop.appUser.shipments.Shipment;
 import com.dinhson.sunshop.appUser.shipments.ShipmentService;
+import com.dinhson.sunshop.securityConfig.MyUserDetail;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -27,9 +29,10 @@ public class OrderController {
     private final UserService userService;
 
     @GetMapping
-    public String checkOut(@RequestParam String checkedValues, Model model){
-        //TODO get userId
-        int userId = 4;
+    public String checkOut(@AuthenticationPrincipal MyUserDetail user,
+                           @RequestParam String checkedValues,
+                           Model model){
+        int userId = user.getId();
 
         List<OrderItemDTO> orderItemDTOS = orderService.getOrderItems(checkedValues,userId);
         Double subTotalPrice = orderService.getSubTotal(orderItemDTOS);
@@ -46,15 +49,15 @@ public class OrderController {
 
     @PostMapping
     @Transactional(rollbackFor = {IllegalArgumentException.class})
-    public String order(@RequestParam Integer shipment,
+    public String order(@AuthenticationPrincipal MyUserDetail user,
+                        @RequestParam Integer shipment,
                         @RequestParam(required = false) String newPhone,
                         @RequestParam(required = false) String newAddress,
                         @RequestParam String checkedValues,
                         @RequestParam(required = false) String note,
                         RedirectAttributes redirectAttributes){
-        Integer userId = 4;
 
-        orderService.order(checkedValues, userId, shipment, newPhone, newAddress, note);
+        orderService.order(checkedValues, user.getId(), shipment, newPhone, newAddress, note);
         redirectAttributes.addFlashAttribute("message", "Ordered successfully!!!");
         return "redirect:/shop";
     }

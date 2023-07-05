@@ -1,7 +1,10 @@
 package com.dinhson.sunshop.securityConfig;
 
+import com.dinhson.sunshop.appUser.Role;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -9,9 +12,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.dinhson.sunshop.appUser.Role.*;
+
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class WebSecurityConfig {
+
+    private final CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public UserDetailsService userDetailsService(){
@@ -34,6 +42,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/home/**",
                                 "/css/**",
@@ -41,20 +50,20 @@ public class WebSecurityConfig {
                                 "img/**",
                                 "fonts/**",
                                 "/product/**",
-                                "/cart/**",
                                 "/sign-up/**",
                                 "/forget-password/**",
                                 "/change-password/**",
                                 "/shop/**",
                                 "/").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                        .requestMatchers("/admin/**").hasAnyAuthority(ADMIN.name(), MANAGER.name())
+                        .requestMatchers("/cart/**", "/api/cart/**").hasAuthority(USER.name())
                         .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler(successHandler)
                         .failureUrl("/login?message=Wrong%20UserName%20Or%20Password")
                 )
                 .logout(logout -> logout

@@ -23,12 +23,13 @@ class CartServiceTest {
     void canAddItemsNotExistInCartToCart() {
 
         //after
-        int userId = 1;
+        int userId = 4;
         int productDetailId = 4;
         int number = cartRepository.countNumberItemInCart(userId);
+        int numberProduct = 2;
 
         //when
-        underTest.addItemsToCart(productDetailId, userId);
+        underTest.addItemsToCart(productDetailId, userId, numberProduct);
 
         //then
         int numberAfterAdd = cartRepository.countNumberItemInCart(userId);
@@ -44,9 +45,10 @@ class CartServiceTest {
         int productDetailId = 4;
         int number = cartRepository.countNumberItemInCart(userId);
         int quantity = cartRepository.findCartItemByProductDetailId(productDetailId, userId).get().getQuantity();
+        int numberProduct = 2;
 
         //when
-        underTest.addItemsToCart(productDetailId, userId);
+        underTest.addItemsToCart(productDetailId, userId, numberProduct);
 
         //then
         int numberBeforeAdd = cartRepository.countNumberItemInCart(userId);

@@ -32,7 +32,6 @@ public class ProductService {
         return productRepository.findProductByName(product.getName()).isPresent();
     }
 
-    @Cacheable("products")
     public List<ProductDTO> findAllProductActive() {
         System.out.println("dinh son");
         List<Product> products = productRepository.getAllProductsByIsDelete(false);

@@ -42,12 +42,13 @@ public class SizeService {
     }
 
     public String updateSize(Integer id, String name, String height, String weight){
-        if(isSizeExist(name)){
+        Size size = sizeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find size!!!"));
+
+        if(isSizeExist(name) && !size.getSize().equals(name)){
             return "Size " + name + " is already exist!!!";
         }
 
-        Size size = sizeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Can not find size!!!"));
         size.setSize(name);
         size.setHeight(height);
         size.setWeight(weight);

@@ -1,43 +1,48 @@
 package com.dinhson.sunshop.appCart;
 
+import com.dinhson.sunshop.common.ApiResponse;
+import com.dinhson.sunshop.securityConfig.MyUserDetail;
+import jakarta.annotation.security.PermitAll;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/cart")
-@EnableCaching
 public class CartApiController {
 
     private final CartService cartService;
 
     @PostMapping
-    public String addItemToCart(@RequestParam(name = "productDetailId") Integer productDetailId,
-                                Model model) {
+    public ApiResponse addItemToCart(@RequestParam(name = "productDetailId") Integer productDetailId,
+                                     @RequestParam Integer numberProduct,
+                                     @AuthenticationPrincipal MyUserDetail user,
+                                     Model model) {
 
-        //TODO lay userId
+        cartService.addItemsToCart(productDetailId, user.getId(), numberProduct);
 
-        cartService.addItemsToCart(productDetailId, 4);
-        int count = cartService.countNumberItemInCart(4);
-
-        return String.valueOf(count);
+        return new ApiResponse("Add success!!", HttpStatus.OK);
     }
 
     @PutMapping
-    public String changeQuantityItem(@RequestBody CartItemRequestDTO cartItemRequestDTO) {
+    public String changeQuantityItem(@RequestBody CartItemRequestDTO cartItemRequestDTO,
+                                     @AuthenticationPrincipal MyUserDetail user) {
 
-        cartService.changeQuantityItem(cartItemRequestDTO.productDetailId(), 4, cartItemRequestDTO.number());
+        cartService.changeQuantityItem(cartItemRequestDTO.productDetailId(), user.getId(), cartItemRequestDTO.number());
 
         return "Change success!!!";
     }
 
     @DeleteMapping
-    public String deleteItem(@RequestBody CartItemRequestDTO cartItemRequestDTO){
+    public String deleteItem(@RequestBody CartItemRequestDTO cartItemRequestDTO,
+                             @AuthenticationPrincipal MyUserDetail user){
 
-        int userId = 4;
-        cartService.deleteItem(cartItemRequestDTO.productDetailId(), userId);
+        cartService.deleteItem(cartItemRequestDTO.productDetailId(), user.getId());
         return "Success";
     }
 
