@@ -2,6 +2,8 @@ package com.dinhson.sunshop.appOrders;
 
 import com.dinhson.sunshop.appAdmin.ordersManagement.OrderDTO;
 import com.dinhson.sunshop.appAdmin.ordersManagement.OrderDTOMapper;
+import com.dinhson.sunshop.appAdmin.ordersManagement.OrderResponse;
+import com.dinhson.sunshop.appAdmin.ordersManagement.OrderResponseMapper;
 import com.dinhson.sunshop.appCart.CartItem;
 import com.dinhson.sunshop.appCart.CartService;
 import com.dinhson.sunshop.appOrders.orderdetails.OrderDetailService;
@@ -29,6 +31,7 @@ public class OrderService {
     private final OrderDetailService orderDetailService;
     private final ProductDetailService productDetailService;
     private final OrderDTOMapper orderDTOMapper;
+    private final OrderResponseMapper orderResponseMapper;
 
     private List<Integer> getItemsSelected (String itemsString){
         return Arrays.stream(itemsString.split(","))
@@ -62,7 +65,13 @@ public class OrderService {
 
     private Order createNewOrder (Shipment shipment, String note){
         LocalDate orderDate = LocalDate.now();
-        Order order = new Order(orderDate, Status.Pending, note, shipment);
+        Order order = Order.builder()
+                .orderDate(orderDate)
+                .status(Status.Pending)
+                .note(note)
+                .shipment(shipment)
+                .build();
+                //new Order(orderDate, Status.Pending, note, shipment);
         return orderRepository.save(order);
     }
 
@@ -121,6 +130,12 @@ public class OrderService {
         return searchOrders(status, searchName).stream()
                 .map(orderDTOMapper)
                 .collect(Collectors.toList());
+    }
+
+    public OrderResponse getOrderResponseByOrderId(Integer orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Can not find order!!!"));
+        return orderResponseMapper.apply(order);
     }
 
 

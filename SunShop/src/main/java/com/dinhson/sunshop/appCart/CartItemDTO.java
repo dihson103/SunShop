@@ -2,9 +2,11 @@ package com.dinhson.sunshop.appCart;
 
 import com.dinhson.sunshop.appProduct.colors.Color;
 import com.dinhson.sunshop.appProduct.sizes.Size;
+import lombok.Builder;
 
 import java.util.Set;
 
+@Builder
 public record CartItemDTO(
         int id,
         int productId,

@@ -13,12 +13,14 @@ public class OrderItemDTOMapper implements Function<CartItem, OrderItemDTO> {
     public OrderItemDTO apply(CartItem cartItem) {
         ProductDetail productDetail = cartItem.getProductDetail();
         Product product = productDetail.getProduct();
-        return new OrderItemDTO(
-                product.getName() + " (x" + cartItem.getQuantity() + ")",
-                productDetail.getColor().getName(),
-                productDetail.getSize().getSize(),
+
+        return OrderItemDTO
+                .builder()
+                .information(product.getName() + " (x" + cartItem.getQuantity() + ")")
+                .color(productDetail.getColor().getName())
+                .size(productDetail.getSize().getSize())
                 //TODO chua tinh discount
-                cartItem.getQuantity() * product.getPrice()
-        );
+                .totalPrice(cartItem.getQuantity() * product.getPrice())
+                .build();
     }
 }

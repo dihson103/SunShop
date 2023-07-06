@@ -4,6 +4,7 @@ import com.dinhson.sunshop.appOrders.Order;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_details")
+@Builder
 public class OrderDetail {
 
     @Id

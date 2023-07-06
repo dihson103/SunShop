@@ -10,6 +10,8 @@
 
     <link rel="icon" type="image/png" th:href="@{/img/login/icons/favicon.ico}"/>
 
+
+
     <!-- Google Font -->
     <link th:href="@{https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap}" rel="stylesheet">
 
@@ -141,21 +143,9 @@
                     <ul>
                         <li class="active"><a th:href="@{/home}">Home</a></li>
                         <li><a th:href="@{/shop}">Shop</a></li>
-                        <li><a href="#">Pages</a>
-                            <ul class="header__menu__dropdown">
-                                <li><a href="shopDetails.html">Shop Details</a></li>
-                                <li><a href="shopping-cart.html">Shoping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
-                            </ul>
-                        </li>
                         <li><a href="./blog.html">Blog</a></li>
-                        <li th:if="${user} != null"><a href="./contact.html">Profile</a>
-                            <ul class="header__menu__dropdown">
-                                <li><a href="shopDetails.html">My orders</a></li>
-                                <li><a href="shopping-cart.html">My profile</a></li>
-                                <li><a href="./checkout.html">Change password</a></li>
-                            </ul>
+                        <li th:if="${session.user} != null"><a th:href="@{/order/view}">My orders</a></li>
+                        <li th:if="${session.user} != null"><a th:href="@{/profile}">My Profile</a>
                         </li>
                     </ul>
                 </nav>

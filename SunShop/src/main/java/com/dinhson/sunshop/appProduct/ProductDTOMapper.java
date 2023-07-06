@@ -10,17 +10,18 @@ public class ProductDTOMapper implements Function<Product, ProductDTO> {
 
     @Override
     public ProductDTO apply(Product product) {
-        return new ProductDTO(
-                product.getId(),
-                product.getName(),
-                product.getPrice(),
-                product.getDescription(),
-                product.getImg(),
-                product.getProductDetails().stream()
+        return ProductDTO
+                .builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .description(product.getDescription())
+                .img(product.getImg())
+                .images(product.getProductDetails().stream()
                         .flatMap(p -> p.getImages().stream())
-                        .collect(Collectors.toSet()),
-                product.isDelete(),
-                product.getCategory()
-        );
+                        .collect(Collectors.toSet()))
+                .isDelete(product.isDelete())
+                .category(product.getCategory())
+                .build();
     }
 }

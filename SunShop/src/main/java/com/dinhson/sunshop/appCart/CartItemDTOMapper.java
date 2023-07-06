@@ -3,6 +3,7 @@ package com.dinhson.sunshop.appCart;
 import com.dinhson.sunshop.appProduct.Product;
 import com.dinhson.sunshop.appProduct.ProductResponseDTO;
 import com.dinhson.sunshop.appProduct.ProductResponseDTOMapper;
+import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +17,24 @@ public class CartItemDTOMapper implements Function<CartItem, CartItemDTO> {
 
     @Override
     public CartItemDTO apply(CartItem cartItem) {
-        Product product = cartItem.getProductDetail().getProduct();
+        ProductDetail productDetail = cartItem.getProductDetail();
+        Product product = productDetail.getProduct();
         ProductResponseDTO productResponseDTO = productResponseDTOMapper.apply(product);
-        return new CartItemDTO(
-                cartItem.getId(),
-                product.getId(),
-                cartItem.getProductDetail().getId(),
-                product.getName(),
-                product.getImg(),
-                cartItem.getQuantity(),
-                product.getPrice(),
-                productResponseDTO.discount(),
-                cartItem.getProductDetail().getSize().getId(),
-                cartItem.getProductDetail().getColor().getId(),
-                productResponseDTO.colors(),
-                productResponseDTO.sizes()
-        );
+
+        return CartItemDTO
+                .builder()
+                .id(cartItem.getId())
+                .productId(product.getId())
+                .productDetailId(productDetail.getId())
+                .name(product.getName())
+                .img(product.getImg())
+                .quantity(cartItem.getQuantity())
+                .price(product.getPrice())
+                .discount(productResponseDTO.discount())
+                .sizeIdChoose(productDetail.getSize().getId())
+                .colorIdChoose(productDetail.getColor().getId())
+                .colors(productResponseDTO.colors())
+                .sizes(productResponseDTO.sizes())
+                .build();
     }
 }

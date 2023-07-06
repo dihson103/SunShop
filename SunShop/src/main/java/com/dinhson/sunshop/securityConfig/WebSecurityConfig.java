@@ -56,8 +56,7 @@ public class WebSecurityConfig {
                                 "/shop/**",
                                 "/").permitAll()
                         .requestMatchers("/admin/**").hasAnyAuthority(ADMIN.name(), MANAGER.name())
-                        .requestMatchers("/cart/**", "/api/cart/**").hasAuthority(USER.name())
-                        .requestMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/cart/**", "/api/cart/**", "/order/**").hasAuthority(USER.name())
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

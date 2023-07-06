@@ -18,12 +18,14 @@ public class CategoryDTOMapper implements Function<Category, CategoryDTO> {
     @Override
     public CategoryDTO apply(Category category) {
         Integer number = productDetailService.getNumberProductRemainByCategoryId(category.getId());
-        return new CategoryDTO(
-                category.getId(),
-                category.getName(),
-                category.getImg(),
-                productService.getNumberProductByCategoryId(category.getId()),
-                number == null ? 0 : number
-        );
+
+        return CategoryDTO
+                .builder()
+                .id(category.getId())
+                .name(category.getName())
+                .img(category.getImg())
+                .number(productService.getNumberProductByCategoryId(category.getId()))
+                .numberRemain(number == null ? 0 : number)
+                .build();
     }
 }

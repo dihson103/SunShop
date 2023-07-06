@@ -4,6 +4,7 @@ import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
 import com.dinhson.sunshop.appUser.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CartItem {
 
     @Id
@@ -28,9 +30,9 @@ public class CartItem {
     @JoinColumn(name = "product_detail_id")
     private ProductDetail productDetail;
 
-    public CartItem(int quantity, User user, ProductDetail productDetail) {
-        this.quantity = quantity;
-        this.user = user;
-        this.productDetail = productDetail;
-    }
+//    public CartItem(int quantity, User user, ProductDetail productDetail) {
+//        this.quantity = quantity;
+//        this.user = user;
+//        this.productDetail = productDetail;
+//    }
 }

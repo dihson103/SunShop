@@ -17,27 +17,22 @@ public class ProductResponseDTOMapper implements Function<Product, ProductRespon
 
     @Override
     public ProductResponseDTO apply(Product product) {
-        return new ProductResponseDTO(
-                productDTOMapper.apply(product),
-
-                product.getProductDetails().stream()
+        return ProductResponseDTO
+                .builder()
+                .productDTO(productDTOMapper.apply(product))
+                .images(product.getProductDetails().stream()
                         .flatMap(p -> p.getImages().stream())
-                        .collect(Collectors.toSet()),
-
-                product.getProductDetails().stream()
+                        .collect(Collectors.toSet()))
+                .colors(product.getProductDetails().stream()
                         .map(p -> p.getColor())
-                        .collect(Collectors.toSet()),
-
-                product.getProductDetails().stream()
+                        .collect(Collectors.toSet()))
+                .sizes(product.getProductDetails().stream()
                         .map(p -> p.getSize())
-                        .collect(Collectors.toSet()),
-
-                //TODO Viet ham tinh toan discount
-                0,
-
-                product.getProductDetails().stream()
+                        .collect(Collectors.toSet()))
+                .discount(0) //TODO Viet ham tinh toan discount
+                .productDetailResponseDTO(product.getProductDetails().stream()
                         .map(productDetailResponseDTOMapper)
-                        .collect(Collectors.toList())
-        );
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

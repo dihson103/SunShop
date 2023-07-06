@@ -30,7 +30,8 @@ public class CartService {
     private void saveItem(int productDetailId, int userId, int number) {
         User user = userService.findUserById(userId);
         ProductDetail productDetail = productDetailService.findProductDetailById(productDetailId);
-        CartItem cartItem = new CartItem(number, user, productDetail);
+        CartItem cartItem = CartItem.builder().quantity(number).user(user).productDetail(productDetail).build();
+                //new CartItem(number, user, productDetail);
 
         cartRepository.save(cartItem);
     }

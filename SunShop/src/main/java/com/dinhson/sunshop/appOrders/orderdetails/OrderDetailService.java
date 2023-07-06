@@ -15,7 +15,13 @@ public class OrderDetailService {
 
     private void addNewOrders(CartItem cartItem, Order order){
         //TODO van dang de discount la 0
-        OrderDetail orderDetail = new OrderDetail(cartItem.getQuantity(), 0, cartItem.getProductDetail(), order);
+        OrderDetail orderDetail = OrderDetail.builder()
+                .quantity(cartItem.getQuantity())
+                .discount(0)
+                .productDetail(cartItem.getProductDetail())
+                .order(order)
+                .build();
+                //new OrderDetail(cartItem.getQuantity(), 0, cartItem.getProductDetail(), order);
         orderDetailRepository.save(orderDetail);
     }
 
@@ -23,6 +29,10 @@ public class OrderDetailService {
         cartItems.forEach(cartItem -> {
             addNewOrders(cartItem, order);
         });
+    }
+
+    public List<OrderDetail> getOrderDetailsByOrder(Order order){
+        return orderDetailRepository.findOrderDetailsByOrder(order);
     }
 
 }

@@ -4,14 +4,19 @@ import com.dinhson.sunshop.appOrders.Status;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
-public record OrderDTO(
+public record OrderResponse(
         Integer orderId,
-        String userName,
-        String email,
+        String customerName,
+        String customerEmail,
+        String phone,
+        String address,
+        List<OrderDetailResponse> orderDetails,
         LocalDate orderDate,
         Status status,
-        Double totalMoney
+        Double total
+
 ) {
 }

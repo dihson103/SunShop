@@ -20,10 +20,12 @@ public class ColorDTOMapper implements Function<Color, ColorDTO> {
     @Override
     public ColorDTO apply(Color color) {
         Integer number = productDetailService.getNumberProductRemainByColorId(color.getId());
-        return new ColorDTO(
-                color.getId(),
-                color.getName(),
-                number == null ? 0 : number
-        );
+
+        return ColorDTO
+                .builder()
+                .id(color.getId())
+                .name(color.getName())
+                .numberRemain(number == null ? 0 : number)
+                .build();
     }
 }

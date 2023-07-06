@@ -1,5 +1,6 @@
 package com.dinhson.sunshop.appOrders;
 
+import com.dinhson.sunshop.appAdmin.ordersManagement.OrderResponse;
 import com.dinhson.sunshop.appUser.UserDTO;
 import com.dinhson.sunshop.appUser.UserService;
 import com.dinhson.sunshop.appUser.shipments.Shipment;
@@ -10,10 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -21,14 +19,13 @@ import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("order")
 public class OrderController {
 
     private final OrderService orderService;
     private final ShipmentService shipmentService;
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("order")
     public String checkOut(@AuthenticationPrincipal MyUserDetail user,
                            @RequestParam String checkedValues,
                            Model model){
@@ -47,7 +44,7 @@ public class OrderController {
         return "checkout";
     }
 
-    @PostMapping
+    @PostMapping("order")
     @Transactional(rollbackFor = {IllegalArgumentException.class})
     public String order(@AuthenticationPrincipal MyUserDetail user,
                         @RequestParam Integer shipment,
@@ -60,6 +57,14 @@ public class OrderController {
         orderService.order(checkedValues, user.getId(), shipment, newPhone, newAddress, note);
         redirectAttributes.addFlashAttribute("message", "Ordered successfully!!!");
         return "redirect:/shop";
+    }
+
+    @GetMapping("view")
+    public String viewOrder(@RequestParam Integer orderId, Model model){
+        OrderResponse orderResponse = orderService.getOrderResponseByOrderId(orderId);
+
+        model.addAttribute("orderResponse", orderResponse);
+        return "view-order-details";
     }
 
 }
