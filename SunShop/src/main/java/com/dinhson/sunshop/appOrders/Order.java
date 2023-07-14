@@ -3,15 +3,14 @@ package com.dinhson.sunshop.appOrders;
 import com.dinhson.sunshop.appOrders.orderdetails.OrderDetail;
 import com.dinhson.sunshop.appUser.shipments.Shipment;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -33,14 +32,7 @@ public class Order {
     @JoinColumn(name = "shipment_id")
     private Shipment shipment;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "order_id")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
     private Set<OrderDetail> orderDetails;
 
-    public Order (LocalDate orderDate, Status status, String note, Shipment shipment){
-        this.orderDate = orderDate;
-        this.status = status;
-        this.note = note;
-        this.shipment = shipment;
-    }
 }

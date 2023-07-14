@@ -3,6 +3,8 @@
 
 <head th:replace="fragments :: html_head"/>
 <body>
+    <link rel="stylesheet" href="css/orderDetail.css">
+
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -66,7 +68,7 @@
                                     <td th:text="${orderDetail.productSize()}"></td>
                                     <td th:text="'$' + ${orderDetail.price()}"></td>
                                     <td th:text="${orderDetail.quantity()}"></td>
-                                    <td class="shoping__cart__total" th:text="${orderDetail.price() * orderDetail.quantity()}"></td>
+                                    <td class="shoping__cart__total" th:text="'$' + ${orderDetail.price() * orderDetail.quantity()}"></td>
                                 </div>
                             </tr>
 
@@ -103,83 +105,48 @@
     </section>
     <!-- Shoping Cart Section End -->
 
-
-
-    <link rel="stylesheet" th:href="@{/css/orderDetail.css}" type="text/css">
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <div class="row shop-tracking-status">
-
-        <div class="col-md-12">
-            <div class="well">
-
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label for="inputOrderTrackingID" class="col-sm-2 control-label">Order id</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputOrderTrackingID" value="" placeholder="# put your order id here">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="button" id="shopGetOrderStatusID" class="btn btn-success">Get status</button>
-                        </div>
+    <div class="container">
+        <div class="card">
+            <!-- Add class 'active' to progress -->
+            <div class="row d-flex justify-content-center">
+                <div class="col-12">
+                    <ul id="progressbar" class="text-center">
+                        <li th:class="${orderResponse.statusInNumber() >= 1 ? 'active step0' : 'step0'}"></li>
+                        <li th:class="${orderResponse.statusInNumber() >= 2 ? 'active step0' : 'step0'}"></li>
+                        <li th:class="${orderResponse.statusInNumber() >= 3 ? 'active step0' : 'step0'}"></li>
+                        <li th:class="${orderResponse.statusInNumber() >= 4 ? 'active step0' : 'step0'}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row justify-content-between top">
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>Processed</p>
                     </div>
                 </div>
-
-                <h4>Your order status:</h4>
-
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <span class="prefix">Date created:</span>
-                        <span class="label label-success">12.12.2013</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="prefix">Last update:</span>
-                        <span class="label label-success">12.15.2013</span>
-                    </li>
-                    <li class="list-group-item">
-                        <span class="prefix">Comment:</span>
-                        <span class="label label-success">customer's comment goes here</span>
-                    </li>
-                    <li class="list-group-item">You can find out latest status of your order with the following link:</li>
-                    <li class="list-group-item"><a href="//tracking/link/goes/here">//tracking/link/goes/here</a></li>
-                </ul>
-
-                <div class="order-status">
-
-                    <div class="order-status-timeline">
-                        <!-- class names: c0 c1 c2 c3 and c4 -->
-                        <div class="order-status-timeline-completion c3"></div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>Shipped</p>
                     </div>
-
-                    <div class="image-order-status image-order-status-new active img-circle">
-                        <span class="status">Accepted</span>
-                        <div class="icon"></div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/HdsziHP.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>Arrived</p>
                     </div>
-                    <div class="image-order-status image-order-status-active active img-circle">
-                        <span class="status">In progress</span>
-                        <div class="icon"></div>
+                </div>
+                <div class="row d-flex icon-content">
+                    <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                    <div class="d-flex flex-column">
+                        <p class="font-weight-bold">Order<br>Returned</p>
                     </div>
-                    <div class="image-order-status image-order-status-intransit active img-circle">
-                        <span class="status">Shipped</span>
-                        <div class="icon"></div>
-                    </div>
-                    <div class="image-order-status image-order-status-delivered active img-circle">
-                        <span class="status">Delivered</span>
-                        <div class="icon"></div>
-                    </div>
-                    <div class="image-order-status image-order-status-completed active img-circle">
-                        <span class="status">Completed</span>
-                        <div class="icon"></div>
-                    </div>
-
                 </div>
             </div>
         </div>
-
     </div>
+
 
 
     <!-- Footer Section Begin -->

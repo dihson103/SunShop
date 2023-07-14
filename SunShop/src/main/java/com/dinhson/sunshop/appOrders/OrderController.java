@@ -1,6 +1,5 @@
 package com.dinhson.sunshop.appOrders;
 
-import com.dinhson.sunshop.appAdmin.ordersManagement.OrderResponse;
 import com.dinhson.sunshop.appUser.UserDTO;
 import com.dinhson.sunshop.appUser.UserService;
 import com.dinhson.sunshop.appUser.shipments.Shipment;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -59,12 +57,20 @@ public class OrderController {
         return "redirect:/shop";
     }
 
-    @GetMapping("view")
+    @GetMapping("my-order")
     public String viewOrder(@RequestParam Integer orderId, Model model){
         OrderResponse orderResponse = orderService.getOrderResponseByOrderId(orderId);
 
         model.addAttribute("orderResponse", orderResponse);
         return "view-order-details";
     }
+
+    @GetMapping("my-orders")
+    public String viewAllOrdersOrdered(@AuthenticationPrincipal MyUserDetail user, Model model){
+        List<OrderResponse> orderResponseList = orderService.findAllOrderOfUser(user);
+        model.addAttribute("orderResponseList", orderResponseList);
+        return "order-history";
+    }
+
 
 }

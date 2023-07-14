@@ -1,5 +1,6 @@
-package com.dinhson.sunshop.appAdmin.ordersManagement;
+package com.dinhson.sunshop.appOrders;
 
+import com.dinhson.sunshop.appAdmin.ordersManagement.OrderDetailResponse;
 import com.dinhson.sunshop.appOrders.Status;
 import lombok.Builder;
 
@@ -15,6 +16,7 @@ public record OrderResponse(
         String address,
         List<OrderDetailResponse> orderDetails,
         LocalDate orderDate,
+        int statusInNumber,
         Status status,
         Double total
 

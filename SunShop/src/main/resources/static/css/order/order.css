@@ -1,0 +1,53 @@
+main {
+    margin-bottom: 50px;
+}
+
+.container .card{
+    border-radius: 10px;
+    background-color: rgb(255, 254, 255);
+    box-shadow: 1px 1px gainsboro;
+}
+
+.container .card .card-body .title{
+    margin-bottom: 50px;
+}
+
+.container .card .order .order-title {
+    font-size: 20px;
+}
+
+.container .card .order {
+    margin-bottom: 40px;
+}
+
+.container .card .order .order-title .order-management-btn :hover{
+    color: darkolivegreen;
+}
+
+.container .card .order .order-content .item-info {
+    display: flex;
+}
+
+.container .card .order .order-content .item-info img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.container .card .order .order-content .item-info .item-name {
+    font-weight: 700;
+}
+
+.container .card .order .order-content .item-info .item-name,
+.container .card .order .order-content .item-info .item-size-color,
+.container .card .order .order-content .item-info .item-price {
+    margin-bottom: 20px;
+}
+
+.container .card .order .order-content .item-info-btn .btn {
+    margin-top: 20px;
+    min-width: 130px;
+    height: 50px;
+    color: #1b1e21;
+}

@@ -1,5 +1,8 @@
 package com.dinhson.sunshop.appAdmin.ordersManagement;
 
+import lombok.Builder;
+
+@Builder
 public record OrderDetailResponse(
         String productName,
         String productImage,

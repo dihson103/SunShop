@@ -1,8 +1,11 @@
 package com.dinhson.sunshop.appUser;
 
+import lombok.Builder;
+
 import java.time.LocalDate;
 import java.util.Date;
 
+@Builder
 public record UserDTO(
         Integer userId,
         String name,
@@ -14,17 +17,4 @@ public record UserDTO(
         String image,
         Boolean isActive
 ) {
-    public static UserDTO withUserDTOTest(String name, Boolean isActive, Role role){
-        return new UserDTO(
-                null,
-                name,
-                null,
-                null,
-                null,
-                role,
-                null,
-                null,
-                isActive
-        );
-    }
 }

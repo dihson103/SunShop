@@ -52,7 +52,10 @@ public class CategoryService {
 
     public void createCategory(CategoryRequestDTO categoryRequestDTO){
         String image = FileUtils.getImageUrl(categoryRequestDTO.getFile());
-        Category category = new Category(categoryRequestDTO.getName(), image);
+        Category category = Category.builder()
+                .name(categoryRequestDTO.getName())
+                .img(image)
+                .build();
         addNewCategory(category);
     }
 

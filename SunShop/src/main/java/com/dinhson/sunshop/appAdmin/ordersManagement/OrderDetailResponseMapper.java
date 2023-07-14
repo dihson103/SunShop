@@ -14,13 +14,15 @@ public class OrderDetailResponseMapper implements Function<OrderDetail, OrderDet
     public OrderDetailResponse apply(OrderDetail orderDetail) {
         ProductDetail productDetail = orderDetail.getProductDetail();
         Product product = productDetail.getProduct();
-        return new OrderDetailResponse(
-                product.getName(),
-                product.getImg(),
-                productDetail.getColor().getName(),
-                productDetail.getSize().getSize(),
-                product.getPrice(),
-                orderDetail.getQuantity()
-        );
+
+        return OrderDetailResponse
+                .builder()
+                .productName(product.getName())
+                .productImage(product.getImg())
+                .productColor(productDetail.getColor().getName())
+                .productSize(productDetail.getSize().getSize())
+                .price(product.getPrice())
+                .quantity(orderDetail.getQuantity())
+                .build();
     }
 }

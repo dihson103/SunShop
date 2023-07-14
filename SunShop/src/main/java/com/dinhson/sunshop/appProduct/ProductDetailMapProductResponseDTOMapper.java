@@ -1,9 +1,12 @@
 package com.dinhson.sunshop.appProduct;
 
+import com.dinhson.sunshop.appProduct.colors.Color;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
+import com.dinhson.sunshop.appProduct.sizes.Size;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,17 +18,24 @@ public class ProductDetailMapProductResponseDTOMapper implements Function<Produc
 
     @Override
     public ProductResponseDTO apply(ProductDetail productDetail) {
-        return new ProductResponseDTO(
-                productDTOMapper.apply(productDetail.getProduct()),
-                null,
-                productDetail.getProduct().getProductDetails().stream()
-                        .map(p ->p.getColor())
-                        .collect(Collectors.toSet()),
-                productDetail.getProduct().getProductDetails().stream()
-                        .map(p ->p.getSize())
-                        .collect(Collectors.toSet()),
-                0,
-                null
-                );
+        return ProductResponseDTO
+                .builder()
+                .productDTO(productDTOMapper.apply(productDetail.getProduct()))
+                .colors(getColorSet(productDetail))
+                .sizes(getSizeSet(productDetail))
+                .discount(0)
+                .build();
+    }
+
+    private Set<Size> getSizeSet(ProductDetail productDetail) {
+        return productDetail.getProduct().getProductDetails().stream()
+                .map(ProductDetail::getSize)
+                .collect(Collectors.toSet());
+    }
+
+    private Set<Color> getColorSet(ProductDetail productDetail) {
+        return productDetail.getProduct().getProductDetails().stream()
+                .map(ProductDetail::getColor)
+                .collect(Collectors.toSet());
     }
 }

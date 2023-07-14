@@ -2,7 +2,6 @@ package com.dinhson.sunshop.appAdmin.colorManagement;
 
 import com.dinhson.sunshop.appProduct.colors.Color;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetailService;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 

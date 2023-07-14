@@ -3,12 +3,11 @@ package com.dinhson.sunshop.appOrders.orderdetails;
 import com.dinhson.sunshop.appOrders.Order;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -28,14 +27,8 @@ public class OrderDetail {
     @JoinColumn(name = "product_detail_id", nullable = false)
     private ProductDetail productDetail;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
-    public OrderDetail (Integer quantity, Integer discount, ProductDetail productDetail, Order order){
-        this.quantity = quantity;
-        this.discount = discount;
-        this.productDetail = productDetail;
-        this.order = order;
-    }
 }

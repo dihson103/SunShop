@@ -6,10 +6,7 @@ import com.dinhson.sunshop.appProduct.discounts.Discount;
 import com.dinhson.sunshop.appProduct.images.Image;
 import com.dinhson.sunshop.appProduct.sizes.Size;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -19,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "product_details")
+@Builder
 public class ProductDetail {
 
     @Id
@@ -47,10 +45,4 @@ public class ProductDetail {
     @JoinColumn(name = "product_detail_id")
     private Set<Discount> discounts;
 
-    public ProductDetail (Product product, Color color, Size size, Integer number){
-        this.product = product;
-        this.color = color;
-        this.size = size;
-        this.number = number;
-    }
 }

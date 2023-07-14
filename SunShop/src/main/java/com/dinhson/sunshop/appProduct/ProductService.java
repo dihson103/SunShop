@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,7 +98,16 @@ public class ProductService {
 
     public void createNewProduct(ProductRequestCreate productRequestCreate, Category category) {
         String fileName = FileUtils.getImageUrl(productRequestCreate.getFile());
-        Product product = new Product(productRequestCreate, category, fileName);
+        Product product = Product.builder()
+                .name(productRequestCreate.getName())
+                .price(productRequestCreate.getPrice())
+                .description(productRequestCreate.getDescription())
+                .isDelete(true)
+                .img(fileName)
+                .category(category)
+                .createDate(LocalDateTime.now())
+                .build();
+                //new Product(productRequestCreate, category, fileName);
         productRepository.save(product);
     }
 

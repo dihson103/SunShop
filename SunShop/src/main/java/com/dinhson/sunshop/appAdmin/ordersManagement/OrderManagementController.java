@@ -24,8 +24,6 @@ public class OrderManagementController {
         Status[] statuses = Status.values();
         List<OrderDTO> orders = orderService.searchOrderDTO(statusChecked, searchName);
 
-        orders.forEach(m -> System.out.println("money: " + m.totalMoney()));
-
         model.addAttribute("orders", orders);
         model.addAttribute("statues", statuses);
         model.addAttribute("searchName", searchName);

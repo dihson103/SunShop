@@ -4,10 +4,7 @@ import com.dinhson.sunshop.appAdmin.productManagement.ProductRequestCreate;
 import com.dinhson.sunshop.appProduct.categories.Category;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetail;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -18,6 +15,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Product {
 
     @Id
@@ -50,13 +48,4 @@ public class Product {
     @JoinColumn(name = "product_id")
     private Set<ProductDetail> productDetails;
 
-    public Product(ProductRequestCreate productRequestCreate, Category category, String img){
-        name = productRequestCreate.getName();
-        price = productRequestCreate.getPrice();
-        description = productRequestCreate.getDescription();
-        isDelete = true;
-        this.img = img;
-        this.category = category;
-        createDate = LocalDateTime.now();
-    }
 }

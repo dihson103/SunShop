@@ -2,20 +2,17 @@ package com.dinhson.sunshop.appOrders;
 
 import com.dinhson.sunshop.appAdmin.ordersManagement.OrderDTO;
 import com.dinhson.sunshop.appAdmin.ordersManagement.OrderDTOMapper;
-import com.dinhson.sunshop.appAdmin.ordersManagement.OrderResponse;
-import com.dinhson.sunshop.appAdmin.ordersManagement.OrderResponseMapper;
 import com.dinhson.sunshop.appCart.CartItem;
 import com.dinhson.sunshop.appCart.CartService;
 import com.dinhson.sunshop.appOrders.orderdetails.OrderDetailService;
 import com.dinhson.sunshop.appProduct.productDetails.ProductDetailService;
-import com.dinhson.sunshop.appUser.UserService;
 import com.dinhson.sunshop.appUser.shipments.Shipment;
 import com.dinhson.sunshop.appUser.shipments.ShipmentService;
+import com.dinhson.sunshop.securityConfig.MyUserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -138,6 +135,11 @@ public class OrderService {
         return orderResponseMapper.apply(order);
     }
 
+    public List<OrderResponse> findAllOrderOfUser(MyUserDetail userDetail){
+        return orderRepository.findByUserId(userDetail.getId()).stream()
+                .map(orderResponseMapper)
+                .toList();
+    }
 
 
 }

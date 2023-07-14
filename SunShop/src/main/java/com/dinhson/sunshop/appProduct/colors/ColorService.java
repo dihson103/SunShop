@@ -44,7 +44,7 @@ public class ColorService {
     }
 
     public void createColor(String name){
-        Color color = new Color(name);
+        Color color = Color.builder().name(name).build();
         addNewColor(color);
     }
 

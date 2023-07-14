@@ -1,10 +1,7 @@
 package com.dinhson.sunshop.appUser;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -13,6 +10,7 @@ import java.util.Date;
 @Table(name = "users")
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -48,23 +46,23 @@ public class User {
     @Column(nullable = false)
     private Boolean isActive;
 
-    public User(UserDTO userDTO){
-        name = userDTO.name();
-        email = userDTO.email();
-        password = userDTO.password();
-        enabled = false;
-        isActive = false;
-        role = userDTO.role() == null ? Role.USER : userDTO.role();
-    }
-
-    public User(UserSecurityDTO userDTO){
-        email = userDTO.getEmail();
-        name = userDTO.getName();
-        password = userDTO.getPassword();
-        enabled = false;
-        isActive = false;
-        role = Role.USER;
-    }
+//    public User(UserDTO userDTO){
+//        name = userDTO.name();
+//        email = userDTO.email();
+//        password = userDTO.password();
+//        enabled = false;
+//        isActive = false;
+//        role = userDTO.role() == null ? Role.USER : userDTO.role();
+//    }
+//
+//    public User(UserSecurityDTO userDTO){
+//        email = userDTO.getEmail();
+//        name = userDTO.getName();
+//        password = userDTO.getPassword();
+//        enabled = false;
+//        isActive = false;
+//        role = Role.USER;
+//    }
 
 
 }

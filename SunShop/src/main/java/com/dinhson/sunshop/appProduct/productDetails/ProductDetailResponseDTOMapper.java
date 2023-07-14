@@ -8,11 +8,12 @@ import java.util.function.Function;
 public class ProductDetailResponseDTOMapper implements Function<ProductDetail, ProductDetailResponseDTO> {
     @Override
     public ProductDetailResponseDTO apply(ProductDetail productDetail) {
-        return new ProductDetailResponseDTO(
-                productDetail.getId(),
-                productDetail.getColor().getId(),
-                productDetail.getSize().getId(),
-                productDetail.getNumber()
-        );
+        return ProductDetailResponseDTO
+                .builder()
+                .productDetailId(productDetail.getId())
+                .colorId(productDetail.getColor().getId())
+                .sizeId(productDetail.getSize().getId())
+                .number(productDetail.getNumber())
+                .build();
     }
 }

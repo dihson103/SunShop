@@ -27,7 +27,7 @@ class OrderRepositoryTest {
         Status status = Status.Pending;
         Shipment shipment = shipmentRepository.findById(1).get();
         String note = "giao hang som nha";
-        Order order = new Order(orderDate, status, note, shipment);
+        Order order = null; //new Order(orderDate, status, note, shipment);
 
         //when
         Order orderAdd = underTest.save(order);

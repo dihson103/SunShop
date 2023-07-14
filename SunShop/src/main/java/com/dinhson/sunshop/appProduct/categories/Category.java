@@ -2,12 +2,14 @@ package com.dinhson.sunshop.appProduct.categories;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "categories")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category {
@@ -22,8 +24,4 @@ public class Category {
     @Column(nullable = false)
     private String img;
 
-    public Category (String name, String img){
-        this.name = name;
-        this.img = img;
-    }
 }

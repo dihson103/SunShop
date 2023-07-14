@@ -36,7 +36,12 @@ public class SizeService {
             return "Size " + name + " is already exist!!!";
         }
 
-        Size size = new Size(name, height, weight);
+        Size size = Size.builder()
+                .size(name)
+                .height(height)
+                .weight(weight)
+                .build();
+                //new Size(name, height, weight);
         sizeRepository.save(size);
         return "Add new size success!!!";
     }

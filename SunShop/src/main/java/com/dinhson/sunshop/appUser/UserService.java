@@ -3,17 +3,16 @@ package com.dinhson.sunshop.appUser;
 import com.dinhson.sunshop.appUser.profile.ProfileSecurityDTO;
 import com.dinhson.sunshop.exception.ForgetPasswordEmailNotTrueException;
 import com.dinhson.sunshop.exception.UserNotValidException;
-import com.dinhson.sunshop.exception.UsersNotFoundException;
 import com.dinhson.sunshop.securityConfig.MyUserDetail;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.dinhson.sunshop.appUser.Role.USER;
 
 @Service
 @AllArgsConstructor
@@ -163,7 +162,15 @@ public class UserService {
     public User saveUser(UserSecurityDTO userDTO){
         checkPassword(userDTO);
         checkUserExist(userDTO);
-        User user = new User(userDTO);
+        User user = User.builder()
+                .name(userDTO.getName())
+                .email(userDTO.getEmail())
+                .password(passwordEncoder.encode(userDTO.getPassword()))
+                .enabled(false)
+                .isActive(false)
+                .role(USER)
+                .build();
+                //new User(userDTO);
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return userRepository.save(user);
     }
@@ -181,7 +188,8 @@ public class UserService {
     }
 
     public void changeUserPassword(UserSecurityDTO userDTO) {
-        User user = userRepository.findUserByEmailAndActiveIsTrue(userDTO.getEmail()).get();
+        User user = userRepository.findUserByEmailAndActiveIsTrue(userDTO.getEmail())
+                        .orElseThrow(() -> new IllegalArgumentException("Can not find user!!!"));
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
     }

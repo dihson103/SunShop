@@ -18,4 +18,7 @@ public interface OrderRepository extends CrudRepository<Order, Integer> {
 
     @Query("SELECT o FROM Order o WHERE o.shipment.user.email LIKE %:searchName% AND o.status = :status")
     List<Order> searchOrdersByAll(Status status, String searchName);
+
+    @Query("SELECT o FROM Order o WHERE o.shipment.user.id = :userId")
+    List<Order> findByUserId(int userId);
 }

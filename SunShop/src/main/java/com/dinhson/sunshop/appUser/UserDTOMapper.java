@@ -8,16 +8,16 @@ import java.util.function.Function;
 public class UserDTOMapper implements Function<User, UserDTO> {
     @Override
     public UserDTO apply(User user) {
-        return new UserDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getDob(),
-                user.getGender(),
-                user.getRole(),
-                null,
-                user.getImage(),
-                user.getIsActive()
-        );
+        return UserDTO
+                .builder()
+                .userId(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .dob(user.getDob())
+                .gender(user.getGender())
+                .role(user.getRole())
+                .image(user.getImage())
+                .isActive(user.getIsActive())
+                .build();
     }
 }

@@ -3,10 +3,12 @@ package com.dinhson.sunshop.appUser.shipments;
 import com.dinhson.sunshop.appUser.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @Entity
 @Table(name = "shipments")
 @AllArgsConstructor
@@ -25,9 +27,9 @@ public class Shipment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Shipment (String phone, String address, User user){
-        this.phone = phone;
-        this.address = address;
-        this.user = user;
-    }
+//    public Shipment (String phone, String address, User user){
+//        this.phone = phone;
+//        this.address = address;
+//        this.user = user;
+//    }
 }

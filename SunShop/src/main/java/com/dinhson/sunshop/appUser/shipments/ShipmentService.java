@@ -20,7 +20,12 @@ public class ShipmentService {
 
     public Shipment createNewShipment(String address, String phone, Integer userId){
         User user = userService.findUserById(userId);
-        Shipment shipment = new Shipment(phone, address, user);
+        Shipment shipment = Shipment.builder()
+                .phone(phone)
+                .address(address)
+                .user(user)
+                .build();
+                //new Shipment(phone, address, user);
         return shipmentRepository.save(shipment);
     }
 

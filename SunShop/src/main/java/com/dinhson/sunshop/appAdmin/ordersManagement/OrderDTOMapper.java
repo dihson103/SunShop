@@ -17,11 +17,6 @@ public class OrderDTOMapper implements Function<Order, OrderDTO> {
 
     @Override
     public OrderDTO apply(Order order) {
-
-        System.out.println("order number: " + order.getId() + " has " + order.getOrderDetails().size());
-
-        List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrder(order);
-
         return OrderDTO
                 .builder()
                 .orderId(order.getId())
@@ -30,11 +25,15 @@ public class OrderDTOMapper implements Function<Order, OrderDTO> {
                 .orderDate(order.getOrderDate())
                 .status(order.getStatus())
                 //TODO chua tinh discount
-                .totalMoney(2 + orderDetails.stream()
-                        .mapToDouble(value -> {
-                            return value.getQuantity() * value.getProductDetail().getProduct().getPrice();
-                        })
-                        .sum())
+                .totalMoney(calculateTotalPrice(order))
                 .build();
+    }
+
+    private Double calculateTotalPrice (Order order){
+        List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrder(order);
+
+        return order.getOrderDetails().stream()
+                .mapToDouble(value -> value.getQuantity() * value.getProductDetail().getProduct().getPrice())
+                .sum();
     }
 }

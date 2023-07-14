@@ -2,10 +2,12 @@ package com.dinhson.sunshop.appProduct.colors;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -18,7 +20,4 @@ public class Color {
 
     private String name;
 
-    public Color(String name) {
-        this.name = name;
-    }
 }
