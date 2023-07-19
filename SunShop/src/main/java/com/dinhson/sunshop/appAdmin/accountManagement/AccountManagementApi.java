@@ -22,6 +22,6 @@ public class AccountManagementApi {
     public List<UserDTO> searchUsers(@RequestParam String name,
                               @RequestParam String role,
                               @RequestParam String isActive){
-        return userService.searchUsers(isActive, role, name);
+        return userService.searchUsers(isActive, role, name, 0, 2);
     }
 }

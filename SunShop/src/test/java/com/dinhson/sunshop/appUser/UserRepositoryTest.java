@@ -3,6 +3,7 @@ package com.dinhson.sunshop.appUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ class UserRepositoryTest {
         Role role = Role.MANAGER;
 
         //when
-        List<User> users = underTest.searchUserByAll(status, role, searchName);
+        List<User> users = underTest.searchUserByAll(status, role, searchName, PageRequest.of(0, 2)).getContent();
 
         boolean actual = users.stream()
                 .anyMatch(u -> !u.getName().contains(searchName) || u.getIsActive() == false || u.getRole() != role);
@@ -36,7 +37,7 @@ class UserRepositoryTest {
         boolean status = true;
 
         //when
-        List<User> users = underTest.searchUserByIsActiveAndSearch(status, searchName);
+        List<User> users = underTest.searchUserByIsActiveAndSearch(status, searchName, PageRequest.of(0, 2)).getContent();
 
         //then
         boolean actual = users.stream().anyMatch(u -> !u.getName().contains(searchName) || u.getIsActive() == false);
@@ -50,7 +51,7 @@ class UserRepositoryTest {
         Role role = Role.USER;
 
         //when
-        List<User> users = underTest.searchUserByRoleAndSearch(role, searchName);
+        List<User> users = underTest.searchUserByRoleAndSearch(role, searchName, PageRequest.of(0, 2)).getContent();
 
         //then
         boolean actual = users.stream().anyMatch(u -> !u.getName().contains(searchName) || u.getRole() != role);
@@ -64,7 +65,7 @@ class UserRepositoryTest {
         Role role = Role.USER;
 
         //when
-        List<User> users = underTest.searchUserByIsActiveAndRole(status, role);
+        List<User> users = underTest.searchUserByIsActiveAndRole(status, role, PageRequest.of(0, 2)).getContent();
 
         //then
         boolean actual = users.stream().anyMatch(u -> u.getIsActive() == false || u.getRole() != role);
@@ -77,7 +78,7 @@ class UserRepositoryTest {
         boolean status = true;
 
         //when
-        List<User> users = underTest.searchUserByIsActive(status);
+        List<User> users = underTest.searchUserByIsActive(status, PageRequest.of(0, 2)).getContent();
 
         //then
         boolean actual = users.stream().anyMatch(u -> u.getIsActive() == false);
@@ -90,7 +91,7 @@ class UserRepositoryTest {
         Role role = Role.USER;
 
         //when
-        List<User> users = underTest.searchUserByRole(role);
+        List<User> users = underTest.searchUserByRole(role, PageRequest.of(0, 2)).getContent();
 
         //then
         boolean actual = users.stream().anyMatch(u -> u.getRole() != role);
@@ -103,7 +104,7 @@ class UserRepositoryTest {
         String searchName = "on";
 
         //when
-        List<User> users = underTest.searchByName(searchName);
+        List<User> users = underTest.searchByName(searchName, PageRequest.of(0, 2)).getContent();
 
         //then
         boolean actual = users.stream().anyMatch(u -> !u.getName().contains(searchName));
@@ -115,7 +116,7 @@ class UserRepositoryTest {
         //after
 
         //when
-        List<User> users = underTest.getAll();
+        List<User> users = underTest.getAll(PageRequest.of(0, 2)).getContent();
 
         //then
         assertEquals(false, users.isEmpty());

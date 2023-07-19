@@ -1,14 +1,18 @@
 package com.dinhson.sunshop.appUser;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    Optional<User> getById(Integer id);
+    User getById(Integer id);
 
     Optional<User> getUserByEmail(String email);
 
@@ -16,28 +20,28 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     Optional<User> findUserByEmailAndActiveIsTrue(String email);
 
     @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.role = :role AND u.name LIKE %:nameSearch%")
-    List<User> searchUserByAll(boolean isActive, Role role, String nameSearch);
+    Page<User> searchUserByAll(boolean isActive, Role role, String nameSearch, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.name LIKE %:nameSearch%")
-    List<User> searchUserByIsActiveAndSearch(boolean isActive, String nameSearch);
+    Page<User> searchUserByIsActiveAndSearch(boolean isActive, String nameSearch, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.role = :role AND u.name LIKE %:nameSearch%")
-    List<User> searchUserByRoleAndSearch(Role role, String nameSearch);
+    Page<User> searchUserByRoleAndSearch(Role role, String nameSearch, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.isActive = :isActive AND u.role = :role")
-    List<User> searchUserByIsActiveAndRole(boolean isActive, Role role);
+    Page<User> searchUserByIsActiveAndRole(boolean isActive, Role role, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.isActive = :isActive")
-    List<User> searchUserByIsActive(boolean isActive);
+    Page<User> searchUserByIsActive(boolean isActive, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.role = :role")
-    List<User> searchUserByRole(Role role);
+    Page<User> searchUserByRole(Role role, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.name LIKE %:searchName%")
-    List<User> searchByName(String searchName);
+    Page<User> searchByName(String searchName, Pageable pageable);
 
     @Query("SELECT u FROM User u")
-    List<User> getAll();
+    Page<User> getAll(Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.email = :email AND u.password = :password AND u.isActive  = true")
     Optional<User> findUserByEmailAndPassword(String email, String password);

@@ -22,13 +22,18 @@ public class AccountsManagementController {
                            @RequestParam(required = false, defaultValue = "all") String role,
                            @RequestParam(required = false, defaultValue = "all") String isActive,
                            @RequestParam(required = false, defaultValue = "") String message,
+                           @RequestParam(required = false, defaultValue = "0") Integer pageIndex,
+                           @RequestParam(required = false, defaultValue = "2") Integer pageSize,
                            Model model){
-        List<UserDTO> userDTOS = userService.searchUsers(isActive, role, name);
+        List<UserDTO> userDTOS = userService.searchUsers(isActive, role, name, pageIndex, pageSize);
+        Integer totalPages = userService.getTotalPages();
         model.addAttribute("users", userDTOS);
         model.addAttribute("role", role);
         model.addAttribute("isActive", isActive);
         model.addAttribute("search", name);
         model.addAttribute("message", message);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageIndex", pageIndex);
         return "admin-accounts-management";
     }
 

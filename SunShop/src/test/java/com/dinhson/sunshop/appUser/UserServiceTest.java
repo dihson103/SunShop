@@ -29,7 +29,7 @@ class UserServiceTest {
         String role = "USER";
 
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers(isActive, role, searchName);
+        List<UserDTO> userDTOS = underTest.searchUsers(isActive, role, searchName, 0, 2);
 
         //then
         boolean actual = userDTOS.stream()
@@ -43,7 +43,7 @@ class UserServiceTest {
         String searchName = "on";
         String isActive = "true";
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers(isActive, null, searchName);
+        List<UserDTO> userDTOS = underTest.searchUsers(isActive, null, searchName, 0, 2);
 
         //then
         boolean actual = userDTOS.stream()
@@ -58,7 +58,7 @@ class UserServiceTest {
         String role = "USER";
 
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers("null", role, searchName);
+        List<UserDTO> userDTOS = underTest.searchUsers("null", role, searchName, 0, 2);
 
         //then
         boolean actual = userDTOS.stream()
@@ -73,7 +73,7 @@ class UserServiceTest {
         String role = "USER";
 
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers(isActive, role, null);
+        List<UserDTO> userDTOS = underTest.searchUsers(isActive, role, null, 0, 2);
 
         //then
         boolean actual = userDTOS.stream()
@@ -87,7 +87,7 @@ class UserServiceTest {
         String isActive = "true";
 
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers("null", isActive, null);
+        List<UserDTO> userDTOS = underTest.searchUsers("null", isActive, null, 0, 2);
 
         //then
         boolean actual = userDTOS.stream()
@@ -101,7 +101,7 @@ class UserServiceTest {
         String role = "USER";
 
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers("null", role, null);
+        List<UserDTO> userDTOS = underTest.searchUsers("null", role, null, 0, 2);
 
         //then
         boolean actual = userDTOS.stream()
@@ -115,7 +115,7 @@ class UserServiceTest {
         String searchName = "on";
 
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers("null", "null", searchName);
+        List<UserDTO> userDTOS = underTest.searchUsers("null", "null", searchName, 0, 2);
 
         //then
         boolean actual = userDTOS.stream()
@@ -128,7 +128,7 @@ class UserServiceTest {
         //after
 
         //when
-        List<UserDTO> userDTOS = underTest.searchUsers("null", "null", null);
+        List<UserDTO> userDTOS = underTest.searchUsers("null", "null", null, 0, 2);
 
         //then
         assertEquals(false, userDTOS.isEmpty());
