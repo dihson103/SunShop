@@ -43,7 +43,7 @@
     </div>
 </section>
 
-<main>
+<main id="main-content">
     <div class="container">
         <div class="card">
             <div class="card-body">
@@ -60,8 +60,8 @@
                         <div class="order-status col-md-2">
                             <span style="font-weight: 700;">Status:</span> [[${order.status()}]]
                         </div>
-                        <div class="order-management-btn col-md-2">
-                            <a th:href="@{my-order(orderId=${order.orderId()})}">Manager order</a>
+                        <div class="order-management-btn col-md-2" th:id="${order.orderId()}">
+                            <div>Manager order</div>
                         </div>
                     </div>
 
@@ -85,8 +85,8 @@
                                     </div>
                                 </div>
                                 <div class="item-info-btn col-md-2">
-                                    <button class="btn btn-success" type="button">Add to card</button>
-                                    <button class="btn btn-info" type="button">View product</button>
+                                    <button class="btn btn-success buttonAdd" th:id="${item.productDetailId()}" type="button">Add to card</button>
+                                    <button class="btn btn-info buttonView" th:id="${item.productId()}" type="button">View product</button>
                                 </div>
                             </div>
                         </div>
@@ -101,6 +101,12 @@
         </div>
     </div>
 </main>
+
+<div class="container" id="returnOrder" hidden>
+    <button id="returnOrderButton" type="button">Return my orders</button>
+</div>
+<section id="detail-content" class="shoping-cart spad" style="padding-top: 0px;"></section>
+<div class="container" id="orderTracking"></div>
 
 <footer class="footer spad">
     <div class="container">
@@ -167,5 +173,178 @@
         </div>
     </div>
 </footer>
+
+<script th:inline="javascript">
+
+    const orderDetails = /*[[${orderResponseList}]]*/ null;
+
+    $('.buttonAdd').click((event) => {
+        let productDetailId = event.target.id;
+        let param = {
+            productDetailId: productDetailId,
+            numberProduct : 1
+        };
+
+        $.ajax({
+            url: "/api/cart",
+            type: 'POST',
+            data: param,
+            success: function(response) {
+                alert(response.message || 'Please login to add item to cart');
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
+        });
+    });
+
+    $('.buttonView').click(function () {
+        let productId = $(this).attr('id');
+        window.location = '/product?productId=' + productId;
+    });
+
+    const renderItemsHtml = (items) => {
+        return items.reduce((accumulator, currentValue) => {
+            return accumulator + `
+            <tr><div>
+                                    <td class="shoping__cart__item">
+                                        <img src="${currentValue.productImage}" style="width: 70px; height: 70px;" alt="">
+                                        <a><h5>${currentValue.productName}</h5></a>
+                                    </td>
+                                    <td>${currentValue.productColor}</td>
+                                    <td>${currentValue.productSize}</td>
+                                    <td>${currentValue.price}</td>
+                                    <td>${currentValue.quantity}</td>
+                                    <td class="shoping__cart__total">$${currentValue.price * currentValue.quantity}</td>
+                                </div></tr>
+            `;
+        }, ``);
+    }
+
+    const renderTableItemsHtml = (order) => {
+        let items = order.orderDetails;
+        let itemsHtml = renderItemsHtml(items);
+        console.log(itemsHtml)
+
+        return `
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="shoping__cart__table">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th class="shoping__product">Products</th>
+                                        <th>Color</th>
+                                        <th>Size</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    ${itemsHtml}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="shoping__checkout" id="shipInfo">
+                                <h5>Shipping Information</h5>
+                                <ul>
+                                    <li>Full name <span>${order.customerName}</span></li>
+                                    <li>Email <span>${order.customerEmail}</span></li>
+                                    <li>Phone <span>${order.phone}</span></li>
+                                    <li>Order date <span>${order.orderDate}</span></li>
+                                    <li>Address <span>${order.address}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="shoping__checkout" id="totalPrice">
+                                <h5>Cart Total</h5>
+                                <ul>
+                                    <li>Subtotal <span id="subTotalMoney">$${order.total}</span></li>
+                                    <li>Shipment's fee <span>$ 2</span></li>
+                                    <li>Total <span  id="totalMoney">$${order.total + 2}</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        `;
+    }
+
+    const renderOrderTracking = (order) => {
+        return `
+                    <link rel="stylesheet" href="css/orderDetail.css">
+                    <div class="card">
+                    <!-- Add class 'active' to progress -->
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-12">
+                            <ul id="progressbar" class="text-center">
+                                <li class="${order.statusInNumber >= 1 ? 'active step0' : 'step0'}"></li>
+                                <li class="${order.statusInNumber >= 2 ? 'active step0' : 'step0'}"></li>
+                                <li class="${order.statusInNumber >= 3 ? 'active step0' : 'step0'}"></li>
+                                <li class="${order.statusInNumber >= 4 ? 'active step0' : 'step0'}"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between top">
+                        <div class="row d-flex icon-content">
+                            <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                            <div class="d-flex flex-column">
+                                <p class="font-weight-bold">Order<br>Processed</p>
+                            </div>
+                        </div>
+                        <div class="row d-flex icon-content">
+                            <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                            <div class="d-flex flex-column">
+                                <p class="font-weight-bold">Order<br>Shipped</p>
+                            </div>
+                        </div>
+                        <div class="row d-flex icon-content">
+                            <img class="icon" src="https://i.imgur.com/HdsziHP.png">
+                            <div class="d-flex flex-column">
+                                <p class="font-weight-bold">Order<br>Arrived</p>
+                            </div>
+                        </div>
+                        <div class="row d-flex icon-content">
+                            <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                            <div class="d-flex flex-column">
+                                <p class="font-weight-bold">Order<br>Returned</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        `;
+    }
+
+    $('.order-management-btn').click(function() {
+        let orderId = $(this).attr('id');
+        let order = orderDetails.find(order => order.orderId == orderId);
+        let orderHtml = renderTableItemsHtml(order);
+        $('#main-content').toggle(false);
+        $('#detail-content').html(orderHtml);
+        let height = $('#shipInfo').height();
+        $('#totalPrice').height(height);
+        let trackingHtml = renderOrderTracking(order);
+        $('#orderTracking').html(trackingHtml);
+        $('#returnOrder').attr('hidden', false);
+    })
+
+    $('#returnOrderButton').click(() => {
+        $('#main-content').toggle(true);
+        $('#orderTracking').html('');
+        $('#detail-content').html('');
+        $('#returnOrder').attr('hidden', true);
+    });
+
+
+</script>
 </body>
 </html>

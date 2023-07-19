@@ -145,7 +145,7 @@
                         <li class="active"><a th:href="@{/home}">Home</a></li>
                         <li><a th:href="@{/shop}">Shop</a></li>
                         <li><a href="./blog.html">Blog</a></li>
-                        <li th:if="${session.user} != null"><a th:href="@{/order/view}">My orders</a></li>
+                        <li th:if="${session.user} != null"><a th:href="@{/my-orders}">My orders</a></li>
                         <li th:if="${session.user} != null"><a th:href="@{/profile}">My Profile</a>
                         </li>
                     </ul>

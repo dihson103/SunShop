@@ -17,6 +17,8 @@ public class OrderDetailResponseMapper implements Function<OrderDetail, OrderDet
 
         return OrderDetailResponse
                 .builder()
+                .productId(product.getId())
+                .productDetailId(productDetail.getId())
                 .productName(product.getName())
                 .productImage(product.getImg())
                 .productColor(productDetail.getColor().getName())

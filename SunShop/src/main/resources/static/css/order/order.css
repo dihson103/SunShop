@@ -20,7 +20,12 @@ main {
     margin-bottom: 40px;
 }
 
+.container .card .order .order-title .order-management-btn {
+    color: #2f89fc;
+}
+
 .container .card .order .order-title .order-management-btn :hover{
+    cursor: pointer;
     color: darkolivegreen;
 }
 
@@ -50,4 +55,14 @@ main {
     min-width: 130px;
     height: 50px;
     color: #1b1e21;
+}
+
+#returnOrderButton {
+    min-width: 140px;
+    height: 44px;
+    margin-bottom: 20px;
+    border: none;
+    background-color: rgb(127, 173, 57);
+    color: white;
+    font-weight: 700;
 }
