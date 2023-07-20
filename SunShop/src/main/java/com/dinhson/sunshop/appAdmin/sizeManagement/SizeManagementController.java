@@ -24,10 +24,16 @@ public class SizeManagementController {
 
     @GetMapping
     public String getSizes(@RequestParam(required = false) String search,
+                           @RequestParam(required = false, defaultValue = "0") Integer pageIndex,
+                           @RequestParam(required = false, defaultValue = "2") Integer pageSize,
                            Model model){
-        Iterable<Size> sizes = sizeService.findAllSize();
+        List<Size> sizes = sizeService.findAllSize(pageIndex, pageSize);
+        Integer totalPages = sizeService.getTotalPages();
+
         model.addAttribute("sizes", sizes);
         model.addAttribute("search", search);
+        model.addAttribute("pageIndex", pageIndex);
+        model.addAttribute("totalPages", totalPages);
         return "admin-sizes-management";
     }
 

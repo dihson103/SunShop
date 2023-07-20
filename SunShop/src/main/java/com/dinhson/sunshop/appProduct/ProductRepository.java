@@ -1,12 +1,15 @@
 package com.dinhson.sunshop.appProduct;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ProductRepository extends CrudRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("SELECT p FROM Product p WHERE p.name = :name")
     Optional<Product> findProductByName(String name);
@@ -20,40 +23,40 @@ public interface ProductRepository extends CrudRepository<Product, Integer> {
     @Query("SELECT p " +
             "FROM Product p " +
             "WHERE p.isDelete = :isDelete AND p.category.id = :categoryId AND p.name LIKE %:searchName%")
-    List<Product> searchProductByAll(boolean isDelete, int categoryId, String searchName);
+    Page<Product> searchProductByAll(boolean isDelete, int categoryId, String searchName, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM Product p " +
             "WHERE p.isDelete = :isDelete AND p.category.id = :categoryId")
-    List<Product> searchProductByCategoryAndIsDelete(boolean isDelete, int categoryId);
+    Page<Product> searchProductByCategoryAndIsDelete(boolean isDelete, int categoryId, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM Product p " +
             "WHERE p.isDelete = :isDelete AND p.name LIKE %:searchName%")
-    List<Product> searchProductByIsDeleteAndSearchName(boolean isDelete, String searchName);
+    Page<Product> searchProductByIsDeleteAndSearchName(boolean isDelete, String searchName, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM Product p " +
             "WHERE p.isDelete = :isDelete")
-    List<Product> searchProductByIsDelete(boolean isDelete);
+    Page<Product> searchProductByIsDelete(boolean isDelete, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM Product p " +
             "WHERE p.category.id = :categoryId AND p.name LIKE %:searchName%")
-    List<Product> searchProductByCategoryAndSearchName(int categoryId, String searchName);
+    Page<Product> searchProductByCategoryAndSearchName(int categoryId, String searchName, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM Product p " +
             "WHERE p.category.id = :categoryId")
-    List<Product> searchProductByCategory(int categoryId);
+    Page<Product> searchProductByCategory(int categoryId, Pageable pageable);
 
     @Query("SELECT p " +
             "FROM Product p " +
             "WHERE p.name LIKE %:searchName%")
-    List<Product> searchProductBySearchName(String searchName);
+    Page<Product> searchProductBySearchName(String searchName, Pageable pageable);
 
     @Query("SELECT p FROM Product p")
-    List<Product> getAll();
+    Page<Product> getAll(Pageable pageable);
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.category.id = :categoryId")
     Integer getNumberProductByCategoryId(Integer categoryId);

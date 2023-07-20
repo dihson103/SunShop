@@ -22,13 +22,19 @@ public class CategoriesManagementController {
     private final ProductService productService;
 
     @GetMapping
-    public String categoriesManagement (@RequestParam(required = false) String searchName, Model model){
+    public String categoriesManagement (@RequestParam(required = false) String searchName,
+                                        @RequestParam(required = false, defaultValue = "0") Integer pageIndex,
+                                        @RequestParam(required = false, defaultValue = "2") Integer pageSize,
+                                        Model model){
 
-        List<CategoryDTO> categories = categoryService.getAllListCategoryDTO();
+        List<CategoryDTO> categories = categoryService.getAllListCategoryDTO(pageIndex, pageSize);
+        Integer totalPages = categoryService.getTotalPages();
 
         model.addAttribute("categories", categories);
         model.addAttribute("searchName", searchName);
         model.addAttribute("categoryRequestDTO", new CategoryRequestDTO());
+        model.addAttribute("pageIndex", pageIndex);
+        model.addAttribute("totalPages", totalPages);
         return "admin-categories-management";
     }
 

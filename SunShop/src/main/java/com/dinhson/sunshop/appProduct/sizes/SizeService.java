@@ -3,13 +3,18 @@ package com.dinhson.sunshop.appProduct.sizes;
 import com.dinhson.sunshop.exception.SizeAlreadyExistException;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class SizeService {
 
     private final SizeRepository sizeRepository;
+    private static Integer totalPages = 0;
 
     private boolean isSizeExist(String size) {
         return sizeRepository.findSizeBySize(size).isPresent();
@@ -24,6 +29,13 @@ public class SizeService {
 
     public Iterable<Size> findAllSize() {
         return sizeRepository.findAll();
+    }
+
+    public List<Size> findAllSize(Integer pageIndex, Integer pageSize) {
+        Page<Size> sizePage = sizeRepository.findAll(PageRequest.of(pageIndex, pageSize));
+        totalPages = sizePage.getTotalPages();
+
+        return sizePage.getContent();
     }
 
     public Size findSizeById(Integer sizeId){
@@ -65,5 +77,9 @@ public class SizeService {
         Size size = sizeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Can not find size!!!"));
         sizeRepository.delete(size);
+    }
+
+    public Integer getTotalPages() {
+        return totalPages;
     }
 }

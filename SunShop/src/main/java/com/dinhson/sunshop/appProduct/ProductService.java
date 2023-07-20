@@ -7,6 +7,9 @@ import com.dinhson.sunshop.exception.ProductAlreadyExistException;
 import com.dinhson.sunshop.utils.FileUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +24,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductDTOMapper productDTOMapper;
     private final ProductResponseDTOMapper productResponseDTOMapper;
+    private static Integer totalPages = 0;
 
     public void addNewProduct(Product product) {
         if (isProductExist(product)) {
@@ -49,34 +53,35 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("Can not found product has id: " + productId));
     }
 
-    private List<Product> searchBy(Boolean isDelete, int categoryId, String searchName){
+    private Page<Product> searchBy(Boolean isDelete, int categoryId, String searchName, Integer pageIndex, Integer pageSize){
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
         if (isDelete != null) {
             if (categoryId != 0 && !searchName.isEmpty()) {
                 // search by all
-                return productRepository.searchProductByAll(isDelete, categoryId, searchName);
+                return productRepository.searchProductByAll(isDelete, categoryId, searchName, pageable);
             } else if (categoryId != 0) {
                 // search by category and isDelete
-                return productRepository.searchProductByCategoryAndIsDelete(isDelete, categoryId);
+                return productRepository.searchProductByCategoryAndIsDelete(isDelete, categoryId, pageable);
             } else if (!searchName.isEmpty()) {
                 // search by isDelete and search name
-                return productRepository.searchProductByIsDeleteAndSearchName(isDelete, searchName);
+                return productRepository.searchProductByIsDeleteAndSearchName(isDelete, searchName, pageable);
             } else {
                 // search by isDelete
-                return productRepository.searchProductByIsDelete(isDelete);
+                return productRepository.searchProductByIsDelete(isDelete, pageable);
             }
         } else {
             if (categoryId != 0 && !searchName.isEmpty()) {
                 // search by color and search name
-                return productRepository.searchProductByCategoryAndSearchName(categoryId, searchName);
+                return productRepository.searchProductByCategoryAndSearchName(categoryId, searchName, pageable);
             } else if (categoryId != 0) {
                 // search by color
-                return productRepository.searchProductByCategory(categoryId);
+                return productRepository.searchProductByCategory(categoryId, pageable);
             } else if (!searchName.isEmpty()) {
                 // search by search name
-                return productRepository.searchProductBySearchName(searchName);
+                return productRepository.searchProductBySearchName(searchName, pageable);
             } else {
                 // get all
-                return productRepository.getAll();
+                return productRepository.getAll(pageable);
             }
         }
     }
@@ -90,8 +95,11 @@ public class ProductService {
         return null;
     }
 
-    public List<ProductResponseDTO> searchProducts(String status, int categoryId, String searchName){
-        return searchBy(convertStringToBoolean(status), categoryId, searchName).stream()
+    public List<ProductResponseDTO> searchProducts(String status, int categoryId, String searchName, Integer pageIndex, Integer pageSize){
+        Page<Product> productPage = searchBy(convertStringToBoolean(status), categoryId, searchName, pageIndex, pageSize);
+        totalPages = productPage.getTotalPages();
+
+        return productPage.stream()
                 .map(productResponseDTOMapper)
                 .collect(Collectors.toList());
     }
@@ -107,7 +115,6 @@ public class ProductService {
                 .category(category)
                 .createDate(LocalDateTime.now())
                 .build();
-                //new Product(productRequestCreate, category, fileName);
         productRepository.save(product);
     }
 
@@ -143,6 +150,10 @@ public class ProductService {
 
     public Integer getNumberProductByCategoryId(Integer categoryId){
         return productRepository.getNumberProductByCategoryId(categoryId);
+    }
+
+    public Integer getTotalPages(){
+        return totalPages;
     }
 
 

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -57,7 +59,7 @@ class ProductServiceTest {
         boolean isDelete = Boolean.valueOf(status);
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.stream().anyMatch(p -> {
@@ -77,7 +79,7 @@ class ProductServiceTest {
         boolean isDelete = Boolean.valueOf(status);
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.stream().anyMatch(p -> {
@@ -96,7 +98,7 @@ class ProductServiceTest {
         boolean isDelete = Boolean.valueOf(status);
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.stream().anyMatch(p -> {
@@ -115,7 +117,7 @@ class ProductServiceTest {
         boolean isDelete = Boolean.valueOf(status);
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.stream().anyMatch(p -> {
@@ -132,7 +134,7 @@ class ProductServiceTest {
         String searchName = "duct";
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.stream().anyMatch(p -> {
@@ -150,7 +152,7 @@ class ProductServiceTest {
         String searchName = "";
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.stream().anyMatch(p -> {
@@ -168,7 +170,7 @@ class ProductServiceTest {
         boolean isDelete = Boolean.valueOf(status);
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.stream().anyMatch(p -> {
@@ -187,7 +189,7 @@ class ProductServiceTest {
         String searchName = "";
 
         //when
-        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName);
+        List<ProductResponseDTO> list = underTest.searchProducts(status, categoryId, searchName, 0, 2);
 
         //then
         boolean actual = list.isEmpty();

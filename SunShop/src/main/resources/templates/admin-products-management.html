@@ -100,16 +100,16 @@
                 </table>
                 <div class="clearfix">
                     <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                    <ul class="pagination">
-                        <li class="page-item disabled"><a href="#">Previous</a></li>
-                        <li class="page-item"><a href="#" class="page-link">1</a></li>
-                        <li class="page-item"><a href="#" class="page-link">2</a></li>
-                        <li class="page-item"><a href="#" class="page-link">3</a></li>
-                        <li class="page-item active"><a href="#" class="page-link">4</a></li>
-                        <li class="page-item"><a href="#" class="page-link">5</a></li>
-                        <li class="page-item"><a href="#" class="page-link">6</a></li>
-                        <li class="page-item"><a href="#" class="page-link">7</a></li>
-                        <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    <ul class="pagination" th:if="${totalPages > 1}">
+                        <li th:class="${pageIndex == 0 ? 'page-item disabled' : 'page-item'}">
+                            <span style="cursor: pointer; border: none" class="page-link previous">Previous</span>
+                        </li>
+                        <li th:class="'page-item ' + ${i - 1 == pageIndex ? ' active' : ''}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <span th:id="${i}" style="cursor: pointer; border: none" class="page-link page-link-number">[[${i}]]</span>
+                        </li>
+                        <li th:class="${pageIndex + 1 == totalPages ? 'page-item disabled' : 'page-item'}">
+                            <span style="cursor: pointer; border: none" class="page-link next">Next</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -121,7 +121,7 @@
 </div>
 
 
-<script>
+<script th:inline="javascript">
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
     });
@@ -130,9 +130,38 @@
         let searchName = $('#searchName').val();
         let isDelete = $('#isDelete').val();
         let categoryId = $('#categoryId').val();
-
-        window.location = "products?isDelete=" + isDelete + "&&categoryId=" + categoryId + "&&searchName=" + searchName;
+        let url = `/admin/products?isDelete=${isDelete}&&categoryId=${categoryId}&&searchName=${searchName}`;
+        window.location = url;
+        // window.location = "products?isDelete=" + isDelete + "&&categoryId=" + categoryId + "&&searchName=" + searchName;
     }
+
+    const paging = (pageIndex) => {
+        let searchName = $('#searchName').val();
+        let isDelete = $('#isDelete').val();
+        let categoryId = $('#categoryId').val();
+
+        let url = `/admin/products?isDelete=${isDelete}&&categoryId=${categoryId}&&searchName=${searchName}&&pageIndex=${pageIndex}`;
+        window.location = url;
+    };
+
+    $('.page-link-number').click(function () {
+        let pageIndex = $(this).attr('id');
+        pageIndex = pageIndex - 1;
+        paging(pageIndex);
+    });
+
+    $('.previous').click(() => {
+        let pageIndex = /*[[${pageIndex}]]*/ "";
+        pageIndex = pageIndex - 1;
+        paging(pageIndex);
+    });
+
+    $('.next').click(() => {
+        let pageIndex = /*[[${pageIndex}]]*/ "";
+        pageIndex = pageIndex + 1;
+        paging(pageIndex);
+    });
+
 </script>
 
 </body>

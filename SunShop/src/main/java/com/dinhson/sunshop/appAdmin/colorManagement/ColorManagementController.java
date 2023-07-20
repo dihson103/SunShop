@@ -22,11 +22,17 @@ public class ColorManagementController {
     private final ProductDetailService productDetailService;
 
     @GetMapping
-    public String colorManagement(@RequestParam(required = false) String search, Model model){
-        List<ColorDTO> colorDTOS = colorService.searchColor(search);
+    public String colorManagement(@RequestParam(required = false) String search,
+                                  @RequestParam(required = false, defaultValue = "0") Integer pageIndex,
+                                  @RequestParam(required = false, defaultValue = "2") Integer pageSize,
+                                  Model model){
+        List<ColorDTO> colorDTOS = colorService.searchColor(search, pageIndex, pageSize);
+        Integer totalPages = colorService.getTotalPages();
 
         model.addAttribute("colors", colorDTOS);
         model.addAttribute("search", search);
+        model.addAttribute("pageIndex", pageIndex);
+        model.addAttribute("totalPages", totalPages);
         return "admin-colors-management";
     }
 

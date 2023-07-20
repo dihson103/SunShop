@@ -6,15 +6,12 @@ import com.dinhson.sunshop.appAdmin.categoryManagement.CategoryRequestDTO;
 import com.dinhson.sunshop.exception.CategoryAlreadyExistException;
 import com.dinhson.sunshop.utils.FileUtils;
 import lombok.AllArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.util.Streams;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -22,6 +19,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryDTOMapper categoryDTOMapper;
+    private static Integer totalPages = 0;
 
     public Category addNewCategory(Category category) {
         if (isCategoryExist(category)) {
@@ -34,8 +32,11 @@ public class CategoryService {
         return categoryRepository.findCategoryByName(category.getName()).isPresent();
     }
 
+    public Page<Category> findAllCategory(Integer pageIndex, Integer pageSize) {
+        return categoryRepository.getAll(PageRequest.of(pageIndex, pageSize));
+    }
+
     public List<Category> findAllCategory() {
-        System.out.println("get all categories");
         return categoryRepository.getAll();
     }
 
@@ -44,8 +45,11 @@ public class CategoryService {
                 .orElseThrow(() -> new IllegalArgumentException("Can not found category!!!"));
     }
 
-    public List<CategoryDTO> getAllListCategoryDTO(){
-        return findAllCategory().stream()
+    public List<CategoryDTO> getAllListCategoryDTO(Integer pageIndex, Integer pageSize){
+        Page<Category> categoryPage = findAllCategory(pageIndex, pageSize);
+        totalPages = categoryPage.getTotalPages();
+
+        return categoryPage.stream()
                 .map(categoryDTOMapper)
                 .collect(Collectors.toList());
     }
@@ -80,5 +84,9 @@ public class CategoryService {
     public void deleteCategory(Integer categoryId){
         Category category = getCategoryById(categoryId);
         categoryRepository.delete(category);
+    }
+
+    public Integer getTotalPages() {
+        return totalPages;
     }
 }

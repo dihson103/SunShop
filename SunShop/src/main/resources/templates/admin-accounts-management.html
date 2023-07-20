@@ -92,10 +92,16 @@
                 </table>
                 <div class="clearfix">
                     <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                    <ul class="pagination">
-                        <li class="page-item disabled"><span style="cursor: pointer; border: none" class="page-link">Previous</span></li>
-                        <li th:class="'page-item ' + ${i - 1 == pageIndex ? ' active' : ''}" th:each="i : ${#numbers.sequence(1, totalPages)}"><span th:id="${i}" style="cursor: pointer; border: none" class="page-link page-link-number">[[${i}]]</span></li>
-                        <li class="page-item"><span style="cursor: pointer; border: none" class="page-link">Next</span></li>
+                    <ul class="pagination" th:if="${totalPages > 1}">
+                        <li th:class="${pageIndex == 0 ? 'page-item disabled' : 'page-item'}">
+                            <span style="cursor: pointer; border: none" class="page-link previous">Previous</span>
+                        </li>
+                        <li th:class="'page-item ' + ${i - 1 == pageIndex ? ' active' : ''}" th:each="i : ${#numbers.sequence(1, totalPages)}">
+                            <span th:id="${i}" style="cursor: pointer; border: none" class="page-link page-link-number">[[${i}]]</span>
+                        </li>
+                        <li th:class="${pageIndex + 1 == totalPages ? 'page-item disabled' : 'page-item'}">
+                            <span style="cursor: pointer; border: none" class="page-link next">Next</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -125,13 +131,30 @@
         window.location = url;
     }
 
-    $('.page-link-number').click(function () {
+    const paging = (pageIndex) => {
         let name = $('#searchName').val();
         let isActive = $('#status').val();
         let role = $('#role').val();
-        let pageIndex = $(this).attr('id');
-        let url = `/admin/users?role=${role}&&isActive=${isActive}&&name=${name}&&pageIndex=${pageIndex-1}`;
+        let url = `/admin/users?role=${role}&&isActive=${isActive}&&name=${name}&&pageIndex=${pageIndex}`;
         window.location = url;
+    }
+
+    $('.page-link-number').click(function () {
+        let pageIndex = $(this).attr('id');
+        pageIndex = pageIndex - 1;
+        paging(pageIndex);
+    });
+
+    $('.previous').click(() => {
+        let pageIndex = /*[[${pageIndex}]]*/ "";
+        pageIndex = pageIndex - 1;
+        paging(pageIndex);
+    });
+
+    $('.next').click(() => {
+        let pageIndex = /*[[${pageIndex}]]*/ "";
+        pageIndex = pageIndex + 1;
+        paging(pageIndex);
     });
 
 </script>

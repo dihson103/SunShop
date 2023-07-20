@@ -35,15 +35,20 @@ public class ProductsManagementController {
     public String getProducts(@RequestParam(defaultValue = "all") String isDelete,
                               @RequestParam(defaultValue = "") String searchName,
                               @RequestParam(defaultValue = "0") Integer categoryId,
+                              @RequestParam(required = false, defaultValue = "0") Integer pageIndex,
+                              @RequestParam(required = false, defaultValue = "2") Integer pageSize,
                               Model model){
-        List<ProductResponseDTO> productResponseDTOS = productService.searchProducts(isDelete, categoryId, searchName);
+        List<ProductResponseDTO> productResponseDTOS = productService.searchProducts(isDelete, categoryId, searchName, pageIndex, pageSize);
         Iterable<Category> categories = categoryService.findAllCategory();
+        Integer totalPages = productService.getTotalPages();
 
         model.addAttribute("categories", categories);
         model.addAttribute("products", productResponseDTOS);
         model.addAttribute("isDelete", isDelete);
         model.addAttribute("searchName", searchName);
         model.addAttribute("categoryId", categoryId);
+        model.addAttribute("pageIndex", pageIndex);
+        model.addAttribute("totalPages", totalPages);
         return "admin-products-management";
     }
 
