@@ -51,7 +51,7 @@
                             <h4>Categories</h4>
                             <ul>
                                 <li th:each="categorie : ${categories}">
-                                    <a th:href="@{/#}">[[${categorie.name}]]</a>
+                                    <div style="cursor: pointer" class="handleCategorySearch" th:name="${categorie.name}">[[${categorie.name}]]</div>
                                 </li>
                             </ul>
                         </div>
@@ -59,15 +59,16 @@
                             <h4>Price</h4>
                             <div class="price-range-wrap">
                                 <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                    data-min="10" data-max="540">
+                                    data-min="10" data-max="540" onmouseup="handlePriceChange()">
                                     <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
                                     <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
                                     <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
                                 </div>
                                 <div class="range-slider">
                                     <div class="price-input">
-                                        <input type="text" id="minamount" onchange="testGetValue()">
+                                        <input type="text" id="minamount">
                                         <input type="text" id="maxamount">
+                                        <input type="hidden" id="flagPriceInput" value="1">
                                     </div>
                                 </div>
                             </div>
@@ -75,10 +76,10 @@
                         <div class="sidebar__item sidebar__item__color--option">
                             <h4>Colors</h4>
 
-                            <div th:each="color : ${colors}" class="sidebar__item__color sidebar__item__color--white" >
-                                <label for="white">
+                            <div th:each="color : ${colors}" class="sidebar__item__color" >
+                                <label th:for="${color.name}">
                                     [[${color.name}]]
-                                    <input type="radio" id="white" name="colorRequest">
+                                    <input type="radio" th:id="${color.name}" name="colorRequest">
                                 </label>
                             </div>
 
@@ -87,9 +88,9 @@
                             <h4>Popular Size</h4>
 
                             <div class="sidebar__item__size" th:each="size : ${sizes}">
-                                <label for="large">
+                                <label th:for="${size.size}">
                                     [[${size.size}]]
-                                    <input type="radio" id="large" name="sizeRequest">
+                                    <input type="radio" th:id="${size.size}" name="sizeRequest">
                                 </label>
                             </div>
 
@@ -474,6 +475,19 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
 
+
+    <script>
+
+        function handlePriceChange() {
+            let priceRange = $('#flagPriceInput').val();
+            console.log(priceRange)
+        }
+
+        $('.handleCategorySearch').click(function () {
+            console.log($(this).attr('name'))
+        })
+
+    </script>
 
 
 </body>

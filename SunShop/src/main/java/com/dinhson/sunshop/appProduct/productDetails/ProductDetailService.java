@@ -60,51 +60,7 @@ public class ProductDetailService {
         return productDetailRepository.findById(productDetailId).get().getNumber();
     }
 
-    private List<ProductDetail> searchBy(Boolean isDelete, int colorId, String searchName) {
-        if (isDelete != null) {
-            if (colorId != 0 && !searchName.isEmpty()) {
-                // search by all
-                return productDetailRepository.searchProductDetailByAll(isDelete, colorId, searchName);
-            } else if (colorId != 0) {
-                // search by color and isDelete
-                return productDetailRepository.searchProductDetailByColorAndIsDelete(colorId, isDelete);
-            } else if (!searchName.isEmpty()) {
-                // search by isDelete and search name
-                return productDetailRepository.searchProductDetailByIsDeleteAndSearchName(isDelete, searchName);
-            } else {
-                // search by isDelete
-                return productDetailRepository.searchProductDetailByIsDelete(isDelete);
-            }
-        } else {
-            if (colorId != 0 && !searchName.isEmpty()) {
-                // search by color and search name
-                return productDetailRepository.searchProductDetailByColorAndSearchName(colorId, searchName);
-            } else if (colorId != 0) {
-                // search by color
-                return productDetailRepository.searchProductDetailByColor(colorId);
-            } else if (!searchName.isEmpty()) {
-                // search by search name
-                return productDetailRepository.searchProductDetailBySearchName(searchName);
-            } else {
-                // get all
-                return productDetailRepository.getAll();
-            }
-        }
-    }
 
-    public List<ProductResponseDTO> searchProducts(String status, int colorId, String searchName) {
-        Boolean isDelete;
-        if (status.equals("true")) {
-            isDelete = true;
-        } else if (status.equals("false")) {
-            isDelete = false;
-        } else {
-            isDelete = null;
-        }
-        return searchBy(isDelete, colorId, searchName).stream()
-                .map(productResponseDTOMapper)
-                .collect(Collectors.toList());
-    }
 
     public NumberProductResponseDTO getNumberProductRemain(Integer sizeId, Integer colorId, Integer productId) {
         Optional<ProductDetail> productDetail = productDetailRepository.findProductDetailByAll(productId, colorId, sizeId);

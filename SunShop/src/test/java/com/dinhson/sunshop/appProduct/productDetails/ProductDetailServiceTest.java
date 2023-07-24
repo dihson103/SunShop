@@ -54,19 +54,4 @@ class ProductDetailServiceTest {
         underTest.addNewProductDetail(productD1);
     }
 
-    @Test
-    void searchProductDetailByAll() {
-        //after
-        String status = "false";
-        int colorId = 1;
-        String searchName = "Product";
-
-        //when
-        List<ProductResponseDTO> productResponseDTOS = underTest.searchProducts(status, colorId, searchName);
-
-        //then
-        boolean actual = productResponseDTOS.stream().anyMatch(p -> {
-            return true;
-        });
-    }
 }

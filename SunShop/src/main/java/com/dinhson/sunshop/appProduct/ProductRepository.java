@@ -61,4 +61,41 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT COUNT(p) FROM Product p WHERE p.category.id = :categoryId")
     Integer getNumberProductByCategoryId(Integer categoryId);
 
+    @Query("SELECT p FROM Product p WHERE :min <= p.price AND p.price <= :max")
+    List<Product> getProductByPrice(Double min, Double max);
+
+    @Query("SELECT p.product FROM " +
+            "ProductDetail p " +
+            "where p.size.id = :sizeId AND :min <= p.product.price AND p.product.price <= :max")
+    List<Product> getProductBySizeAndPrice(Integer sizeId, Double min, Double max);
+
+    @Query("SELECT p.product FROM " +
+            "ProductDetail p " +
+            "where p.color.id = :colorId AND :min <= p.product.price AND p.product.price <= :max")
+    List<Product> getProductByColorAndPrice(Integer colorId, Double min, Double max);
+
+    @Query("SELECT p.product " +
+            "FROM ProductDetail p " +
+            "where p.color.id = :colorId AND p.size.id = :sizeId AND :min <= p.product.price AND p.product.price <= :max")
+    List<Product> getProductByColorSizeAndPrice(Integer colorId, Integer sizeId, Double min, Double max);
+
+    @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId AND :min <= p.price AND p.price <= :max")
+    List<Product> getProductByCategoryAndPrice(Integer categoryId, Double min, Double max);
+
+    @Query("SELECT p.product " +
+            "FROM ProductDetail p " +
+            "WHERE p.size.id = :sizeId AND p.product.category.id = :categoryId AND :min <= p.product.price AND p.product.price <= :max")
+    List<Product> getProductByCategorySizeAndPrice(Integer categoryId, Integer sizeId, Double min, Double max);
+
+    @Query("SELECT p.product " +
+            "FROM ProductDetail p " +
+            "WHERE p.color.id = :colorId AND p.product.category.id = :categoryId AND :min <= p.product.price AND p.product.price <= :max")
+    List<Product> getProductByCategoryColorAndPrice(Integer categoryId, Integer colorId, Double min, Double max);
+
+    @Query("SELECT p.product " +
+            "FROM ProductDetail p " +
+            "WHERE p.color.id = :colorId AND p.size.id = :sizeId AND p.product.category.id = :categoryId " +
+            "AND :min <= p.product.price AND p.product.price <= :max")
+    List<Product> getProductByCategoryColorSizeAndPrice(Integer categoryId, Integer colorId, Integer sizeId, Double min, Double max);
+
 }

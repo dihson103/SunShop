@@ -53,7 +53,11 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("Can not found product has id: " + productId));
     }
 
-    private Page<Product> searchBy(Boolean isDelete, int categoryId, String searchName, Integer pageIndex, Integer pageSize){
+    private Page<Product> searchBy(Boolean isDelete,
+                                   int categoryId,
+                                   String searchName,
+                                   Integer pageIndex,
+                                   Integer pageSize){
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
         if (isDelete != null) {
             if (categoryId != 0 && !searchName.isEmpty()) {
@@ -95,7 +99,11 @@ public class ProductService {
         return null;
     }
 
-    public List<ProductResponseDTO> searchProducts(String status, int categoryId, String searchName, Integer pageIndex, Integer pageSize){
+    public List<ProductResponseDTO> searchProducts(String status,
+                                                   int categoryId,
+                                                   String searchName,
+                                                   Integer pageIndex,
+                                                   Integer pageSize){
         Page<Product> productPage = searchBy(convertStringToBoolean(status), categoryId, searchName, pageIndex, pageSize);
         totalPages = productPage.getTotalPages();
 
@@ -156,5 +164,43 @@ public class ProductService {
         return totalPages;
     }
 
+    private List<Product> findProduct(Integer categoryId,
+                                      Double minPrice,
+                                      Double maxPrice,
+                                      Integer colorId,
+                                      Integer sizeId){
+        if (categoryId == null){
+            if(colorId == null){
+                if (sizeId == null){
+                    return productRepository.getProductByPrice(minPrice, maxPrice);
+                }
+                return productRepository.getProductBySizeAndPrice(sizeId, minPrice, maxPrice);
+            }
+            if (sizeId == null){
+                return productRepository.getProductByColorAndPrice(colorId, minPrice, maxPrice);
+            }
+            return productRepository.getProductByColorSizeAndPrice(colorId, sizeId, minPrice, maxPrice);
+        }
+        if(colorId == null){
+            if (sizeId == null){
+                return productRepository.getProductByCategoryAndPrice(categoryId, minPrice, maxPrice);
+            }
+            return productRepository.getProductByCategorySizeAndPrice(categoryId, sizeId, minPrice, maxPrice);
+        }
+        if (sizeId == null){
+            return productRepository.getProductByCategoryColorAndPrice(categoryId, colorId, minPrice, maxPrice);
+        }
+        return productRepository.getProductByCategoryColorSizeAndPrice(categoryId, colorId, sizeId, minPrice, maxPrice);
+    }
+
+    public List<ProductDTO> searchProduct(Integer categoryId,
+                                          Double minPrice,
+                                          Double maxPrice,
+                                          Integer colorId,
+                                          Integer sizeId){
+        return findProduct(categoryId, minPrice, maxPrice, colorId, sizeId).stream()
+                .map(productDTOMapper)
+                .toList();
+    }
 
 }
