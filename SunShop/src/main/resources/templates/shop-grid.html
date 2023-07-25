@@ -51,7 +51,7 @@
                             <h4>Categories</h4>
                             <ul>
                                 <li th:each="categorie : ${categories}">
-                                    <div style="cursor: pointer" class="handleCategorySearch" th:name="${categorie.name}">[[${categorie.name}]]</div>
+                                    <div style="cursor: pointer" class="handleCategorySearch" th:id="'category-' + ${categorie.id}">[[${categorie.name}]]</div>
                                 </li>
                             </ul>
                         </div>
@@ -76,10 +76,9 @@
                         <div class="sidebar__item sidebar__item__color--option">
                             <h4>Colors</h4>
 
-                            <div th:each="color : ${colors}" class="sidebar__item__color" >
-                                <label th:for="${color.name}">
+                            <div class="sidebar__item__size" th:each="color : ${colors}">
+                                <label class="colorReq" th:id="'color-' + ${color.id}">
                                     [[${color.name}]]
-                                    <input type="radio" th:id="${color.name}" name="colorRequest">
                                 </label>
                             </div>
 
@@ -88,9 +87,8 @@
                             <h4>Popular Size</h4>
 
                             <div class="sidebar__item__size" th:each="size : ${sizes}">
-                                <label th:for="${size.size}">
+                                <label class="sizeReq" th:id="'size-' + ${size.id}">
                                     [[${size.size}]]
-                                    <input type="radio" th:id="${size.size}" name="sizeRequest">
                                 </label>
                             </div>
 
@@ -304,7 +302,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="mainProduct">
 
                         <div class="col-lg-4 col-md-6 col-sm-6" th:each="product : ${products}">
                             <div class="product__item">
@@ -324,7 +322,7 @@
 
                         <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
+                                <div class="product__item__pic set-bg" data-setbg="/img/product/product-2.jpg">
                                     <ul class="product__item__pic__hover">
                                         <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                         <li><a href="#"><i class="fa fa-retweet"></i></a></li>
@@ -466,26 +464,131 @@
     <!-- Footer Section End -->
 
     <!-- Js Plugins -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/mixitup.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
+    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.nice-select.min.js}"></script>
+    <script th:src="@{/js/jquery-ui.min.js}"></script>
+    <script th:src="@{/js/jquery.slicknav.js}"></script>
+    <script th:src="@{/js/mixitup.min.js}"></script>
+    <script th:src="@{/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
 
 
-    <script>
+    <script th:inline="javascript">
+
+        const filterValue = {
+            minPrice: 10,
+            maxPrice: 100,
+            categoryId: 0,
+            colorId: 0,
+            sizeId: 0
+        };
+
+        function renderProductList(products){
+            let productHtml = products.reduce((prevValue, curValue) => {
+                return prevValue + `
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="${curValue.img}" style="background-image: url(${curValue.img});">
+                                    <ul class="product__item__pic__hover">
+                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                    </ul>
+                                </div>
+                                <div class="product__item__text">
+                                    <h6><a href="/product?productId=${curValue.id}">${curValue.name}</a></h6>
+                                    <h5>$ ${curValue.price}</h5>
+                                </div>
+                            </div>
+                        </div>
+                `;
+            }, '');
+
+
+            $('#mainProduct').html(productHtml);
+        }
+
+        function handleProductFilter() {
+            console.log(filterValue);
+            $.ajax({
+                url: "/api/products",
+                type: 'GEt',
+                data: filterValue,
+                success: function(response) {
+                    console.log(response)
+                    renderProductList(response);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+        }
 
         function handlePriceChange() {
             let priceRange = $('#flagPriceInput').val();
-            console.log(priceRange)
-        }
+            let arrayPrice = priceRange.split('-');
+            filterValue.minPrice = arrayPrice[0];
+            filterValue.maxPrice = arrayPrice[1];
+
+            handleProductFilter();
+        };
 
         $('.handleCategorySearch').click(function () {
-            console.log($(this).attr('name'))
-        })
+            let category = $(this).attr('id');
+            let categoryId = category.split('-')[1];
+
+            if(categoryId != filterValue.categoryId){
+                let categoryElementId = '#category-' + filterValue.categoryId;
+                $(categoryElementId).removeClass('text-success');
+                $(this).addClass('text-success');
+                filterValue.categoryId = categoryId;
+            }else {
+                $(this).removeClass('text-success');
+                filterValue.categoryId = 0;
+            }
+
+            handleProductFilter();
+        });
+
+        $('.sizeReq').click(function () {
+            let size = $(this).attr('id');
+            let sizeId = size.split('-')[1];
+
+            if(sizeId != filterValue.sizeId){
+                let sizeElementId = '#size-' + filterValue.sizeId;
+                $(sizeElementId).removeClass('bg-success text-white');
+                let sizeActive = '#size-' + sizeId;
+                $(sizeActive).addClass('bg-success text-white');
+                filterValue.sizeId = sizeId;
+            }else {
+                let sizeElementId = '#size-' + filterValue.sizeId;
+                $(sizeElementId).removeClass('bg-success text-white');
+                filterValue.sizeId = 0;
+            }
+
+            handleProductFilter();
+        });
+
+        $('.colorReq').click(function () {
+            let color = $(this).attr('id');
+            let colorId = color.split('-')[1];
+
+            if(colorId != filterValue.colorId){
+                let colorElementId = '#color-' + filterValue.colorId;
+                $(colorElementId).removeClass('bg-success text-white');
+                let colorActive = '#color-' + colorId;
+                $(colorActive).addClass('bg-success text-white');
+                filterValue.colorId = colorId;
+            }else {
+                let colorElementId = '#color-' + filterValue.colorId;
+                $(colorElementId).removeClass('bg-success text-white');
+                filterValue.colorId = 0;
+            }
+
+            handleProductFilter();
+        });
+
 
     </script>
 

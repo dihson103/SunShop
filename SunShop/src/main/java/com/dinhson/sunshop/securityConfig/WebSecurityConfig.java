@@ -54,6 +54,7 @@ public class WebSecurityConfig {
                                 "/forget-password/**",
                                 "/change-password/**",
                                 "/shop/**",
+                                "/api/products",
                                 "/").permitAll()
                         .requestMatchers("/admin/**").hasAnyAuthority(ADMIN.name(), MANAGER.name())
                         .requestMatchers("/cart/**", "/api/cart/**", "/order/**").hasAuthority(USER.name())

@@ -169,31 +169,31 @@ public class ProductService {
                                       Double maxPrice,
                                       Integer colorId,
                                       Integer sizeId){
-        if (categoryId == null){
-            if(colorId == null){
-                if (sizeId == null){
+        if (categoryId == 0){
+            if(colorId == 0){
+                if (sizeId == 0){
                     return productRepository.getProductByPrice(minPrice, maxPrice);
                 }
                 return productRepository.getProductBySizeAndPrice(sizeId, minPrice, maxPrice);
             }
-            if (sizeId == null){
+            if (sizeId == 0){
                 return productRepository.getProductByColorAndPrice(colorId, minPrice, maxPrice);
             }
             return productRepository.getProductByColorSizeAndPrice(colorId, sizeId, minPrice, maxPrice);
         }
-        if(colorId == null){
-            if (sizeId == null){
+        if(colorId == 0){
+            if (sizeId == 0){
                 return productRepository.getProductByCategoryAndPrice(categoryId, minPrice, maxPrice);
             }
             return productRepository.getProductByCategorySizeAndPrice(categoryId, sizeId, minPrice, maxPrice);
         }
-        if (sizeId == null){
+        if (sizeId == 0){
             return productRepository.getProductByCategoryColorAndPrice(categoryId, colorId, minPrice, maxPrice);
         }
         return productRepository.getProductByCategoryColorSizeAndPrice(categoryId, colorId, sizeId, minPrice, maxPrice);
     }
 
-    public List<ProductDTO> searchProduct(Integer categoryId,
+    public List<ProductDTO> filterProducts(Integer categoryId,
                                           Double minPrice,
                                           Double maxPrice,
                                           Integer colorId,
