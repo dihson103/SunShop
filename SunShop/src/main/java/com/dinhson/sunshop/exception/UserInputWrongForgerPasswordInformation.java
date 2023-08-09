@@ -1,5 +1,8 @@
 package com.dinhson.sunshop.exception;
 
+import lombok.Getter;
+
+@Getter
 public class UserInputWrongForgerPasswordInformation extends RuntimeException {
 
     private String token;
